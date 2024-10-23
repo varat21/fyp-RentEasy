@@ -1,6 +1,12 @@
-import Body from './components/Body'
-function App() {
-  return <Body />;
-}
+// Import MantineProvider
+import { MantineProvider } from "@mantine/core";
+import Body from "./components/Body";
 
-export default App;
+// Define the App component
+export default function App() {
+  return (
+    <MantineProvider>
+      <Body />
+    </MantineProvider>
+  );
+}

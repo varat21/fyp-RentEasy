@@ -1,8 +1,8 @@
-import React from 'react'
+import { Button } from '@mantine/core';
 
 const Home = () => {
   return (
-    <div>Home</div>
+  <Button variant="filled">Button</Button>
   )
 }
 
