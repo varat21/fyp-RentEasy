@@ -8,7 +8,7 @@ import Header from "./Header/Header";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Header/>,
   },
   {
     path: "/register",
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
     element: <Home/>,
   },
   {
-    path: "/header",
-    element: <Header/>,
+    path: "/login",
+    element: <Login/>,
   },
  
 ]);

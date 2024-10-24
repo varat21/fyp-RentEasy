@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mantine/core';
-import { IconStar } from '@tabler/icons-react';
 import { FiAlignJustify } from "react-icons/fi";
 
 
@@ -31,12 +30,10 @@ const Header = () => {
                 <div className="">
                     <input
                         type="text"
-                        placeholder="Search by date or location"
+                        placeholder="Search by location or price"
                         className="border rounded-lg py-2 px-3 mx-auto w-[450px] shadow-sm ml-40 text-center text-black"
                     />
-                    {/* <button className="">
-                        Search
-                    </button> */}
+                  
                 </div>
 
                 {/* Navigation Items */}
@@ -44,7 +41,7 @@ const Header = () => {
                     <Link to="/home" className="text-gray-600 hover:text-blue-500 font-bold">Home</Link>
                     <Link to="/rooms" className="text-gray-600 hover:text-blue-500 font-bold">Rooms</Link>
                     <Link to="/houses" className="text-gray-600 hover:text-blue-500 font-bold">Houses</Link>
-                    <Link to="/shop-home" className="text-gray-600 hover:text-blue-500 font-bold">ShopHome</Link>
+                    <Link to="/shop-home" className="text-gray-600 hover:text-blue-500 font-bold">ShopHouse</Link>
                     <Link to="/about" className="text-gray-600 hover:text-blue-500 font-bold">About</Link>
                     <Link to="/properties" className="text-gray-600 hover:text-blue-500 font-bold">Properties</Link>
                     <Link to="/contact" className="text-gray-600 hover:text-blue-500 font-bold">Contact</Link>
@@ -64,9 +61,9 @@ const Header = () => {
                         {dropdownOpen && (
                             <div className="absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                 <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                    <Link to="/faq" className="block px-4 py-2 text-sm text-black hover:bg-gray-100" role="menuitem">FAQ</Link>
-                                    <Link to="/terms" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Terms of Service</Link>
-                                    <Link to="/privacy" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Privacy Policy</Link>
+                                    <Link to="/faq" className="block px-4 py-2 text-md text-gray-600 hover:bg-gray-100" role="menuitem">FAQ</Link>
+                                    <Link to="/terms" className="block px-4 py-2 text-md text-gray-600 hover:bg-gray-100" role="menuitem">Terms of Service</Link>
+                                    <Link to="/privacy" className="block px-4 py-2 text-md text-gray-600 hover:bg-gray-100" role="menuitem">Privacy Policy</Link>
                                 </div>
                             </div>
                         )}
@@ -76,14 +73,10 @@ const Header = () => {
                 {/* Login and Sign Up Buttons on the Right */}
                 <div className="flex items-center space-x-2">
                     <Link to="/login">
-                        {/* <button className="border border-gray-600 text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2">
-                            Login
-                        </button> */}
+                        
                     </Link>
                     <Link to="/register">
-                        {/* <p className="bg-blue-500 text-white hover:bg-blue-600 rounded-md px-4 py-2">
-                            Sign Up
-                        </p> */}
+                      
 
                         <div 
                         className='w-28 h-12 bg-white rounded-full flex items-center gap-6'
