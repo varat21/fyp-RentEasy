@@ -99,8 +99,7 @@ const Header = () => {
     <Link
       to="/profile"
       className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
-      onClick={() => setProfileOpen(false)} // Close dropdown on click
-    >
+      onClick={() => setProfileOpen(false)}    >
       <FaRegUser className="h-5 w-5 mr-2" />
 
       Profile
@@ -131,7 +130,7 @@ const Header = () => {
         </div>
       </div>
 
-      <nav className="hidden md:flex justify-center py-2">
+      <nav className="hidden md:flex  justify-center py-1">
         <Group className="flex text-md font-semibold text-gray-800 space-x-8">
           <Link to="/" className="text-gray-600 hover:text-blue-500 font-bold">Home</Link>
           <Link to="/rooms" className="text-gray-600 hover:text-blue-500 font-bold">Rooms</Link>
@@ -185,7 +184,26 @@ const Header = () => {
         title={<span className="font-bold text-lg">RentEasy</span>}
       >
         <Box className="flex flex-col space-y-4">
-          <TextInput placeholder="Search by location or price" className="rounded-md mb-4" />
+                    <TextInput placeholder="Search by location or price" className="rounded-md mb-4" />
+
+        <Select
+            placeholder="Select price range"
+            data={['Price high to low', 'Price low to high']}
+            className="rounded-md"
+                        styles={{
+              dropdown: { 
+                minWidth: '160px' // Optional: Set minimum width for the dropdown
+              },
+              input: { 
+                height: '30px', // Match the height
+              },
+              rightSection: { 
+                height: '30px', 
+                display: 'flex', 
+                alignItems: 'center' 
+              },
+            }}
+          />
           <Link to="/" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Home</Link>
           <Link to="/rooms" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Rooms</Link>
           <Link to="/houses" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Houses</Link>
@@ -197,6 +215,36 @@ const Header = () => {
           <Link to="/faq" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>FAQ</Link>
           <Link to="/terms" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Terms</Link>
           <Link to="/privacy-policy" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Privacy Policy</Link>
+        
+    {/* Profile-related links */}
+    <Divider my="sm" />
+
+    <Link
+      to="/profile"
+      className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}
+    >
+      <FaRegUser className="h-5 w-5 mr-2" />
+
+      Profile
+    </Link>
+    
+    <Link
+      to="/login"
+      className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}
+     // Close dropdown on click
+    >
+      <CiLogin  className="h-5 w-5 mr-2" />
+      Login
+    </Link>
+
+    <Link
+      to="/logout"
+      className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}
+      // Close dropdown on click
+    >
+      <IoLogOutOutline className="h-5 w-5 mr-2" />
+      Logout
+    </Link>
         </Box>
       </Drawer>
     </header>
