@@ -1,8 +1,10 @@
-import { Button } from '@mantine/core';
+import Header from './Header/Header'
 
 const Home = () => {
   return (
-  <Button variant="filled">Button</Button>
+    <div>
+     My name is varat.
+    </div>
   )
 }
 
