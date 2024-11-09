@@ -6,8 +6,16 @@ import { Avatar, Burger, Drawer, Group, Box, Divider, TextInput, ActionIcon, Sel
 import { FiAlignJustify, FiSearch } from "react-icons/fi";
 import { useDisclosure } from "@mantine/hooks";
 import { IoLogOutOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
+import { FaQq, FaRegUser } from "react-icons/fa";
 import { CiLogin } from "react-icons/ci";
+import { CiHome } from "react-icons/ci";
+import { MdBedroomParent, MdContactPhone, MdOutlinePolicy } from "react-icons/md";
+
+import { MdOtherHouses } from "react-icons/md";
+import { LiaWarehouseSolid } from "react-icons/lia";
+import { FcAbout } from "react-icons/fc";
+import { LuTableProperties } from "react-icons/lu";
+import { TbLetterMSmall } from "react-icons/tb";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -56,7 +64,7 @@ const Header = () => {
             styles={{
               input: { 
                 paddingRight: '2rem', 
-                height: '48px', // Set height here
+                height: '40px', // Set height here
               },
             }}
           />
@@ -69,7 +77,7 @@ const Header = () => {
                 minWidth: '160px' // Optional: Set minimum width for the dropdown
               },
               input: { 
-                height: '48px', // Match the height
+                height: '40px', // Match the height
               },
               rightSection: { 
                 height: '48px', 
@@ -93,7 +101,7 @@ const Header = () => {
             <Avatar src={null} alt="Profile" className="ml-2" />
             <div   className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
             {profileOpen && (
-  <div  className="text-center font-semibold text-md absolute right-36 mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
+  <div  className="text-center font-semibold text-md absolute right-5 mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
     {/* Profile-related links */}
     
     <Link
@@ -148,30 +156,31 @@ const Header = () => {
               </svg>
             </button>
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                <Link
-                  to="/faq"
-                  className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
-                  onClick={() => setDropdownOpen(false)} // Close dropdown on click
-                >
-                  FAQ
-                </Link>
-                <Link
-                  to="/terms"
-                  className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
-                  onClick={() => setDropdownOpen(false)} // Close dropdown on click
-                >
-                  Terms
-                </Link>
-                <Link
-                  to="/privacyPolicy"
-                  className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
-                  onClick={() => setDropdownOpen(false)} // Close dropdown on click
-                >
-                  Privacy Policy
-                </Link>
-              </div>
-            )}
+  <div className="absolute left-3 mt-2  sm:w-60 md:w-64 lg:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 max-w-36">
+    <Link
+      to="/faq"
+      className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
+      onClick={() => setDropdownOpen(false)}
+    >
+      FAQ
+    </Link>
+    <Link
+      to="/terms"
+      className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
+      onClick={() => setDropdownOpen(false)}
+    >
+      Terms
+    </Link>
+    <Link
+      to="/privacyPolicy"
+      className="block px-4 py-2 text-gray-600 hover:bg-gray-100 transition duration-200 cursor-pointer"
+      onClick={() => setDropdownOpen(false)}
+    >
+      Privacy Policy
+    </Link>
+  </div>
+)}
+
           </div>
         </Group>
       </nav>
@@ -204,17 +213,21 @@ const Header = () => {
               },
             }}
           />
-          <Link to="/" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Home</Link>
-          <Link to="/rooms" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Rooms</Link>
-          <Link to="/houses" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Houses</Link>
-          <Link to="/shop-house" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>ShopHouse</Link>
-          <Link to="/about" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>About</Link>
-          <Link to="/properties" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Properties</Link>
-          <Link to="/contact" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Contact</Link>
+
+
+
+
+          <Link to="/" className=" flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><CiHome className="h-5 w-5 mr-2" />Home</Link>
+          <Link to="/rooms" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><MdBedroomParent className="h-5 w-5 mr-2" />Rooms</Link>
+          <Link to="/houses" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><MdOtherHouses className="h-5 w-5 mr-2"/> Houses</Link>
+          <Link to="/shop-house" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><LiaWarehouseSolid className="h-5 w-5 mr-2"/>ShopHouse</Link>
+          <Link to="/about" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><FcAbout className="h-5 w-5 mr-2"/>About</Link>
+          <Link to="/properties" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><LuTableProperties className="h-5 w-5 mr-2"/> Properties</Link>
+          <Link to="/contact" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><MdContactPhone className="h-5 w-5 mr-2"/> Contact</Link>
           <Divider my="sm" />
-          <Link to="/faq" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>FAQ</Link>
-          <Link to="/terms" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Terms</Link>
-          <Link to="/privacy-policy" className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}>Privacy Policy</Link>
+          <Link to="/faq" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><FaQq className="h-5 w-5 mr-2"/> FAQ</Link>
+          <Link to="/terms" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><TbLetterMSmall className="h-5 w-5 mr-2"/> Terms</Link>
+          <Link to="/privacy-policy" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer" onClick={closeDrawer}><MdOutlinePolicy className="h-5 w-5 mr-2"/> Privacy Policy</Link>
         
     {/* Profile-related links */}
     <Divider my="sm" />
