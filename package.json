@@ -10,21 +10,29 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@mantine/core": "^7.13.4",
+    "@mantine/dates": "^7.13.5",
+    "@mantine/dropzone": "^7.13.5",
     "@mantine/form": "^7.13.4",
     "@mantine/hooks": "^7.13.3",
+    "@react-formgen/zod": "^0.0.0-alpha.19",
     "@tabler/icons-react": "^3.20.0",
     "@tiptap/extension-link": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
+    "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.53.1",
+    "react-dropzone": "^14.3.5",
+    "react-hook-form": "^7.53.2",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-lottie": "^1.2.4",
     "react-router-dom": "^6.27.0",
-    "recharts": "^2.13.0"
+    "recharts": "^2.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
