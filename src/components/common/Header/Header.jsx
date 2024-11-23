@@ -166,42 +166,42 @@ const Header = () => {
 
       <nav className="hidden md:flex  justify-center py-1">
         <Group className="flex text-md font-semibold text-gray-800 space-x-8">
-          <Link to="/" className="text-gray-600 hover:text-blue-500 font-bold">
+          <Link to="/" className="text-gray-600 hover:text-blue-500 ">
             Home
           </Link>
           <Link
             to="/rooms"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500 "
           >
             Rooms
           </Link>
           <Link
             to="/houses"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500 "
           >
             Houses
           </Link>
           <Link
             to="/shopHouse"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500 "
           >
             ShopHouse
           </Link>
           <Link
             to="/about"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500 "
           >
             About
           </Link>
           <Link
             to="/properties"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500 "
           >
             Properties
           </Link>
           <Link
             to="/contact"
-            className="text-gray-600 hover:text-blue-500 font-bold"
+            className="text-gray-600 hover:text-blue-500"
           >
             Contact
           </Link>
@@ -209,7 +209,7 @@ const Header = () => {
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setDropdownOpen((prev) => !prev)}
-              className="flex items-center hover:text-blue-500 transition"
+              className="flex items-center hover:text-blue-500 transition text-semiBold"
             >
               More
               <svg

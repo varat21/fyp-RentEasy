@@ -37,7 +37,9 @@ const Login = () => {
       formData.append("password",data.password);
       const response = await axios.post('http://localhost/rent-easy/auth/login.php',formData );
       console.log(response);
-      if(response.data.success){
+      if(response.data.success = 'success'){
+        //store session  or user info
+        localStorage.setItem('user', JSON.stringify(response.data.user));
         toast.success("Login successful");
         const userType = response.data.userType;
         // Navigate based on userType
@@ -95,7 +97,7 @@ const Login = () => {
             <TextInput
               {...register('email')}
               label="Email"
-              placeholder="Enter your email"
+              placeholder="Enter  email"
               error={errors.email?.message}
               withAsterisk
             />
@@ -104,17 +106,11 @@ const Login = () => {
             <PasswordInput
               {...register('password')}
               label="Password"
-              placeholder="Enter your password"
+              placeholder="Enter  password"
               error={errors.password?.message}
               withAsterisk
             />
-             {/* Forgot Password and Sign Up Links */}
-             <div className="text-sm font-semibold text-blue-500 hover:text-blue-700 flex justify-center items-center">
-            {/* <Group position="apart" mt="md"> */}
-              <button  type="button" onClick ={open}>
-                Forgot Password?
-              </button>
-              </div>
+            
 
             {/* Sign In Button */}
             <Button fullWidth type="submit" mt="lg">
@@ -122,9 +118,17 @@ const Login = () => {
             </Button>
 
            
-
-            {/* Remember Me Checkbox */}
+            <div className="">
+            {/* <div className="text-sm font-semibold text-blue-500 hover:text-blue-700 flex justify-center items-center">
             <Checkbox label="Remember Me" />
+            </div> */}
+            <div className="text-sm font-semibold text-blue-500 hover:text-blue-700 flex justify-center items-center">
+            {/* <Group position="apart" mt="md"> */}
+              <button  type="button" onClick ={open}>
+                Forgot Password?
+              </button>
+              </div>
+              </div>
 
             {/* Divider */}
             <div className="flex items-center my-4">

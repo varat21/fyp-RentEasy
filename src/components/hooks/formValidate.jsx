@@ -32,3 +32,7 @@ export const useLoginValidation = () => {
     resolver: zodResolver(schema),
   };
 };
+export const useAddProductValidation=()=>{
+    
+  
+}
