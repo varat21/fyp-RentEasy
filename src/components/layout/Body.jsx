@@ -5,6 +5,7 @@ import Logout from "../Pages/Logout";
 import Register from "../Pages/Register";
 import Home from "../Pages/Home";
 import Header from "../common/Header/Header";
+import Footer from "../common/Footer/Footer";
 // import Rooms from "../Pages/properties/Rooms";
 import Rooms from '../properties/Rooms'
 import ShopHouses from "../properties/ShopHouses";
@@ -18,6 +19,8 @@ import Contact from '../Pages/Contact'
 import Profile  from '../Pages/Profile'
 import LandLord from '../properties/LandLord'
 import Admin from '../Pages/Admin'
+import AddProperties from "../properties/AddProperties";
+// import VerifyEmail from "../Pages/VerifyEmail";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -25,6 +28,8 @@ const Layout = () => {
     <>
       <Header />
       <Outlet /> {/* Renders the nested route components */}
+
+      <Footer/>
     </>
   );
 };
@@ -96,7 +101,15 @@ const router = createBrowserRouter([
       {
         path:"/logout",
          element:<Logout/>
-      }
+      },
+      {
+        path:"/addProperties",
+         element:<AddProperties/>
+      },
+      // {
+      //   path:"/verifyEmail",
+      //    element:<VerifyEmail/>
+      // },
     ],
   },
 ]);
