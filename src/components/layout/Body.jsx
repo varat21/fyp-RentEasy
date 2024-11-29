@@ -20,6 +20,10 @@ import Profile  from '../Pages/Profile'
 import LandLord from '../properties/LandLord'
 import Admin from '../Pages/Admin'
 import AddProperties from "../properties/AddProperties";
+import ForgetPasswordModal from '../Pages/ForgetPasswordModal';
+import EmailVerification from "../Pages/VerifyEmail";
+// import VerifyOTPModal from "../Pages/VerifyOTPModal";
+// import VerifyEmail from "../Pages/VerifyEmail";
 // import VerifyEmail from "../Pages/VerifyEmail";
 
 // Layout component to include Header on all pages
@@ -43,6 +47,13 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
+  {
+    path:"/forgetPasswordModal",
+     element:<ForgetPasswordModal/>
+  },
+ 
+  
+  
   {
     element: <Layout />, // Wraps all routes that should include Header
     children: [
@@ -106,10 +117,12 @@ const router = createBrowserRouter([
         path:"/addProperties",
          element:<AddProperties/>
       },
-      // {
-      //   path:"/verifyEmail",
-      //    element:<VerifyEmail/>
-      // },
+
+      {
+        path:"/emailVerification",
+         element:<EmailVerification/>
+      },
+     
     ],
   },
 ]);

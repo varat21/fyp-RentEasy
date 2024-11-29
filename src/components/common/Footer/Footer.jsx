@@ -30,7 +30,7 @@ function Footer() {
                   d="M12 4.354l-2.5 4.146H5.5l4.5 4.293-2.5 4.146L12 16.5l2.5 4.146 4.5-4.293H18.5l-4.5-4.293 2.5-4.146L12 4.354z"
                 />
               </svg> */}
-            <p className='text-xl font-bold hidden lg:block'>RentEasy</p>
+            {/* <p className='text-xl font-bold hidden lg:block'>RentEasy</p> */}
             </div>
             <div className=" text-gray-800 px-4 py-5">
   <div className="container mx-auto">
@@ -193,7 +193,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-10 border-t border-gray-800 pt-6 text-md text-center">
+        <div className="mt-10 border-t border-gray-200 pt-6 text-md text-center">
           <p>© 2024 RentEasy, Inc. All rights reserved.</p>
         </div>
       </div>

@@ -1,55 +1,201 @@
 import React, { useState } from "react";
-import { Modal, Button, TextInput, PasswordInput } from "@mantine/core";
+import {
+  Modal,
+  TextInput,
+  Button,
+  Notification,
+  Loader,
+  PasswordInput,
+} from "@mantine/core";
 import axios from "axios";
-import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for toast notifications
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const ForgetPasswordModal = ({ opened, close }) => {
+
+const ForgetPasswordModal = ({ opened, onClose }) => {
+  const [email, setEmail] = useState(""); // State for email
+  const [otp, setOtp] = useState(""); // State for OTP
+  const [newPassword, setNewPassword] = useState(""); // State for new password
+  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+
+  const [otpModalOpen, setOtpModalOpen] = useState(false); // State for OTP modal
+  const [resetModalOpen, setResetModalOpen] = useState(false); // State for reset password modal
+
   const navigate = useNavigate();
 
-  // State variables for email, password, and confirmPassword
-  const [email, setEmail] = useState("");
- 
-
-  // Handle form submission
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent form reload
-
-    
+  // Handle email submission
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      const response = await axios.post('http://localhost/rent-easy/auth/forgetPassword.php', { email });
-       console.log(response);
+      const response = await axios.post(
+        "http://localhost/rent-easy/auth/forgetPassword.php",
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(response.data);
       if (response.data.success) {
-        toast.success(response.data.message);
-        navigate("/login"); // Redirect after success
+        setMessage("Reset code sent successfully!");
+        setMessageType("success");
+        toast.success("Reset code sent!");
+        setOtpModalOpen(true); // Open OTP modal
+        onClose(); // Close the email modal
+      } else {
+        setMessage(response.data.message);
+        setMessageType("error");
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      setMessage("An error occurred. Please try again later.");
+      setMessageType("error");
+      toast.error("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle OTP submission
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost/rent-easy/auth/verifyOtp.php",
+        { otp },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+
+      if (response.data.success) {
+        toast.success("OTP verified successfully!");
+        setOtpModalOpen(false);
+        setResetModalOpen(true); // Open reset password modal
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.response?.data?.message || "An error occurred!");
+      toast.error("Failed to verify OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle reset password submission
+  const handleResetSubmit = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost/rent-easy/auth/resetPassword.php",
+        { email, newPassword },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success("Password reset successfully!");
+        setResetModalOpen(false);
+        navigate("/login"); // Redirect to login page
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed to reset password. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Modal opened={opened} onClose={close} title="Reset Password" centered>
-      <form onSubmit={handleSubmit}>
-        {/* Email Input */}
-        <TextInput
-          label="Email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
+    <>
+      {/* Email Input Modal */}
+      <Modal opened={opened} onClose={onClose} title="Forgot Password" centered>
+        <form onSubmit={handleEmailSubmit}>
+          <TextInput
+            label="Email"
+            placeholder="Enter your email"
+            withAsterisk
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Button fullWidth type="submit" mt="lg" disabled={loading}>
+            {loading ? <Loader size="xs" /> : "Send Reset Code"}
+          </Button>
+          {message && (
+            <Notification
+              color={messageType === "success" ? "green" : "red"}
+              mt="md"
+              withCloseButton
+            >
+              {message}
+            </Notification>
+          )}
+        </form>
+      </Modal>
 
-        
+      {/* OTP Input Modal */}
+      <Modal opened={otpModalOpen} onClose={() => setOtpModalOpen(false)} title="Enter OTP" centered>
+        <form onSubmit={handleOtpSubmit}>
+          <TextInput
+            label="OTP"
+            placeholder="Enter the OTP sent to your email"
+            withAsterisk
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            required
+          />
+          <Button fullWidth type="submit" mt="lg" disabled={loading}>
+            {loading ? <Loader size="xs" /> : "Verify OTP"}
+          </Button>
+        </form>
+      </Modal>
 
-        <Button fullWidth type="submit" mt="lg">
-          Submit
-        </Button>
-      </form>
-    </Modal>
+      {/* Reset Password Modal */}
+      <Modal opened={resetModalOpen} onClose={() => setResetModalOpen(false)} title="Reset Password" centered>
+        <form onSubmit={handleResetSubmit}>
+          <PasswordInput
+            label="New Password"
+            placeholder="Enter your new password"
+            withAsterisk
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Re-enter your new password"
+            withAsterisk
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <Button fullWidth type="submit" mt="lg" disabled={loading}>
+            {loading ? <Loader size="xs" /> : "Reset Password"}
+          </Button>
+        </form>
+      </Modal>
+    </>
   );
 };
 
