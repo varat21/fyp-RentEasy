@@ -49,7 +49,7 @@ const MapEventsHandler = () => {
 
   return (
     <div className="min-h-screen  flex justify-center items-center p-6">
-      <div className=" rounded-xl shadow-lg p-8 w-full max-w-5xl">
+      <div className=" rounded-xl shadow-sm p-8 w-full max-w-5xl">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">
           Post Property
         </h1>

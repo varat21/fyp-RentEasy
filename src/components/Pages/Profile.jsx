@@ -1,51 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from "react";
+import { useDisclosure } from "@mantine/hooks";
+import ProfileEditModal from "./ProfileEditModal";
 
 const GetProfileData = () => {
-  const [profileData, setProfileData] = useState(null); // State to store profile data
-
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const token = localStorage.getItem('token'); // Ensure token is properly formatted
-      console.log('Token:', token); // Log the token here
-
-      if (!token) {
-        console.error('No token found in localStorage');
-        return;
-      }
-
-      try {
-        const headers = {
-          Authorization: `Bearer ${token}`,  // Corrected this line
-        };
-
-        const response = await axios.get('http://localhost/rent-easy/public/profile.php', { headers });
-        console.log(response);
-
-        if (response.data.success) {
-          console.log('Profile data:', response.data);
-          setProfileData(response.data.users); // Store users data correctly in state
-        } else {
-          console.error('Failed to fetch profile data:', response.data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    };
-
-    fetchProfileData();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <div>
-        <>
-          <p>Welcome, {profileData?.name}</p> {/* Use profileData here */}
-          console.log(profileData);
-          <p>Phone Number: {profileData?.phoneNumber}</p>
-          <p>User Type: {profileData?.usersType}</p> {/* Corrected this to match the key */}
-        </>
-      
-      
+    
+    <div className="min-h-screen bg-white dark:bg-gray-800 flex items-center justify-center p-4">
+      <div className="w-full max-w-md dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
+        <div className="text-center p-6 border-b dark:border-gray-700">
+          <img
+            className="w-32 h-32 mx-auto rounded-full border-4 border-blue-500"
+            src="https://randomuser.me/api/portraits/women/21.jpg"
+            alt="Profile"
+          />
+          <h2 className="mt-4 text-xl font-bold text-gray-800 dark:text-white">
+            Cait Genevieve
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            New York, NY
+          </p>
+        </div>
+
+        <div className="p-6">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
+                Phone:
+              </span>
+              <span className="text-gray-600 dark:text-gray-400">
+                9847502403
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
+                Gender:
+              </span>
+              <span className="text-gray-600 dark:text-gray-400">Female</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
+                Email:
+              </span>
+              <span className="text-gray-600 dark:text-gray-400">
+                thapavarat@yahoo.com
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
+                Password:
+              </span>
+              <span className="text-gray-600 dark:text-gray-400">*******</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
+                User Type:
+              </span>
+              <span className="text-gray-600 dark:text-gray-400">User</span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex space-x-4">
+            <button
+              onClick={open}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Edit Profile
+            </button>
+            <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Profile Edit Modal */}
+      <ProfileEditModal opened={opened} close={close} />
     </div>
   );
 };

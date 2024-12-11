@@ -41,7 +41,7 @@ const EmailVerification = () => {
       } else {
         // Verification failed
         // setErrorMessage(response.data.message);
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false);

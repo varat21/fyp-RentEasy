@@ -30,22 +30,25 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
+    const formData = new FormData();
+    formData.append("email", email);
+  
     try {
       const response = await axios.post(
-        "http://localhost/rent-easy/auth/forgetPassword.php",
-        { email },
+        "http://localhost/rent-easy/auth/ForgetPassword/forgetPassword.php",
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",  // This ensures the form data is sent correctly
           },
         }
       );
-
-      console.log(response.data);
+  
       if (response.data.success) {
-        setMessage("Reset code sent successfully!");
+        setMessage("Check your email and click the link!");
         setMessageType("success");
-        toast.success("Reset code sent!");
+        toast.success("Check your email and click the link!!");
         setOtpModalOpen(true); // Open OTP modal
         onClose(); // Close the email modal
       } else {
@@ -57,74 +60,75 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
       setMessage("An error occurred. Please try again later.");
       setMessageType("error");
       toast.error("An error occurred. Please try again later.");
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
+  
+  // // Handle OTP submission
+  // const handleOtpSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost/rent-easy/auth/verifyOtp.php",
+  //       { otp },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     console.log(response);
 
-  // Handle OTP submission
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost/rent-easy/auth/verifyOtp.php",
-        { otp },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response);
+  //     if (response.data.success) {
+  //       toast.success("OTP verified successfully!");
+  //       setOtpModalOpen(false);
+  //       setResetModalOpen(true); // Open reset password modal
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed to verify OTP. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-      if (response.data.success) {
-        toast.success("OTP verified successfully!");
-        setOtpModalOpen(false);
-        setResetModalOpen(true); // Open reset password modal
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Failed to verify OTP. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // // Handle reset password submission
+  // const handleResetSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (newPassword !== confirmPassword) {
+  //     toast.error("Passwords do not match!");
+  //     return;
+  //   }
 
-  // Handle reset password submission
-  const handleResetSubmit = async (e) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
-    }
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost/rent-easy/auth/resetPassword.php",
+  //       { email, newPassword },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost/rent-easy/auth/resetPassword.php",
-        { email, newPassword },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data.success) {
-        toast.success("Password reset successfully!");
-        setResetModalOpen(false);
-        navigate("/login"); // Redirect to login page
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Failed to reset password. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (response.data.success) {
+  //       toast.success("Password reset successfully!");
+  //       setResetModalOpen(false);
+  //       navigate("/login"); // Redirect to login page
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed to reset password. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <>
@@ -140,7 +144,7 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
             required
           />
           <Button fullWidth type="submit" mt="lg" disabled={loading}>
-            {loading ? <Loader size="xs" /> : "Send Reset Code"}
+            {loading ? <Loader size="xs" /> : "Send"}
           </Button>
           {message && (
             <Notification
@@ -155,7 +159,7 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
       </Modal>
 
       {/* OTP Input Modal */}
-      <Modal opened={otpModalOpen} onClose={() => setOtpModalOpen(false)} title="Enter OTP" centered>
+      {/* <Modal opened={otpModalOpen} onClose={() => setOtpModalOpen(false)} title="Enter OTP" centered>
         <form onSubmit={handleOtpSubmit}>
           <TextInput
             label="OTP"
@@ -169,10 +173,10 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
             {loading ? <Loader size="xs" /> : "Verify OTP"}
           </Button>
         </form>
-      </Modal>
+      </Modal> */}
 
       {/* Reset Password Modal */}
-      <Modal opened={resetModalOpen} onClose={() => setResetModalOpen(false)} title="Reset Password" centered>
+      {/* <Modal opened={resetModalOpen} onClose={() => setResetModalOpen(false)} title="Reset Password" centered>
         <form onSubmit={handleResetSubmit}>
           <PasswordInput
             label="New Password"
@@ -194,7 +198,7 @@ const ForgetPasswordModal = ({ opened, onClose }) => {
             {loading ? <Loader size="xs" /> : "Reset Password"}
           </Button>
         </form>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

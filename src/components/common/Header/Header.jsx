@@ -127,10 +127,13 @@ const Header = () => {
             onClick={() => setProfileOpen((prev) => !prev)}
           >
             <FiAlignJustify className="h-5 w-5 " />
+
+
+            
             <Avatar src={null} alt="Profile" className="ml-2" />
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               {profileOpen && (
-                <div className="text-center font-semibold text-md absolute -left-52   mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
+                <div className="text-center font-semibold text-md absolute    mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
                   {/* Profile-related links */}
 
                   <Link
@@ -139,6 +142,8 @@ const Header = () => {
                     onClick={() => setProfileOpen(false)}
                   >
                     <FaRegUser className="h-5 w-5 mr-2" />
+
+                    
                     Profile
                   </Link>
 
@@ -190,16 +195,16 @@ const Header = () => {
             ShopHouse
           </Link>
           <Link
+            to="/apartment"
+            className="text-gray-600 hover:text-blue-500 "
+          >
+             Properties
+          </Link>
+          <Link
             to="/about"
             className="text-gray-600 hover:text-blue-500 "
           >
-            About
-          </Link>
-          <Link
-            to="/properties"
-            className="text-gray-600 hover:text-blue-500 "
-          >
-            Properties
+          About
           </Link>
           <Link
             to="/contact"

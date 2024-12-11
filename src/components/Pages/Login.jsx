@@ -12,7 +12,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
-import ForgetPasswordModal from "./ForgetPasswordModal"; // Import the modal component
+import ForgetPasswordModal from "./ForgetPassword/ForgetPasswordModal";
 
 const Login = () => {
   const { resolver } = useLoginValidation();
@@ -35,16 +35,18 @@ const Login = () => {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
-
+  
+      // Ensure response is properly handled
       const response = await axios.post(
-        "http://localhost/rent-easy/auth/login.php",
+        "http://localhost/rent-easy/auth/login.php", 
         formData
       );
-
+  
       if (response.data.success) {
+        // Correct usage of response
         localStorage.setItem("token", response.data.token);
         toast.success("Login successful");
-
+  
         const userType = response.data.userType;
         if (userType === "tenant") {
           navigate("/");
@@ -68,6 +70,7 @@ const Login = () => {
       toast.error("An error occurred. Please try again later.");
     }
   };
+  
 
   return (
     <div className="relative min-h-screen flex justify-center items-center p-10 m-10">
