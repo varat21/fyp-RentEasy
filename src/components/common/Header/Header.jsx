@@ -10,6 +10,7 @@ import {
   TextInput,
   ActionIcon,
   Select,
+  Button,
 } from "@mantine/core";
 import { FiAlignJustify, FiSearch } from "react-icons/fi";
 import { useDisclosure } from "@mantine/hooks";
@@ -29,6 +30,7 @@ import { FcAbout } from "react-icons/fc";
 import { LuTableProperties } from "react-icons/lu";
 import { TbLetterMSmall } from "react-icons/tb";
 import Logout from "../../Pages/Logout";
+import AddProperties from "../../properties/AddProperties";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -125,10 +127,13 @@ const Header = () => {
             onClick={() => setProfileOpen((prev) => !prev)}
           >
             <FiAlignJustify className="h-5 w-5 " />
+
+
+            
             <Avatar src={null} alt="Profile" className="ml-2" />
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               {profileOpen && (
-                <div className="text-center font-semibold text-md absolute -left-52   mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
+                <div className="text-center font-semibold text-md absolute    mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
                   {/* Profile-related links */}
 
                   <Link
@@ -137,6 +142,8 @@ const Header = () => {
                     onClick={() => setProfileOpen(false)}
                   >
                     <FaRegUser className="h-5 w-5 mr-2" />
+
+                    
                     Profile
                   </Link>
 
@@ -188,16 +195,16 @@ const Header = () => {
             ShopHouse
           </Link>
           <Link
+            to="/apartment"
+            className="text-gray-600 hover:text-blue-500 "
+          >
+             Properties
+          </Link>
+          <Link
             to="/about"
             className="text-gray-600 hover:text-blue-500 "
           >
-            About
-          </Link>
-          <Link
-            to="/properties"
-            className="text-gray-600 hover:text-blue-500 "
-          >
-            Properties
+          About
           </Link>
           <Link
             to="/contact"
@@ -205,6 +212,7 @@ const Header = () => {
           >
             Contact
           </Link>
+         
 
           <div ref={dropdownRef} className="relative">
             <button
@@ -226,6 +234,7 @@ const Header = () => {
                 />
               </svg>
             </button>
+            
             {dropdownOpen && (
               <div className="absolute left-3 mt-2  sm:w-60 md:w-64 lg:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 max-w-36">
                 <Link
@@ -252,6 +261,15 @@ const Header = () => {
               </div>
             )}
           </div>
+          <Link to="/addProperties">
+
+<Button className="text-gray-600 hover:text-blue-500">
+
+  Add Properties            
+</Button>
+
+
+</Link>
         </Group>
       </nav>
 
@@ -274,7 +292,7 @@ const Header = () => {
             className="rounded-md"
             styles={{
               dropdown: {
-                minWidth: "160px", // Optional: Set minimum width for the dropdown
+                // minWidth: "160px", // Optional: Set minimum width for the dropdown
               },
               input: {
                 height: "30px", // Match the height
@@ -365,9 +383,19 @@ const Header = () => {
 
           {/* Profile-related links */}
           <Divider my="sm" />
+          <Link to="/addProperties">
+
+<Button className=" hover:text-blue-500 flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer">
+
+  Add Properties            
+</Button>
+
+
+</Link>
 
           <Link
             to="/profile"
+         
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
             onClick={closeDrawer}
           >

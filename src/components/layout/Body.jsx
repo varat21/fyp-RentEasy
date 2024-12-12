@@ -10,17 +10,25 @@ import Footer from "../common/Footer/Footer";
 import Rooms from '../properties/Rooms'
 import ShopHouses from "../properties/ShopHouses";
 import About from '../Pages/About'
-import Properties from "../properties/Properties";
+import Properties from "../properties/Apartment ";
 import FAQ from "../Pages/FAQ";
 import TermsAndConditions from '../Pages/TermsAndConditions'
 import PrivacyPolicy from '../Pages/PrivacyPolicy'
 import Houses from "../properties/Houses";
 import Contact from '../Pages/Contact'
-import Profile  from '../Pages/Profile'
+// import Profile  from '../Pages/Profile'
 import LandLord from '../properties/LandLord'
 import Admin from '../Pages/Admin'
 import AddProperties from "../properties/AddProperties";
+import EmailVerification from "../Pages/VerifyEmail";
+import ForgetPasswordModal from "../Pages/ForgetPassword/ForgetPasswordModal";
+import UpdatePassword from "../Pages/ForgetPassword/UpdatePassword ";
+
+// import VerifyOTPModal from "../Pages/VerifyOTPModal";
 // import VerifyEmail from "../Pages/VerifyEmail";
+// import VerifyEmail from "../Pages/VerifyEmail";
+import GetProfileData from "../Pages/Profile";
+import Apartment from "../properties/Apartment ";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -43,6 +51,17 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
+  {
+    path:"/forgetPasswordModal",
+     element:<ForgetPasswordModal/>
+  },
+  {
+    path:"/updatePassword",
+     element:<UpdatePassword/>
+  },
+ 
+  
+  
   {
     element: <Layout />, // Wraps all routes that should include Header
     children: [
@@ -71,8 +90,8 @@ const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/properties",
-        element: <Properties />,
+        path: "/apartment",
+        element: <Apartment />,
       },
       {
         path: "/faq",
@@ -86,9 +105,9 @@ const router = createBrowserRouter([
         path: "/privacyPolicy",
         element: <PrivacyPolicy />,
       },
-      {
+       {
         path: "/profile",
-        element: <Profile />,
+        element: <GetProfileData />,
       },
       {
         path: "/landlord",
@@ -106,10 +125,14 @@ const router = createBrowserRouter([
         path:"/addProperties",
          element:<AddProperties/>
       },
-      // {
-      //   path:"/verifyEmail",
-      //    element:<VerifyEmail/>
-      // },
+
+      {
+        path:"/emailVerification",
+         element:<EmailVerification/>
+      },
+
+     
+     
     ],
   },
 ]);
