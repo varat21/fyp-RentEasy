@@ -292,7 +292,7 @@ const Header = () => {
             className="rounded-md"
             styles={{
               dropdown: {
-                minWidth: "160px", // Optional: Set minimum width for the dropdown
+                // minWidth: "160px", // Optional: Set minimum width for the dropdown
               },
               input: {
                 height: "30px", // Match the height

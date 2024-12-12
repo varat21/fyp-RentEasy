@@ -33,7 +33,7 @@ const UpdatePassword = () => {
    formData,
    {
     headers: {
-      "Content-Type": "multipart/form-data",  // This ensures the form data is sent correctly
+      "Content-Type": "multipart/form-data", 
     },
   }
 );
