@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditModal from "./ProfileEditModal";
 import axios from "axios";
+import { Tabs } from '@mantine/core';
+import {
+
+  Button
+} from "@mantine/core";
+import { CiUser } from "react-icons/ci";
+
 
 const GetProfileData = () => {
   const [profileData, setProfileData] = useState(null);
@@ -18,7 +25,7 @@ const GetProfileData = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost/rent-easy/public/profile.php", {
+        const response = await axios.get("http://localhost/rent-easy/public/profile.php/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,78 +48,111 @@ const GetProfileData = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-lg font-semibold text-gray-700">Loading...</p>
       </div>
     );
   }
 
   if (!profileData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>No profile data found.</p>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-lg font-semibold text-red-500">No profile data found.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md dark:bg-gray-900 rounded-xl shadow-md overflow-hidden">
-        <div className="text-center p-6 border-b dark:border-gray-700">
-          <img
-            className="w-32 h-32 mx-auto rounded-full border-4 border-blue-500"
-            src={
-              "https://via.placeholder.com/150" // Replace with actual profile image if available
-            }
-            alt="Profile"
+    <div className=" bg-white p-6 mt-20">
+      <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">My Dashboard</h1>
+
+      <Tabs color="teal" defaultValue="first" className="max-w-4xl mx-auto bg-white shadow-md rounded-xl">
+        <Tabs.List className="flex justify-center mb-4 border-b border-gray-200">
+          <Tabs.Tab value="first" className="text-lg font-semibold">My Profile</Tabs.Tab>
+          <Tabs.Tab value="second" className="text-lg font-semibold">My Properties</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="first" pt="xs">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
+            <div className="text-center mb-6">
+             
+              <CiUser  className="w-32 h-32 mx-auto rounded-full border-4 border-black" />
+              <div className="flex mt-4 items-center justify-center">
+              <div className=" text-sm font-medium text-gray-700 dark:text-white ">Name:</div>
+              <div className=" text-lg font-semibold text-gray-800 dark:text-white capitalize">
+
+              {profileData.name || "N/A"}
+              </div>
+              </div>
+              <div className="flex mt-4 items-center justify-center">
+              <div className=" text-sm font-medium text-gray-700 dark:text-white">Address:</div>
+      
+              <p className=" text-lg font-semibold text-gray-800 dark:text-white capitalize">
+                {profileData.address || "N/A"}
+              </p>
+              </div>
+            </div>
+
+            <div className="flex  flex-wrap justify-between p-10">
+              <div>
+                <span className=" text-sm font-medium text-gray-700 dark:text-gray-300">Phone:</span>
+                <span className=" text-lg font-semibold text-gray-800 dark:text-white">
+                  {profileData.phoneNumber || "N/A"}
+                </span>
+              </div>
+              <div>
+                <span className=" text-sm font-medium text-gray-700 dark:text-gray-300">Gender:</span>
+                <span className=" text-lg font-semibold text-gray-800 dark:text-white">
+                  {profileData.gender || "N/A"}
+                </span>
+              </div>
+              <div>
+                <span className=" text-sm font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                <span className=" text-lg font-semibold text-gray-800 dark:text-white">
+                  {profileData.email || "N/A"}
+                </span>
+              </div>
+              <div>
+                <span className=" text-sm font-medium text-gray-700 dark:text-gray-300">User Type:</span>
+                <span className=" text-lg font-semibold text-gray-800 dark:text-white">
+                  {profileData.userType || "N/A"}
+                </span>
+              </div>
+            </div>
+       
+            <div className="flex justify-end space-x-4">
+
+
+
+                          <Button  type="submit" mt="lg"
+              
+            
+                onClick={open}>
+                Edit Profile
+              </Button>
+            
+            </div>
+          </div>
+
+          {/* Profile Edit Modal */}
+          <ProfileEditModal
+            opened={opened}
+            close={close}
+            name={profileData.name}
+            address={profileData.address}
+            phoneNumber={profileData.phoneNumber}
+            gender={profileData.gender}
+            password={profileData.password}
+            id={profileData.id}
           />
-          <h2 className="mt-4 text-xl font-bold text-gray-800 dark:text-white">
-            {profileData.name || "N/A"}
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {profileData.address || "N/A"}
-          </p>
-        </div>
+        </Tabs.Panel>
 
-        <div className="p-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-800 dark:text-gray-300">Phone:</span>
-              <span className="text-gray-600 dark:text-gray-400">{profileData.phoneNumber || "N/A"}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-800 dark:text-gray-300">Gender:</span>
-              <span className="text-gray-600 dark:text-gray-400">{profileData.gender || "N/A"}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-800 dark:text-gray-300">Email:</span>
-              <span className="text-gray-600 dark:text-gray-400">{profileData.email || "N/A"}</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-800 dark:text-gray-300">User Type:</span>
-              <span className="text-gray-600 dark:text-gray-400">{profileData.userType || "N/A"}</span>
-            </div>
+        <Tabs.Panel value="second" pt="xs">
+          <div className="p-6 bg-gray-50 text-center text-gray-700 font-semibold">
+            This tab will display My Properties data.
           </div>
-
-          <div className="mt-6 flex space-x-4">
-            <button
-              onClick={open}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
-            >
-              Edit Profile
-            </button>
-            <button className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-              Delete Profile
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Edit Modal */}
-      <ProfileEditModal opened={opened} close={close} />
+        </Tabs.Panel>
+      </Tabs>
     </div>
   );
 };

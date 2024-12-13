@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Modal, Button, TextInput, PasswordInput, Loader } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,14 +10,11 @@ import { toast } from "react-hot-toast";
 const validationSchema = z.object({
   name: z.string().nonempty("Name is required"),
   address: z.string().nonempty("Address is required"),
-  phone: z
-    .string()
-    .regex(/^\d{10}$/, "Phone number must be 10 digits")
-    .nonempty("Phone number is required"),
-  password: z.string().nonempty("Password is required"),
+  phoneNumber: z.string().min(10, "Phone Number is required").max(15, "Phone Number is too long"),
+
 });
 
-const ProfileEditModal = ({ opened, close }) => {
+const ProfileEditModal = ({ opened, close,id, name,address,phoneNumber,password,gender ,defaultValues}) => {
   const {
     register,
     handleSubmit,
@@ -25,12 +22,46 @@ const ProfileEditModal = ({ opened, close }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(validationSchema),
+    defaultValues,
+    name,
+    address,  
+    phoneNumber,
+    password,
+    gender,
+
   });
 
+
+  const [formValues, setFormValues] = useState({
+    name: name,
+    address: address,
+    phoneNumber:phoneNumber ,
+    password: password,
+    gender: gender,
+  });
+
+  useEffect(() => {
+    if (defaultValues) {
+      setFormValues({
+        name: defaultValues.name || "",
+        address: defaultValues.address || "",
+        phone: defaultValues.phone || "",
+        password: defaultValues.password || "",
+      });
+    }
+  }, [defaultValues]);
+
+
+  const handleInputChange =(e)=>{
+  const{name,value} = e.target;
+  setFormValues((prevFormValues) => ({ ...prevFormValues, [name]: value}))
+ };
+
+ 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost/rent-easy/auth/update-profile.php",
+        "http://localhost/rent-easy/public/updateProfile.php",
         data
       );
 
@@ -50,8 +81,10 @@ const ProfileEditModal = ({ opened, close }) => {
         type: "manual",
         message: "An error occurred. Please try again later.",
       });
-    }
+    
+    
   };
+}
 
   return (
     <Modal opened={opened} onClose={close} title="Edit Profile" centered>
@@ -59,35 +92,43 @@ const ProfileEditModal = ({ opened, close }) => {
         <TextInput
           label="Name"
           placeholder="Enter your name"
-          defaultValue="Cait Genevieve"
+          defaultValue={formValues.name}
           {...register("name")}
           className="mb-4"
           error={errors.name?.message}
+          value={formValues.name}
+          name="name"
+          onChange={handleInputChange}
+
         />
         <TextInput
           label="Address"
           placeholder="Enter your address"
-          defaultValue="New York, NY"
           {...register("address")}
           className="mb-4"
           error={errors.address?.message}
+          value={formValues.address}
+        name="address"
+        onChange={handleInputChange}
+
+
         />
         <TextInput
           label="Phone"
           placeholder="Enter your phone number"
-          defaultValue="9847502403"
-          {...register("phone")}
+          {...register("phoneNumber")}
           className="mb-4"
-          error={errors.phone?.message}
+          error={errors.phoneNumber?.message}
+          value={formValues.phoneNumber}
+          name="phoneNumber"
+          onChange={handleInputChange}
+          type="number"
+
+
         />
-        <PasswordInput
-          label="Password"
-          placeholder="Enter your password"
-          {...register("password")}
-          className="mb-4"
-          error={errors.password?.message}
-        />
+      
         <div className="flex justify-end space-x-4 mt-4">
+          
           <Button variant="outline" color="gray" onClick={close}>
             Cancel
           </Button>
@@ -98,6 +139,6 @@ const ProfileEditModal = ({ opened, close }) => {
       </form>
     </Modal>
   );
-};
+}
 
 export default ProfileEditModal;
