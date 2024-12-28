@@ -1,7 +1,7 @@
 
 const Home = () => {
   return (
-    <div>
+    <div className="h-[200vh]">
      My name is varat.
     </div>
   )

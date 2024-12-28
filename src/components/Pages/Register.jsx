@@ -32,11 +32,14 @@ const Register = () => {
       formData.append("phoneNumber", data.phoneNumber);
       formData.append("userType", data.userType);
       formData.append("address",data.address);
+      formData.append("image",data.image);
+
 
       const response = await axios.post(
         "http://localhost/rent-easy/auth/register.php",
         formData
       );
+      console.log("Response from registration:", response.data);
 
       if (response.data.success) {
         toast.success(
