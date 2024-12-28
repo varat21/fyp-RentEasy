@@ -30,7 +30,7 @@ const GetProfileData = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+console.log(response);
         if (response.data.success) {
           setProfileData(response.data.user);
         } else {
@@ -61,6 +61,7 @@ const GetProfileData = () => {
       </div>
     );
   }
+  console.log(profileData.image);
 
   return (
     <div className=" bg-white p-6 mt-20">
@@ -76,7 +77,17 @@ const GetProfileData = () => {
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
             <div className="text-center mb-6">
              
-              <CiUser  className="w-32 h-32 mx-auto rounded-full border-4 border-black" />
+            {profileData.image ? (
+  <img
+    src={profileData.image}
+    alt="User Profile"
+    className="w-32 h-32 mx-auto rounded-full border-4 border-black"
+  />
+) : (
+  <CiUser className="w-32 h-32 mx-auto rounded-full border-4 border-black" />
+)}
+
+        
               <div className="flex mt-4 items-center justify-center">
               <div className=" text-sm font-medium text-gray-700 dark:text-white ">Name:</div>
               <div className=" text-lg font-semibold text-gray-800 dark:text-white capitalize">
@@ -144,6 +155,7 @@ const GetProfileData = () => {
             gender={profileData.gender}
             password={profileData.password}
             id={profileData.id}
+            email={profileData.email}
           />
         </Tabs.Panel>
 

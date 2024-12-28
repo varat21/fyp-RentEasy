@@ -64,7 +64,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-gray-100 shadow-sm w-full">
+    <header className="bg-gray-100 shadow-sm w-full sticky top-0 z-[99999999]">
       <div className="container mx-auto flex justify-between items-center py-2 px-2 md:px-12 lg:px-24">
         <Link to="/" className="flex items-center">
           <img
@@ -128,12 +128,10 @@ const Header = () => {
           >
             <FiAlignJustify className="h-5 w-5 " />
 
-
-            
             <Avatar src={null} alt="Profile" className="ml-2" />
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               {profileOpen && (
-                <div className="text-center font-semibold text-md absolute    mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20">
+                <div className="text-center font-semibold text-md absolute    mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20 xl:">
                   {/* Profile-related links */}
 
                   <Link
@@ -142,8 +140,6 @@ const Header = () => {
                     onClick={() => setProfileOpen(false)}
                   >
                     <FaRegUser className="h-5 w-5 mr-2" />
-
-                    
                     Profile
                   </Link>
 
@@ -159,7 +155,11 @@ const Header = () => {
                   <div
                     to="/logout"
                     className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
-                    onClick={() => setProfileOpen(false)} // Close dropdown on click
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      navigate("/login");
+                      toast.success("Logged out successfully");
+                    }}
                   >
                     <IoLogOutOutline className="h-5 w-5 mr-2" />
                     <Logout />
@@ -176,43 +176,24 @@ const Header = () => {
           <Link to="/" className="text-gray-600 hover:text-blue-500 ">
             Home
           </Link>
-          <Link
-            to="/rooms"
-            className="text-gray-600 hover:text-blue-500 "
-          >
+          <Link to="/rooms" className="text-gray-600 hover:text-blue-500 ">
             Rooms
           </Link>
-          <Link
-            to="/houses"
-            className="text-gray-600 hover:text-blue-500 "
-          >
+          <Link to="/houses" className="text-gray-600 hover:text-blue-500 ">
             Houses
           </Link>
-          <Link
-            to="/shopHouse"
-            className="text-gray-600 hover:text-blue-500 "
-          >
+          <Link to="/shopHouse" className="text-gray-600 hover:text-blue-500 ">
             ShopHouse
           </Link>
-          <Link
-            to="/apartment"
-            className="text-gray-600 hover:text-blue-500 "
-          >
-             Properties
+          <Link to="/apartment" className="text-gray-600 hover:text-blue-500 ">
+            Properties
           </Link>
-          <Link
-            to="/about"
-            className="text-gray-600 hover:text-blue-500 "
-          >
-          About
+          <Link to="/about" className="text-gray-600 hover:text-blue-500 ">
+            About
           </Link>
-          <Link
-            to="/contact"
-            className="text-gray-600 hover:text-blue-500"
-          >
+          <Link to="/contact" className="text-gray-600 hover:text-blue-500">
             Contact
           </Link>
-         
 
           <div ref={dropdownRef} className="relative">
             <button
@@ -234,7 +215,7 @@ const Header = () => {
                 />
               </svg>
             </button>
-            
+
             {dropdownOpen && (
               <div className="absolute left-3 mt-2  sm:w-60 md:w-64 lg:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 max-w-36">
                 <Link
@@ -262,14 +243,14 @@ const Header = () => {
             )}
           </div>
           <Link to="/addProperties">
-
-<Button className="text-gray-600 hover:text-blue-500">
-
-  Add Properties            
-</Button>
-
-
-</Link>
+            <Button
+              color="blue"
+              size="sm"
+              className="text-gray-600 hover:text-blue-500"
+            >
+              Add Properties
+            </Button>
+          </Link>
         </Group>
       </nav>
 
@@ -283,7 +264,7 @@ const Header = () => {
         <Box className="flex flex-col space-y-4">
           <TextInput
             placeholder="Search by location or price"
-            className="rounded-md mb-4"
+            className="rounded-md mt-10"
           />
 
           <Select
@@ -384,18 +365,13 @@ const Header = () => {
           {/* Profile-related links */}
           <Divider my="sm" />
           <Link to="/addProperties">
-
-<Button className=" hover:text-blue-500 flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer">
-
-  Add Properties            
-</Button>
-
-
-</Link>
+            <Button className=" hover:text-blue-500 flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer">
+              Add Properties
+            </Button>
+          </Link>
 
           <Link
             to="/profile"
-         
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
             onClick={closeDrawer}
           >
@@ -416,7 +392,11 @@ const Header = () => {
           <Link
             // to="/logout"
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
-            onClick={closeDrawer}
+            onClick={() => {
+              closeDrawer();
+              localStorage.removeItem("token");
+            }}
+
             // Close dropdown on click
           >
             <IoLogOutOutline className="h-5 w-5 mr-2" />

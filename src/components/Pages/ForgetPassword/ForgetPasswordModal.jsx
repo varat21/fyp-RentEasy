@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 
 const ForgetPasswordModal = ({ opened, onClose }) => {
   const [email, setEmail] = useState(""); // State for email
-  const [otp, setOtp] = useState(""); // State for OTP
   const [newPassword, setNewPassword] = useState(""); // State for new password
   const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
   const [loading, setLoading] = useState(false);
