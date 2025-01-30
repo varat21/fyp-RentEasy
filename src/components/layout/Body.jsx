@@ -24,11 +24,10 @@ import EmailVerification from "../Pages/VerifyEmail";
 import ForgetPasswordModal from "../Pages/ForgetPassword/ForgetPasswordModal";
 import UpdatePassword from "../Pages/ForgetPassword/UpdatePassword ";
 
-// import VerifyOTPModal from "../Pages/VerifyOTPModal";
-// import VerifyEmail from "../Pages/VerifyEmail";
-// import VerifyEmail from "../Pages/VerifyEmail";
 import GetProfileData from "../Pages/Profile";
 import Apartment from "../properties/Apartment ";
+
+import ProtectedRoute from "./ProtectedRoute";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -122,14 +121,22 @@ const router = createBrowserRouter([
          element:<Logout/>
       },
       {
-        path:"/addProperties",
-         element:<AddProperties/>
+        path: "/addProperties",
+        element: (
+          <ProtectedRoute>
+            <AddProperties />
+          </ProtectedRoute>
+        ),
       },
 
       {
         path:"/emailVerification",
          element:<EmailVerification/>
       },
+      // {
+      //   path:"/TenantDashboard",
+      //   element:<TenantDashboard/>
+      // },
 
      
      

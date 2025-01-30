@@ -11,6 +11,7 @@ import {
   ActionIcon,
   Select,
   Button,
+  Text
 } from "@mantine/core";
 import { FiAlignJustify, FiSearch } from "react-icons/fi";
 import { useDisclosure } from "@mantine/hooks";
@@ -31,9 +32,12 @@ import { LuTableProperties } from "react-icons/lu";
 import { TbLetterMSmall } from "react-icons/tb";
 import Logout from "../../Pages/Logout";
 import AddProperties from "../../properties/AddProperties";
+import * as jwt_decode from "jwt-decode";
+
 
 const Header = () => {
   const navigate = useNavigate();
+  const[user,setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
@@ -41,6 +45,30 @@ const Header = () => {
   const dropdownRef = useRef(null);
   const profileOpenRef = useRef(null); // Added this reference for profile dropdown
   const [profileOpen, setProfileOpen] = useState(false);
+  
+  // function to decode JWT and get user info
+  const decodeToken =(token)=>{
+    try{
+      const decoded = jwt_decode(token);
+    }catch(error){
+      console.log(error);
+      return null;
+    }
+  };
+  //user information from local storage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = decodeToken(token); // Decode the token
+      if (decoded) {
+        setUser({
+          username: decoded.name || "User", // Replace "name" with the actual property in the token payload
+          userType: decoded.userType,
+        });
+      }
+    }
+  }, []);
+
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -62,9 +90,15 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(()=>{
+    const loggedInUser =JSON.parse(localStorage.getItem("user"));
+    if(loggedInUser){
+      setUser(loggedInUser);
+    }
+  }, []);
 
   return (
-    <header className="bg-gray-100 shadow-sm w-full sticky top-0 z-[99999999]">
+    <header className="bg-gray-100 shadow-sm w-full sticky top-0 z-[9999]">
       <div className="container mx-auto flex justify-between items-center py-2 px-2 md:px-12 lg:px-24">
         <Link to="/" className="flex items-center">
           <img
@@ -72,6 +106,7 @@ const Header = () => {
             alt="RentEasy Logo"
             className="h-14 md:h-16 lg:-ml-20"
           />
+         
           <span className="ml-2 text-xl font-bold hidden lg:block">
             RentEasy
           </span>
@@ -129,10 +164,36 @@ const Header = () => {
             <FiAlignJustify className="h-5 w-5 " />
 
             <Avatar src={null} alt="Profile" className="ml-2" />
+            
+            {/* <div>
+  {user ? (
+    <div className="px-4 py-2 font-small">
+      Welcome, <span >{user.name }</span>
+    </div>
+  ) : (
+    <></> // Show blank if user is null
+  )}
+</div>  */}
+
+
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               {profileOpen && (
                 <div className="text-center font-semibold text-md absolute    mt-6 w-36 rounded-md shadow-lg bg-white border border-gray-200 z-20 xl:">
                   {/* Profile-related links */}
+                  <div>
+  {user ? (
+    <div>
+    {/* // <div className="px-4 py-2 text-sm"> */}
+            <Text size="xs">  Welcome, <span >{user.name }</span></Text>
+
+      {/* Welcome, <span >{user.name }</span> */}
+    </div>
+  ) : (
+    <></> // Show blank if user is null
+  )}
+  <Divider my="sm" />
+
+</div> 
 
                   <Link
                     to="/profile"
@@ -156,7 +217,8 @@ const Header = () => {
                     to="/logout"
                     className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      // localStorage.removeItem("token");
+                      <Logout/>
                       navigate("/login");
                       toast.success("Logged out successfully");
                     }}
@@ -168,7 +230,9 @@ const Header = () => {
               )}
             </div>
           </div>
+          
         </div>
+      
       </div>
 
       <nav className="hidden md:flex  justify-center py-1">

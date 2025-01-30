@@ -3,9 +3,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { TextInput, Button, Group, Select } from "@mantine/core";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
-
 // Configure Leaflet marker icon
 const markerIcon = L.icon({
   iconUrl: "./icon.png", // Replace with the actual path to your marker icon
@@ -83,6 +82,13 @@ const AddProperties = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center p-6">
+      <Toaster
+        toastOptions={{
+          style: {
+            zIndex: 10000, // Ensures the toast appears above everything else
+          },
+        }}
+      />
       <div className="rounded-xl shadow-lg p-8 w-full max-w-5xl bg-white">
         <h1 className="text-3xl font-bold text-gray-800 text-center">Post Property</h1>
         <p className="text-gray-600 text-center mt-2">
@@ -99,6 +105,7 @@ const AddProperties = () => {
               size="md"
             
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Rent Price"
@@ -107,6 +114,7 @@ const AddProperties = () => {
               size="md"
               require
               onChange={handleInputChange}
+              required
             />
             <Select
               label="Type"
@@ -116,6 +124,7 @@ const AddProperties = () => {
               value={formData.type}
               onChange={(value) =>
                 setFormData((prev) => ({ ...prev, type: value }))
+                
               }
             />
           </div>
@@ -129,6 +138,7 @@ const AddProperties = () => {
               placeholder="Enter your country"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="City"
@@ -136,6 +146,7 @@ const AddProperties = () => {
               placeholder="Enter your city"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Municipality"
@@ -143,6 +154,7 @@ const AddProperties = () => {
               placeholder="Enter municipality"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Ward No."
@@ -150,6 +162,7 @@ const AddProperties = () => {
               placeholder="Enter ward number"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Province"
@@ -157,6 +170,7 @@ const AddProperties = () => {
               placeholder="Enter province"
               size="md"
               onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -196,6 +210,7 @@ const AddProperties = () => {
               placeholder="E.g., 50x60 ft"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Road Type"
@@ -203,6 +218,7 @@ const AddProperties = () => {
               placeholder="E.g., Asphalt"
               size="md"
               onChange={handleInputChange}
+              required
             />
             <TextInput
               label="Property Face"
@@ -210,6 +226,7 @@ const AddProperties = () => {
               placeholder="E.g., North Facing"
               size="md"
               onChange={handleInputChange}
+              required
             />
           </div>
 
