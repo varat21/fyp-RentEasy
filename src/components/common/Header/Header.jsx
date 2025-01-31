@@ -34,6 +34,7 @@ import Logout from "../../Pages/Logout";
 import AddProperties from "../../properties/AddProperties";
 import * as jwt_decode from "jwt-decode";
 
+import { toast, Toaster } from "react-hot-toast";
 
 const Header = () => {
   const navigate = useNavigate();

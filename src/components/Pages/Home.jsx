@@ -6,7 +6,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Memoize the fetch function to prevent recreating it on every render
   const fetchProperties = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost/rent-easy/public/getProperties.php");
@@ -23,14 +22,12 @@ const Home = () => {
     }
   }, []);
 
-  // Use useEffect with the memoized fetch function
   useEffect(() => {
     fetchProperties();
   }, [fetchProperties]);
 
   const handleImageError = (e) => {
-    // e.target.onerror = null; // Prevent infinite loop of error handling
-    // e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+    e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; // Fallback image
   };
 
   if (loading) {
@@ -68,20 +65,16 @@ const Home = () => {
           >
             <div className="relative h-48">
               <img
-                src={property.image}
+                src={property.images.length > 0 ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image"}
                 alt={property.title}
                 className="w-full h-full object-cover"
                 onError={handleImageError}
               />
             </div>
             <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">
-                {property.title}
-              </h2>
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h2>
               {property.description && (
-                <p className="text-gray-600 mb-4 line-clamp-2">
-                  {property.description}
-                </p>
+                <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
               )}
               <div className="space-y-2 text-sm text-gray-500">
                 {property.city && property.country && (

@@ -45,7 +45,7 @@ const Login = () => {
       if (response.data.success) {
         // Correct usage of response
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
+  
 
         toast.success("Login successful");
   
