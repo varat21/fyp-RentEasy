@@ -1,16 +1,182 @@
-import React, { useState, useEffect, useCallback } from "react";
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import moment from "moment";
+// import { motion } from "framer-motion";
+// import { Button } from "@mantine/core";
+
+// const Home = () => {
+//   const [properties, setProperties] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+
+//   const fetchProperties = async () => {
+//     try {
+//       const response = await axios.get("http://localhost/rent-easy/public/Properties/getProperties.php");
+//       if (response.data.success) {
+//         setProperties(response.data.properties);
+//       } else {
+//         setError(response.data.message || "Failed to fetch properties");
+//       }
+//     } catch (err) {
+//       setError("Error connecting to the server");
+//       console.error("Fetch error:", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchProperties();
+//   }, []);
+
+//   if (loading) {
+//     return (
+//       <motion.div
+//         className="flex justify-center items-center min-h-screen"
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: 1 }}
+//         transition={{ duration: 0.5 }}
+//       >
+//         <div className="text-lg">Loading properties...</div>
+//       </motion.div>
+//     );
+//   }
+
+//   if (error) {
+//     return (
+//       <motion.div
+//         className="flex justify-center items-center min-h-screen"
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: 1 }}
+//         transition={{ duration: 0.5 }}
+//       >
+//         <div className="text-red-500 text-lg">{error}</div>
+//       </motion.div>
+//     );
+//   }
+
+//   if (!properties.length) {
+//     return (
+//       <motion.div
+//         className="flex justify-center items-center min-h-screen"
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: 1 }}
+//         transition={{ duration: 0.5 }}
+//       >
+//         <div className="text-lg">No properties found</div>
+//       </motion.div>
+//     );
+//   }
+
+//   return (
+//     <motion.div
+//       className="container mx-auto px-4 py-8"
+//       initial={{ opacity: 0, y: 20 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       transition={{ duration: 0.5 }}
+//     >
+//       <motion.h1
+//         className="text-3xl font-bold mb-8 text-center"
+//         initial={{ opacity: 0, scale: 0.8 }}
+//         animate={{ opacity: 1, scale: 1 }}
+//         transition={{ duration: 0.5 }}
+//       >
+//         Available Properties
+//       </motion.h1>
+
+//       <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//       {properties.map((property, index) => (
+//           <motion.div
+//             key={property.propertyId}
+//             className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform"
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.3, delay: index * 0.1 }}
+//             whileHover={{ scale: 1.05 }}
+//           >
+//             <div className="relative h-48">
+//               <img
+//                 src={property.images.length > 0 ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image"}
+//                 alt={property.title}
+//                 className="w-full h-full object-cover"
+//               />
+//             </div>
+//             <div className="p-4">
+//               <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h2>
+//               <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.price}</h2>
+
+//               {property.description && (
+//                 <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
+//               )}
+
+//               <div className="space-y-2 text-sm text-gray-500">
+//                 {property.city && property.country && (
+//                   <p className="flex items-center">
+//                     <span className="mr-2">📍</span>
+//                     {property.city}, {property.country}
+//                   </p>
+//                 )}
+//                 {property.owner_name && (
+//                   <p className="flex items-center">
+//                     <span className="mr-2">👤</span>
+//                     {property.owner_name}
+//                   </p>
+//                 )}
+//                 {property.owner_contact && (
+//                   <p className="flex items-center">
+//                     <span className="mr-2">📞</span>
+//                     {property.owner_contact}
+//                   </p>
+//                 )}
+//                 <p className="flex items-center">
+//                   <span className="mr-2">📅</span>
+//                   {moment(property.uploaded_at).format("MMM Do YYYY")}
+//                 </p>
+//               </div>
+
+//               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+//                 <Button color="blue" size="md" className="mt-6 w-full">
+//                   Book Now
+//                 </Button>
+//               </motion.div>
+//             </div>
+//           </motion.div>
+//         ))}
+//       </motion.div>
+//     </motion.div>
+//   );
+// };
+
+// export default Home;
+
+
+
+
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
+import { motion } from "framer-motion";
+import { Button, Select, TextInput, NumberInput } from "@mantine/core";
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
-  const fetchProperties = useCallback(async () => {
+  // Fetch properties from API
+  const fetchProperties = async () => {
     try {
-      const response = await axios.get("http://localhost/rent-easy/public/getProperties.php");
+      const response = await axios.get("http://localhost/rent-easy/public/Properties/getProperties.php");
       if (response.data.success) {
         setProperties(response.data.properties);
+        setFilteredProperties(response.data.properties);
       } else {
         setError(response.data.message || "Failed to fetch properties");
       }
@@ -20,87 +186,155 @@ const Home = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchProperties();
-  }, [fetchProperties]);
+  }, []);
 
-  const handleImageError = (e) => {
-    e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; // Fallback image
-  };
+  // Apply filters when search criteria change
+  useEffect(() => {
+    let filtered = properties;
+
+    if (search) {
+      filtered = filtered.filter((property) =>
+        property.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    if (selectedCity) {
+      filtered = filtered.filter((property) => property.city === selectedCity);
+    }
+
+    if (selectedType) {
+      filtered = filtered.filter((property) => property.type === selectedType);
+    }
+
+    if (minPrice !== "" && maxPrice !== "") {
+      filtered = filtered.filter(
+        (property) => property.price >= minPrice && property.price <= maxPrice
+      );
+    }
+
+    setFilteredProperties(filtered);
+  }, [search, selectedCity, selectedType, minPrice, maxPrice, properties]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <motion.div className="flex justify-center items-center min-h-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <div className="text-lg">Loading properties...</div>
-      </div>
+      </motion.div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <motion.div className="flex justify-center items-center min-h-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <div className="text-red-500 text-lg">{error}</div>
-      </div>
-    );
-  }
-
-  if (!properties.length) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-lg">No properties found</div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Available Properties</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.map((property) => (
-          <div
-            key={property.propertyId}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:transform hover:scale-105"
-          >
-            <div className="relative h-48">
-              <img
-                src={property.images.length > 0 ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image"}
-                alt={property.title}
-                className="w-full h-full object-cover"
-                onError={handleImageError}
-              />
-            </div>
-            <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h2>
-              {property.description && (
-                <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
-              )}
-              <div className="space-y-2 text-sm text-gray-500">
-                {property.city && property.country && (
-                  <p className="flex items-center">
-                    <span className="mr-2">📍</span>
-                    {property.city}, {property.country}
-                  </p>
-                )}
-                {property.owner_name && (
-                  <p className="flex items-center">
-                    <span className="mr-2">👤</span>
-                    {property.owner_name}
-                  </p>
-                )}
-                {property.owner_contact && (
-                  <p className="flex items-center">
-                    <span className="mr-2">📞</span>
-                    {property.owner_contact}
-                  </p>
-                )}
-              </div>
-            </div>
+    <motion.div className="container mx-auto px-4 w-full" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <div className="relative w-full">
+      {/* Background Image */}
+      <div className="relative w-full h-96 p-1">
+        <img
+          src="/images/bgImage.jpg"
+          alt="Property"
+          className="w-[100%] h-full object-cover rounded-lg shadow-lg"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
+      </div>
+
+      {/* Content Above the Image */}
+      <div className="absolute top-0 left-0 w-full p-12">
+        <motion.h1
+          className="text-4xl font-bold text-center mb-6 text-white drop-shadow-lg"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Find Your Dream Property
+        </motion.h1>
+
+        {/* Filter Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 shadow-lg rounded-lg">
+          <TextInput
+            placeholder="Search by title"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full"
+          />
+          <Select
+            placeholder="Filter by city"
+            value={selectedCity}
+            onChange={setSelectedCity}
+            data={[...new Set(properties.map((prop) => prop.city))]}
+            className="w-full"
+          />
+          <Select
+            placeholder="Property Type"
+            value={selectedType}
+            onChange={setSelectedType}
+            data={[...new Set(properties.map((prop) => prop.type))]}
+            className="w-full"
+          />
+          <div className="flex gap-2">
+            <NumberInput
+              placeholder="Min Price"
+              value={minPrice}
+              onChange={setMinPrice}
+              className="w-1/2"
+            />
+            <NumberInput
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={setMaxPrice}
+              className="w-1/2"
+            />
           </div>
-        ))}
+        </div>
       </div>
     </div>
+    <motion.h1
+          className="text-4xl font-bold text-center mb-6 text-black drop-shadow-lg p-7"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+Available Properties        </motion.h1>
+
+      {/* Property Listings */}
+      {filteredProperties.length === 0 ? (
+        <div className="text-lg text-center mt-8">No properties found</div>
+      ) : (
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {filteredProperties.map((property, index) => (
+            <motion.div key={property.propertyId} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }} whileHover={{ scale: 1.05 }}>
+              <div className="relative h-48">
+                <img src={property.images.length > 0 ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image"} alt={property.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h2>
+                <h2 className="text-xl font-semibold mb-2 text-gray-800">${property.price}</h2>
+                {property.description && <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>}
+                <div className="space-y-2 text-sm text-gray-500">
+                  {property.city && property.country && <p className="flex items-center"><span className="mr-2">📍</span>{property.city}, {property.country}</p>}
+                  {property.owner_name && <p className="flex items-center"><span className="mr-2">👤</span>{property.owner_name}</p>}
+                  {property.owner_contact && <p className="flex items-center"><span className="mr-2">📞</span>{property.owner_contact}</p>}
+                  <p className="flex items-center"><span className="mr-2">📅</span>{moment(property.uploaded_at).format("MMM Do YYYY")}</p>
+                </div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button color="blue" size="md" className="mt-6 w-full">Book Now</Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 

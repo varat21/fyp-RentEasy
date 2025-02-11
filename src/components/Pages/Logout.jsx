@@ -10,7 +10,7 @@ const onClick = () => {
     localStorage.removeItem("token");
 
     navigate("/login");
-    toast.success("Logged out successfully");
+    // toast.success("Logged out successfully");
 }
   return (
     <div>

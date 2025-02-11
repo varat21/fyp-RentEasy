@@ -7,14 +7,14 @@ import Home from "../Pages/Home";
 import Header from "../common/Header/Header";
 import Footer from "../common/Footer/Footer";
 // import Rooms from "../Pages/properties/Rooms";
-import Rooms from '../properties/Rooms'
-import ShopHouses from "../properties/ShopHouses";
+// import Rooms from '../properties/Rooms'
+// import ShopHouses from "../properties/ShopHouses";
 import About from '../Pages/About'
 import Properties from "../properties/Apartment ";
 import FAQ from "../Pages/FAQ";
 import TermsAndConditions from '../Pages/TermsAndConditions'
 import PrivacyPolicy from '../Pages/PrivacyPolicy'
-import Houses from "../properties/Houses";
+// import Houses from "../properties/Houses";
 import Contact from '../Pages/Contact'
 // import Profile  from '../Pages/Profile'
 import LandLord from '../properties/LandLord'
@@ -72,18 +72,18 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact />,
       },
-      {
-        path: "/houses",
-        element: <Houses />,
-      },
-      {
-        path: "/rooms",
-        element: <Rooms />,
-      },
-      {
-        path: "/shopHouse",
-        element: <ShopHouses />,
-      },
+      // {
+      //   path: "/houses",
+      //   element: <Houses />,
+      // },
+      // {
+      //   path: "/rooms",
+      //   element: <Rooms />,
+      // },
+      // {
+      //   path: "/shopHouse",
+      //   element: <ShopHouses />,
+      // },
       {
         path: "/about",
         element: <About />,
