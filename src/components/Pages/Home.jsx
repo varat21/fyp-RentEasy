@@ -158,8 +158,10 @@ import axios from "axios";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { Button, Select, TextInput, NumberInput } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const Navigate =useNavigate();
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -173,7 +175,7 @@ const Home = () => {
   // Fetch properties from API
   const fetchProperties = async () => {
     try {
-      const response = await axios.get("http://localhost/rent-easy/public/Properties/getProperties.php");
+      const response = await axios.get("http://localhost/rent-easy/public/getProperties.php");
       if (response.data.success) {
         setProperties(response.data.properties);
         setFilteredProperties(response.data.properties);
@@ -202,11 +204,11 @@ const Home = () => {
       );
     }
 
-    if (selectedCity) {
+    if (selectedCity && selectedCity !== "All Cities") {
       filtered = filtered.filter((property) => property.city === selectedCity);
     }
 
-    if (selectedType) {
+    if (selectedType && selectedType !== "All Types") {
       filtered = filtered.filter((property) => property.type === selectedType);
     }
 
@@ -236,7 +238,7 @@ const Home = () => {
   }
 
   return (
-    <motion.div className="container mx-auto px-4 w-full" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div className="container mx-auto px-4 w-full" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} >
       <div className="relative w-full">
       {/* Background Image */}
       <div className="relative w-full h-96 p-1">
@@ -271,14 +273,14 @@ const Home = () => {
             placeholder="Filter by city"
             value={selectedCity}
             onChange={setSelectedCity}
-            data={[...new Set(properties.map((prop) => prop.city))]}
+            data={["All Cities", ...new Set(properties.map((prop) => prop.city))]}
             className="w-full"
           />
           <Select
             placeholder="Property Type"
             value={selectedType}
             onChange={setSelectedType}
-            data={[...new Set(properties.map((prop) => prop.type))]}
+            data={["All Types", ...new Set(properties.map((prop) => prop.type))]}
             className="w-full"
           />
           <div className="flex gap-2">
@@ -312,7 +314,8 @@ Available Properties        </motion.h1>
       ) : (
         <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredProperties.map((property, index) => (
-            <motion.div key={property.propertyId} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }} whileHover={{ scale: 1.05 }}>
+            <motion.div key={property.propertyId} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }} whileHover={{ scale: 1.05 }}
+            onClick={() => Navigate(`/property/${property.propertyId}`)}>
               <div className="relative h-48">
                 <img src={property.images.length > 0 ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image"} alt={property.title} className="w-full h-full object-cover" />
               </div>

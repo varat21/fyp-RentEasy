@@ -28,6 +28,7 @@ import GetProfileData from "../Pages/Profile";
 import Apartment from "../properties/Apartment ";
 
 import ProtectedRoute from "./ProtectedRoute";
+import GetPropertiesDetails from "../properties/GetPropertiesDetails";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -133,10 +134,10 @@ const router = createBrowserRouter([
         path:"/emailVerification",
          element:<EmailVerification/>
       },
-      // {
-      //   path:"/TenantDashboard",
-      //   element:<TenantDashboard/>
-      // },
+      {
+        path:"/property/:id",
+        element:<GetPropertiesDetails/>
+      },
 
      
      

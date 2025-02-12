@@ -299,7 +299,7 @@ import { Image } from "@mantine/core";
 
 // Configure Leaflet marker icon
 const markerIcon = L.icon({
-  iconUrl: "./icon.png", // Replace with the actual path to your marker icon
+  iconUrl: "./icon.png", 
   iconSize: [35, 35],
 });
 
@@ -411,12 +411,20 @@ const AddProperties = () => {
     Object.keys(formData).forEach((key) => form.append(key, formData[key]));
     form.append("latitude", marker[0]);
     form.append("longitude", marker[1]);
-    images.forEach((image) => form.append("image", image));
-    documents.forEach((document) => form.append("document", document));
+
+   // Append multiple images
+  images.forEach((image, index) => {
+    form.append(`images[${index}]`, image);
+  });
+
+  // Append multiple documents
+  documents.forEach((document, index) => {
+    form.append(`documents[${index}]`, document);
+  });
 
     try {
       const response = await axios.post(
-        "http://localhost/rent-easy/public/Properties/AddProperties.php",
+        "http://localhost/rent-easy/public/AddProperties.php",
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -438,7 +446,7 @@ const AddProperties = () => {
           property_face: "",
           description: "",
           image: [],
-          document: "",
+          document: [],
         });
         setImages([]);
         setDocuments([]);
@@ -470,7 +478,7 @@ const AddProperties = () => {
         <p className="text-gray-600 text-center mt-2">
           Fill out the form below to add your property listing.
         </p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} enctype="multipart/form-data">
           <div className="mt-8 space-y-6">
             {/* Property Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -634,7 +642,7 @@ const AddProperties = () => {
               </Dropzone>
 
               {/* Uploaded Image Previews */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="mt-6 grid grid-cols-4 gap-4 ">
                 {images.map((image, index) => (
                   <div key={index} className="relative">
                     <Image
@@ -675,7 +683,7 @@ const AddProperties = () => {
               </Dropzone>
 
               {/* Uploaded Document and Image Previews */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="mt-6 grid grid-cols-4 gap-4">
                 {documents.map((document, index) => (
                   <div key={index} className="relative">
                     {document.type.startsWith("image/") ? (
