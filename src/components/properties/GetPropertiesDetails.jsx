@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+// import "leaflet/dist/leaflet.css";
 
 const GetPropertyDetails = () => {
   const { id } = useParams();
@@ -19,7 +19,6 @@ const GetPropertyDetails = () => {
         const response = await axios.get(
           `http://localhost/rent-easy/public/getPropertiesDetails.php?propertyId=${id}`
         );
-        console.log("API Response:", response.data);
 
         if (response.data.success && Array.isArray(response.data.properties)) {
           setProperty(response.data.properties[0]);
@@ -113,7 +112,7 @@ const GetPropertyDetails = () => {
               <p className="text-lg font-semibold text-gray-800">{property?.owner_name}</p>
               <p className="text-gray-600 text-md">({property?.owner_role || "Property Owner"})</p>
               </div>
-              <p className="text-gray-600 text-md">               📞 {property?.owner_contact}
+              <p className="text-gray-600 text-md">📞{property?.owner_contact}
               </p>
             </div>
           </div>

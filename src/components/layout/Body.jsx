@@ -28,7 +28,7 @@ import GetProfileData from "../Pages/Profile";
 import Apartment from "../properties/Apartment ";
 
 import ProtectedRoute from "./ProtectedRoute";
-import GetPropertiesDetails from "../properties/GetPropertiesDetails";
+import GetPropertiesDetails from "../properties/getPropertiesDetails";
 
 // Layout component to include Header on all pages
 const Layout = () => {

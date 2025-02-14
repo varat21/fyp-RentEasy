@@ -171,7 +171,7 @@ const Home = () => {
   const [selectedType, setSelectedType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-
+console.log(selectedType)
   // Fetch properties from API
   const fetchProperties = async () => {
     try {
@@ -191,6 +191,8 @@ const Home = () => {
   };
 
   useEffect(() => {
+    console.log("Available property types:", properties.map(prop => prop.type));
+
     fetchProperties();
   }, []);
 
@@ -236,12 +238,14 @@ const Home = () => {
       </motion.div>
     );
   }
-
+  console.log(selectedType)
   return (
-    <motion.div className="container mx-auto px-4 w-full" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} >
+    <motion.div className="container mx-auto px-4 w-full" 
+    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} 
+    transition={{ duration: 0.5 }} >
       <div className="relative w-full">
       {/* Background Image */}
-      <div className="relative w-full h-96 p-1">
+      <div className="relative w-full h-72 md:h-[450px] overflow-hidden rounded-xl shadow-lg p-4">
         <img
           src="/images/bgImage.jpg"
           alt="Property"
@@ -300,19 +304,22 @@ const Home = () => {
         </div>
       </div>
     </div>
+    <div className="p-16"></div>
+
     <motion.h1
           className="text-4xl font-bold text-center mb-6 text-black drop-shadow-lg p-7"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-Available Properties        </motion.h1>
+      Available Properties       
+    </motion.h1>
 
       {/* Property Listings */}
       {filteredProperties.length === 0 ? (
         <div className="text-lg text-center mt-8">No properties found</div>
       ) : (
-        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 cursor-pointer">
           {filteredProperties.map((property, index) => (
             <motion.div key={property.propertyId} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }} whileHover={{ scale: 1.05 }}
             onClick={() => Navigate(`/property/${property.propertyId}`)}>
@@ -330,7 +337,9 @@ Available Properties        </motion.h1>
                   <p className="flex items-center"><span className="mr-2">📅</span>{moment(property.uploaded_at).format("MMM Do YYYY")}</p>
                 </div>
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <Button color="blue" size="md" className="mt-6 w-full">Book Now</Button>
+                  <Button color="blue" size="md"
+                   className="mt-6 w-full"
+                   >Book Now</Button>
                 </motion.div>
               </div>
             </motion.div>
