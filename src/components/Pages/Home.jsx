@@ -159,6 +159,7 @@ import moment from "moment";
 import { motion } from "framer-motion";
 import { Button, Select, TextInput, NumberInput } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
 
 const Home = () => {
   const Navigate =useNavigate();
@@ -226,7 +227,15 @@ console.log(selectedType)
   if (loading) {
     return (
       <motion.div className="flex justify-center items-center min-h-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        <div className="text-lg">Loading properties...</div>
+       <div className="flex flex-col justify-center items-center">
+        <div className="text-lg">Loading properties...
+
+        </div>
+        <div>
+        <Loader className="animate-spin" />
+
+        </div>
+        </div>
       </motion.div>
     );
   }
@@ -328,7 +337,7 @@ console.log(selectedType)
               </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h2>
-                <h2 className="text-xl font-semibold mb-2 text-gray-800">${property.price}</h2>
+                <h2 className="text-xl font-semibold mb-2 text-gray-800">{property.price}</h2>
                 {property.description && <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>}
                 <div className="space-y-2 text-sm text-gray-500">
                   {property.city && property.country && <p className="flex items-center"><span className="mr-2">📍</span>{property.city}, {property.country}</p>}
