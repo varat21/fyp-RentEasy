@@ -41,10 +41,12 @@ const Login = () => {
         "http://localhost/rent-easy/auth/login.php", 
         formData
       );
-  
+      console.log(response);
       if (response.data.success) {
         // Correct usage of response
         localStorage.setItem("token", response.data.token);
+  
+
         toast.success("Login successful");
   
         const userType = response.data.userType;
@@ -63,6 +65,7 @@ const Login = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      console.log(error);
       setError("root", {
         type: "manual",
         message: "An error occurred. Please try again later.",

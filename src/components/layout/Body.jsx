@@ -7,14 +7,14 @@ import Home from "../Pages/Home";
 import Header from "../common/Header/Header";
 import Footer from "../common/Footer/Footer";
 // import Rooms from "../Pages/properties/Rooms";
-import Rooms from '../properties/Rooms'
-import ShopHouses from "../properties/ShopHouses";
+// import Rooms from '../properties/Rooms'
+// import ShopHouses from "../properties/ShopHouses";
 import About from '../Pages/About'
 import Properties from "../properties/Apartment ";
 import FAQ from "../Pages/FAQ";
 import TermsAndConditions from '../Pages/TermsAndConditions'
 import PrivacyPolicy from '../Pages/PrivacyPolicy'
-import Houses from "../properties/Houses";
+// import Houses from "../properties/Houses";
 import Contact from '../Pages/Contact'
 // import Profile  from '../Pages/Profile'
 import LandLord from '../properties/LandLord'
@@ -24,11 +24,12 @@ import EmailVerification from "../Pages/VerifyEmail";
 import ForgetPasswordModal from "../Pages/ForgetPassword/ForgetPasswordModal";
 import UpdatePassword from "../Pages/ForgetPassword/UpdatePassword ";
 
-// import VerifyOTPModal from "../Pages/VerifyOTPModal";
-// import VerifyEmail from "../Pages/VerifyEmail";
-// import VerifyEmail from "../Pages/VerifyEmail";
 import GetProfileData from "../Pages/Profile";
 import Apartment from "../properties/Apartment ";
+
+import ProtectedRoute from "./ProtectedRoute";
+import GetPropertiesDetails from "../properties/GetPropertiesDetails";
+import { NotFoundImage } from "../NotFoundImage";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -73,18 +74,18 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact />,
       },
-      {
-        path: "/houses",
-        element: <Houses />,
-      },
-      {
-        path: "/rooms",
-        element: <Rooms />,
-      },
-      {
-        path: "/shopHouse",
-        element: <ShopHouses />,
-      },
+      // {
+      //   path: "/houses",
+      //   element: <Houses />,
+      // },
+      // {
+      //   path: "/rooms",
+      //   element: <Rooms />,
+      // },
+      // {
+      //   path: "/shopHouse",
+      //   element: <ShopHouses />,
+      // },
       {
         path: "/about",
         element: <About />,
@@ -122,13 +123,26 @@ const router = createBrowserRouter([
          element:<Logout/>
       },
       {
-        path:"/addProperties",
-         element:<AddProperties/>
+        path: "/addProperties",
+        element: (
+          <ProtectedRoute>
+            <AddProperties />
+          </ProtectedRoute>
+        ),
       },
 
       {
         path:"/emailVerification",
          element:<EmailVerification/>
+      },
+      {
+        path:"/property/:id",
+        element:<GetPropertiesDetails/>
+      },
+
+      {
+        path:"*",
+        element:<NotFoundImage/>
       },
 
      
