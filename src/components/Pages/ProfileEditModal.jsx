@@ -116,7 +116,7 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
             <CiUser className="w-full h-full" />
           )}
         </div>
-        <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" />
+        {/* <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" /> */}
 
         <TextInput
           label="Name"

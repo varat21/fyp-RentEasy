@@ -28,7 +28,8 @@ import GetProfileData from "../Pages/Profile";
 import Apartment from "../properties/Apartment ";
 
 import ProtectedRoute from "./ProtectedRoute";
-import GetPropertiesDetails from "../properties/getPropertiesDetails";
+import GetPropertiesDetails from "../properties/GetPropertiesDetails";
+import { NotFoundImage } from "../NotFoundImage";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -137,6 +138,11 @@ const router = createBrowserRouter([
       {
         path:"/property/:id",
         element:<GetPropertiesDetails/>
+      },
+
+      {
+        path:"*",
+        element:<NotFoundImage/>
       },
 
      

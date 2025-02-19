@@ -600,7 +600,7 @@ className={`transition-colors duration-200 ${
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              About
+              About Us
             </Link>
             <Link to="/contact" 
 className={`transition-colors duration-200 ${
@@ -608,7 +608,7 @@ className={`transition-colors duration-200 ${
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              Contact
+              Contact Us
             </Link>
             <Link to="/faq" 
 className={`transition-colors duration-200 ${
@@ -616,7 +616,7 @@ className={`transition-colors duration-200 ${
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              FAQ
+              FAQs
             </Link>
             <Link to="/terms" 
 className={`transition-colors duration-200 ${
@@ -769,7 +769,7 @@ className={`transition-colors duration-200 ${
             to="/faq"
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
           >
-            <FaQq className="h-5 w-5 mr-2" /> FAQ
+            <FaQq className="h-5 w-5 mr-2" /> FAQs
           </Link>
           <Link
             to="/terms"
