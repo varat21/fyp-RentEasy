@@ -10,7 +10,7 @@ import Footer from "../common/Footer/Footer";
 // import Rooms from '../properties/Rooms'
 // import ShopHouses from "../properties/ShopHouses";
 import About from '../Pages/About'
-import Properties from "../properties/Apartment ";
+// import Properties from "../properties/Apartment ";
 import FAQ from "../Pages/FAQ";
 import TermsAndConditions from '../Pages/TermsAndConditions'
 import PrivacyPolicy from '../Pages/PrivacyPolicy'
@@ -25,11 +25,12 @@ import ForgetPasswordModal from "../Pages/ForgetPassword/ForgetPasswordModal";
 import UpdatePassword from "../Pages/ForgetPassword/UpdatePassword ";
 
 import GetProfileData from "../Pages/Profile";
-import Apartment from "../properties/Apartment ";
+// import Apartment from "../properties/Apartment ";
 
 import ProtectedRoute from "./ProtectedRoute";
 import GetPropertiesDetails from "../properties/GetPropertiesDetails";
 import { NotFoundImage } from "../NotFoundImage";
+import Properties from "../properties/Properties";
 
 // Layout component to include Header on all pages
 const Layout = () => {
@@ -90,13 +91,17 @@ const router = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
-      {
-        path: "/apartment",
-        element: <Apartment />,
-      },
+      // {
+      //   path: "/apartment",
+      //   element: <Apartment />,
+      // },
       {
         path: "/faq",
         element: <FAQ />,
+      },
+      {
+        path: "/properties",
+        element: <Properties />,
       },
       {
         path: "/terms", 

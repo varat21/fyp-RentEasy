@@ -586,9 +586,9 @@ const Header = () => {
             >
               Home
             </Link>
-            <Link to="/apartment" 
+            <Link to="/properties" 
 className={`transition-colors duration-200 ${
-  location.pathname === "/apartment" 
+  location.pathname === "/properties" 
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
