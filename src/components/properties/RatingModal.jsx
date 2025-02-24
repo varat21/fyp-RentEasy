@@ -11,6 +11,8 @@ import {
 } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 
 const RatingModal = ({ open, setOpen, propertyId, id }) => {
   const token = localStorage.getItem("token");
@@ -30,24 +32,34 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!token) {
       toast.error("Please login first!");
       return;
     }
-
+  
     if (!formData.rating || !formData.comment.trim()) {
       toast.error("All fields are required!");
       return;
     }
-
+  
     try {
+      console.log("Token from localStorage:", localStorage.getItem("token"));
+  
+      // Decode the token to get the user ID
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken?.userId; // Adjust based on your token structure
+      console.log(userId);
+  
+      // Use FormData instance correctly
       const requestData = new FormData();
       requestData.append("property_id", propertyId);
       requestData.append("rating", formData.rating);
       requestData.append("comment", formData.comment);
-      requestData.append("id", id); // Ensure `id` is passed
-
+      requestData.append("id", userId);  // Fix: Use requestData.append, not formData.append
+  
+      console.log(requestData);
+  
       const response = await axios.post(
         "http://localhost/rent-easy/public/insertRating.php",
         requestData,
@@ -57,7 +69,7 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
           },
         }
       );
-
+  
       if (response.data.success) {
         toast.success("Review added successfully!");
         setFormData({ rating: "", comment: "" });
@@ -70,6 +82,7 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
       toast.error("An error occurred while submitting the rating.");
     }
   };
+  
 
   return (
     <Modal opened={open} onClose={() => setOpen(false)} size="lg" centered>

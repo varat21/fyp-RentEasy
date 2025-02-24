@@ -17,7 +17,7 @@ const Home = () => {
   const [selectedType, setSelectedType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  console.log(selectedType);
+  // console.log(selectedType);
   // Fetch properties from API
   const fetchProperties = async () => {
     try {
@@ -39,10 +39,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log(
-      "Available property types:",
-      properties.map((prop) => prop.type)
-    );
+    // console.log(
+    //   "Available property types:",
+    //   properties.map((prop) => prop.type)
+    // );
 
     fetchProperties();
   }, []);
@@ -287,9 +287,22 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Button color="blue" size="md" className="mt-6 w-full">
+                  {/* <Button color="blue" size="md" className="mt-6 w-full">
                     Book Now
-                  </Button>
+                  </Button> */}
+<p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
+  See more
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    className="w-4 h-4"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+</p>
                 </motion.div>
               </div>
             </motion.div>
