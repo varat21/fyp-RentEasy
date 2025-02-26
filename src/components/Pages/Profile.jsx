@@ -10,8 +10,18 @@ import { useNavigate } from 'react-router-dom';
 import useBookingStore from '../stores/useBookingStore';
 import { Trash } from 'lucide-react';
 import { motion } from 'framer-motion';
-import {  Card, Group, Text, Title, Badge, Rating } from '@mantine/core';
+import {  Card, Group,  Title, Badge, Rating } from '@mantine/core';
 import { toast } from 'react-hot-toast';
+import { jwtDecode } from "jwt-decode";
+import { HiDotsHorizontal} from "react-icons/hi";
+// import { useDisclosure } from '@mantine/hooks';
+import { Popover,Text} from '@mantine/core';
+import DeletePropertiesModal from "./deleteProfilePropertiesModal";
+import { AiTwotoneDelete } from "react-icons/ai";
+import { MdEdit } from "react-icons/md";
+
+
+
 
 const GetProfileData = () => {
   const { bookedProperties, totalAmount, removeProperty, clearBookings } = useBookingStore();
@@ -20,7 +30,9 @@ const GetProfileData = () => {
   const [loading, setLoading] = useState(true);
   const [opened, { open, close }] = useDisclosure(false);
   const [properties, setProperties] = useState([]); // State to store properties
-
+  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+console.log(selectedPropertyId);
+  const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -32,8 +44,15 @@ const GetProfileData = () => {
       }
 
       try {
+         // Decode the token to get the user ID
+              const decodedToken = jwtDecode(token);
+              const userId = decodedToken?.userId; // Adjust based on your token structure
+              if (!userId) {
+                toast.error("Invalid token. Please log in again.");
+                return;
+              }
         const response = await axios.get(
-          "http://localhost/rent-easy/public/profile.php/",
+          `http://localhost/rent-easy/public/profile.php/id=${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,7 +97,7 @@ const GetProfileData = () => {
       </div>
     );
   }
-  console.log(profileData.image);
+  // console.log(profileData.image);
 
   return (
     <div className=" bg-white p-6 mt-20">
@@ -190,71 +209,142 @@ const GetProfileData = () => {
 
         <Tabs.Panel value="second" pt="xs">
   <div className="p-6 bg-gray-50 text-center text-gray-700 font-semibold">
-    This tab will display My Properties data.
-   <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="container mx-auto p-4 max-w-6xl"
-    >
-      <div className="space-y-6">
-      {properties.map((property) => (
+    <h2 className="text-2xl font-bold mb-6">My Properties</h2>
+
+    {/* Section 1: Added Properties */}
+    <div className="mb-8 w-auto">
+      <h3 className="text-xl font-semibold mb-4 text-left">Added Properties</h3>
+      {properties.length > 0 ? (
+        properties.map((property) => (
           <Card key={property.id} shadow="sm" padding="lg" radius="md" withBorder>
             <div className="flex flex-col md:flex-row gap-6">
-              {/* Property Image */}
               <div className="w-full md:w-1/4">
-                <img
-                  src={property.images?.[0] || "/default-property.jpg"}
+              <img
+                  src={
+                    property.images.length > 0
+                      ? property.images[0]
+                      : "https://via.placeholder.com/400x300?text=No+Image"
+                  }
                   alt={property.title}
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-full h-full object-cover"
                 />
+
+
               </div>
-
-              {/* Property Details */}
               <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <Group>
-                      <Title order={3}>{property.title}</Title>
-                    </Group>
-                    <Text color="dimmed" className="mt-2">
-                      {property.description}
-                    </Text>
-                  </div>
-                </div>
+                <div className="flex-col justify-end items-center">
+               <div className="flex justify-end">
+  <div className="cursor-pointer">
+   <Popover width={120} position="bottom" withArrow shadow="md">
+  <Popover.Target>
+    <div style={{ cursor: 'pointer' }}>
+      <HiDotsHorizontal size={24} />
+    </div>
+  </Popover.Target>
+  <Popover.Dropdown>
+    <div style={{ padding: '8px 0' }}>
+    <div className="flex justify-between items-center px-2 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold">
+      <div>
+      <MdEdit size={20}/>
 
+      </div>
+      <div>
+      <Text
+        size="md"
+        // className="px-4 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold"
+      >
+        Edit
+       
+      </Text>
+      </div>
+      </div>
+      <div className="flex justify-between items-center px-2 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold gap-4">
+      <div>
+      <AiTwotoneDelete size={20} />
+      </div>
+        <div>
+      <Text
+   onClick={() => {
+    setSelectedPropertyId(property.propertyId
+    );
+    openDeleteModal();
+  }}       size="md"
+      //  className="px-4 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold"
+     >
+        Delete
+      </Text>
+      </div>
+      
+      </div>
+    </div>
+
+  </Popover.Dropdown>
+</Popover>
+<DeletePropertiesModal opened={deleteModalOpened} onClose={closeDeleteModal} propertyId={selectedPropertyId} />
+
+
+  </div>
+</div>
+                <Group>
+                  <Title order={3}>{property.title}</Title>
+                </Group>
+                
+                </div>
+                <Text color="dimmed" className="mt-2">{property.description}</Text>
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <Text size="sm" color="dimmed">Price</Text>
-                    <Text weight={600}>{property.price}</Text>
-                  </div>
-                  <div>
-                    <Text size="sm" color="dimmed">Location</Text>
-                    <Text weight={600}>
-                      {property.city}, {property.country}
-                    </Text>
-                  </div>
-                  <div>
-                    <Text size="sm" color="dimmed">Size</Text>
-                    <Text weight={600}>{property.dimension} sqft</Text>
-                  </div>
-                  <div>
-                    <Text size="sm" color="dimmed">Uploaded On</Text>
-                    <Text weight={600}>
-                      {moment(property.uploaded_at).format("MMM DD, YYYY")}
-                    </Text>
-                  </div>
+                  <div><Text size="sm" color="dimmed">Price</Text><Text weight={600}>{property.price}</Text></div>
+                  <div><Text size="sm" color="dimmed">Location</Text><Text weight={600}>{property.city}, {property.country}</Text></div>
+                  <div><Text size="sm" color="dimmed">Size</Text><Text weight={600}>{property.dimension} sqft</Text></div>
+                  <div><Text size="sm" color="dimmed">Uploaded On</Text><Text weight={600}>{moment(property.uploaded_at).format("MMM DD, YYYY")}</Text></div>
                 </div>
               </div>
             </div>
           </Card>
-        ))}
-      </div>
-      
-      
-    </motion.div>
+        ))
+      ) : (
+        <Text color="dimmed">No properties added yet.</Text>
+      )}
+    </div>
+
+    {/* Section 2: Booked Properties */}
+    <div>
+      <h3 className="text-xl font-semibold mb-4 text-left">Booked Properties</h3>
+      {bookedProperties.length > 0 ? (
+        bookedProperties.map((property) => (
+          <Card key={property.id} shadow="sm" padding="lg" radius="md" withBorder>
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="w-full md:w-1/4">
+              <img
+                  src={property.images?.[0] || '/default-property.jpg'}
+                  alt={property.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+              <div className="flex-1">
+                <Group>
+                  <Title order={3}>{property.title}</Title>
+                </Group>
+                <Text color="dimmed" className="mt-2">{property.description}</Text>
+                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div><Text size="sm" color="dimmed">Price</Text><Text weight={600}>{property.price}</Text></div>
+                  <div><Text size="sm" color="dimmed">Location</Text><Text weight={600}>{property.city}, {property.country}</Text></div>
+                  <div><Text size="sm" color="dimmed">Booking Date</Text><Text weight={600}>{moment(property.bookedAt).format("MMM DD, YYYY")}</Text></div>
+                  <div><Text size="sm" color="dimmed">Status</Text><Badge color="green">Booked</Badge></div>
+                </div>
+                <Button color="red" size="sm" mt="md" leftSection={<Trash />} onClick={() => removeProperty(property.id)}>
+                  Cancel Booking
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ))
+      ) : (
+        <Text color="dimmed">No properties booked yet.</Text>
+      )}
+    </div>
   </div>
 </Tabs.Panel>
+
 
       </Tabs>
     </div>

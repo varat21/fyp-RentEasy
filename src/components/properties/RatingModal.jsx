@@ -14,7 +14,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 
-const RatingModal = ({ open, setOpen, propertyId, id }) => {
+const RatingModal = ({ open, setOpen, propertyId, }) => {
   const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
   
       // Use FormData instance correctly
       const requestData = new FormData();
-      requestData.append("property_id", propertyId);
+      requestData.append("propertyId", propertyId);
       requestData.append("rating", formData.rating);
       requestData.append("comment", formData.comment);
       requestData.append("id", userId);  // Fix: Use requestData.append, not formData.append

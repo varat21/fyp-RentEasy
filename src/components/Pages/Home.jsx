@@ -47,33 +47,6 @@ const Home = () => {
     fetchProperties();
   }, []);
 
-  // Apply filters when search criteria change
-  // useEffect(() => {
-  //   let filtered = properties;
-
-  //   if (search) {
-  //     filtered = filtered.filter((property) =>
-  //       property.title.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //   }
-
-  //   if (selectedCity && selectedCity !== "All Cities") {
-  //     filtered = filtered.filter((property) => property.city === selectedCity);
-  //   }
-
-  //   if (selectedType && selectedType !== "All Types") {
-  //     filtered = filtered.filter((property) => property.type === selectedType);
-  //   }
-
-  //   if (minPrice !== "" && maxPrice !== "") {
-  //     filtered = filtered.filter(
-  //       (property) => property.price >= minPrice && property.price <= maxPrice
-  //     );
-  //   }
-
-  //   setFilteredProperties(filtered);
-  // }, [search, selectedCity, selectedType, minPrice, maxPrice, properties]);
-
   useEffect(() => {
     let filtered = properties;
 
