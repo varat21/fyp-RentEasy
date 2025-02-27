@@ -53,7 +53,7 @@ const Login = () => {
         if (userType === "tenant") {
           navigate("/");
         } else if (userType === "landlord") {
-          navigate("/landlord");
+          navigate("/");
         } else if (userType === "admin") {
           navigate("/admin");
         }

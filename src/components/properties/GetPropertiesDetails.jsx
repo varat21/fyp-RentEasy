@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import RatingModal from "./RatingModal";
 import { Button, Rating } from "@mantine/core";
-
-// import { Button } from "@mantine/core";
-// import "leaflet/dist/leaflet.css";
-// import { useParams } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+import useBookingStore from "../stores/useBookingStore";
+import { jwtDecode } from "jwt-decode";
 
 const GetPropertyDetails = () => {
+  const { bookedProperties, totalAmount, removeProperty, clearBookings } =
+    useBookingStore();
+  console.log("Booked Properties:", bookedProperties);
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,33 +30,32 @@ const GetPropertyDetails = () => {
           `http://localhost/rent-easy/public/getPropertiesDetails.php?propertyId=${id}`
         );
         console.log("API Response:", response.data); // 🔥 Log API response
-  
+
         if (response.data.success && Array.isArray(response.data.properties)) {
           const fetchedProperty = response.data.properties[0];
-  
+
           // Remove duplicate images using a Set
           const uniqueImages = [...new Set(fetchedProperty.images || [])];
-  
+
           setProperty({
             ...fetchedProperty,
             images: uniqueImages, // Ensure no duplicate images
           });
-  
+
           setSelectedImage(uniqueImages[0] || "/default-image.jpg");
         } else {
           setError(response.data.message || "Property not found");
         }
       } catch (err) {
         setError("Error connecting to the server");
-        console.error("Fetch error:", err);
+        // console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchPropertyDetails();
   }, [id]);
-  
 
   if (loading) {
     return (
@@ -69,13 +72,54 @@ const GetPropertyDetails = () => {
       </div>
     );
   }
-  // console.log(id)
-  // console.log(property.id)
-  
+
+  const handleBooking = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in first!");
+      return;
+    }
+
+    try {
+      // Decode the token to get the user ID
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken?.userId; // Adjust based on your token structure
+      if (!userId) {
+        toast.error("Invalid token. Please log in again.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("property_id", id);
+      formData.append("user_id", userId); // Appending user ID from decoded token
+      formData.append("id", userId);
+      formData.append("status", "pending");
+      formData.append("payment_status", "pending");
+
+      const response = await axios.post(
+        "http://localhost/rent-easy/public/bookProperty.php",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        // Add the property to the booking store
+        useBookingStore.getState().bookProperty(property);
+        toast.success("Property booked successfully!");
+        // Navigate to the Property.jsx component
+        navigate("/properties");
+      } else {
+        toast.error(response.data.message || "Booking failed.");
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      toast.error("An error occurred while booking the property.");
+    }
+  };
 
   return (
     <motion.div
-      className="max-w-7xl mx-auto p-6 bg-gray-50"
+      className=" mx-auto p-4 "
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -194,61 +238,89 @@ const GetPropertyDetails = () => {
       </div>
 
       <div className="mt-10">
-  <h2 className="text-2xl font-semibold text-gray-900">Ratings & Reviews</h2>
+        <h2 className="text-2xl font-semibold text-gray-900">
+          Ratings & Reviews
+        </h2>
 
-  {/* Calculate and display average rating */}
-  {property?.ratings?.length > 0 ? (
-    <div className="flex items-center gap-2 mt-2">
-      <Rating value={property.ratings.reduce((acc, r) => acc + r.rating, 0) / property.ratings.length} readOnly size="lg" />
-      <span className="text-xl font-semibold text-gray-900">
-        {(
-          property.ratings.reduce((acc, r) => acc + r.rating, 0) / property.ratings.length
-        ).toFixed(1)} ( {property.ratings.length} {property.ratings.length === 1 ? "review" : "reviews"})
-      </span>
-    </div>
-  ) : (
-    <p className="text-gray-600 mt-2">No reviews yet.</p>
-  )}
-</div>
-
-
-{property?.ratings?.length > 0 ? (
-  property.ratings.map((rating, index) => {
-    console.log(rating.user_name || "User"); // 🔥 Log the user name
-    return (
-      <div key={index} className="bg-white p-5 rounded-xl shadow-md border">
-        <div className="flex items-center gap-4">
-          <img
-            src={`https://ui-avatars.com/api/?name=${rating.user_name}&background=random&color=fff`}
-            alt="User Avatar"
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <p className="font-semibold text-lg">{rating.user_name || "User"}</p>
-            <p className="text-gray-500 text-sm">{moment(rating.date).format("MMMM YYYY")}</p>
+        {/* Calculate and display average rating */}
+        {property?.ratings?.length > 0 ? (
+          <div className="flex items-center gap-2 mt-2">
+            <Rating
+              value={
+                property.ratings.reduce((acc, r) => acc + r.rating, 0) /
+                property.ratings.length
+              }
+              readOnly
+              size="lg"
+            />
+            <span className="text-xl font-semibold text-gray-900">
+              {(
+                property.ratings.reduce((acc, r) => acc + r.rating, 0) /
+                property.ratings.length
+              ).toFixed(1)}{" "}
+              ( {property.ratings.length}{" "}
+              {property.ratings.length === 1 ? "review" : "reviews"})
+            </span>
           </div>
-        </div>
-        <div className="mt-3 flex items-center gap-2">
-          <Rating value={rating.rating} readOnly size="md" />
-          <span className="text-gray-700 font-semibold">{rating.rating}.0</span>
-        </div>
-        <p className="mt-3 text-gray-800 leading-relaxed">{rating.comment}</p>
+        ) : (
+          <p className="text-gray-600 mt-2">No reviews yet.</p>
+        )}
       </div>
-    );
-  })
-) : null}
+
+      {property?.ratings?.length > 0
+        ? property.ratings.map((rating, index) => {
+            // console.log(rating.user_name || "User"); // 🔥 Log the user name
+            return (
+              <div
+                key={index}
+                className="bg-white p-5 rounded-xl shadow-md border"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${rating.user_name}&background=random&color=fff`}
+                    alt="User Avatar"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div>
+                    <p className="font-semibold text-lg">
+                      {rating.user_name || "User"}
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      {moment(rating.date).format("MMMM YYYY")}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  <Rating value={rating.rating} readOnly size="md" />
+                  <span className="text-gray-700 font-semibold">
+                    {rating.rating}.0
+                  </span>
+                </div>
+                <p className="mt-3 text-gray-800 leading-relaxed">
+                  {rating.comment}
+                </p>
+              </div>
+            );
+          })
+        : null}
 
       {/* Floating Book Now Button */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-full max-w-md">
-        <button className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white text-lg font-bold py-4 rounded-full shadow-lg transition duration-300">
+        <Button
+          onClick={handleBooking}
+          fullWidth
+          variant="filled"
+          size="lg"
+          type="submit"
+        >
           Book Now
-        </button>
+        </Button>
       </div>
       <RatingModal
         open={open}
         setOpen={setOpen}
         propertyId={id}
-        id={property.id}
+        id={property?.id}
       />
 
       {/* <button onClick={() => setOpen(true)} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded z-[10000]"> */}
@@ -260,4 +332,3 @@ const GetPropertyDetails = () => {
 };
 
 export default GetPropertyDetails;
-

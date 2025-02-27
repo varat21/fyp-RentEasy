@@ -11,12 +11,13 @@ import {
 } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
-const RatingModal = ({ open, setOpen, propertyId, id }) => {
+const RatingModal = ({ open, setOpen, propertyId }) => {
   const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
-    rating: "",
+    rating: "5",
     comment: "",
   });
 
@@ -42,11 +43,21 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
     }
 
     try {
+      console.log("Token from localStorage:", localStorage.getItem("token"));
+
+      // Decode the token to get the user ID
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken?.userId; // Adjust based on your token structure
+      console.log(userId);
+
+      // Use FormData instance correctly
       const requestData = new FormData();
-      requestData.append("property_id", propertyId);
+      requestData.append("propertyId", propertyId);
       requestData.append("rating", formData.rating);
       requestData.append("comment", formData.comment);
-      requestData.append("id", id); // Ensure `id` is passed
+      requestData.append("id", userId); // Fix: Use requestData.append, not formData.append
+
+      console.log(requestData);
 
       const response = await axios.post(
         "http://localhost/rent-easy/public/insertRating.php",
@@ -98,7 +109,6 @@ const RatingModal = ({ open, setOpen, propertyId, id }) => {
                   { value: "4", label: "⭐️⭐️⭐️⭐️ (4)" },
                   { value: "3", label: "⭐️⭐️⭐️ (3)" },
                   { value: "2", label: "⭐️⭐️ (2)" },
-
                   { value: "1", label: "⭐️ (1)" },
                 ]}
                 required

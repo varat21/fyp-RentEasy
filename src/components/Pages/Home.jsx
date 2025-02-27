@@ -17,7 +17,7 @@ const Home = () => {
   const [selectedType, setSelectedType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  console.log(selectedType);
+  // console.log(selectedType);
   // Fetch properties from API
   const fetchProperties = async () => {
     try {
@@ -39,40 +39,13 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log(
-      "Available property types:",
-      properties.map((prop) => prop.type)
-    );
+    // console.log(
+    //   "Available property types:",
+    //   properties.map((prop) => prop.type)
+    // );
 
     fetchProperties();
   }, []);
-
-  // Apply filters when search criteria change
-  // useEffect(() => {
-  //   let filtered = properties;
-
-  //   if (search) {
-  //     filtered = filtered.filter((property) =>
-  //       property.title.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //   }
-
-  //   if (selectedCity && selectedCity !== "All Cities") {
-  //     filtered = filtered.filter((property) => property.city === selectedCity);
-  //   }
-
-  //   if (selectedType && selectedType !== "All Types") {
-  //     filtered = filtered.filter((property) => property.type === selectedType);
-  //   }
-
-  //   if (minPrice !== "" && maxPrice !== "") {
-  //     filtered = filtered.filter(
-  //       (property) => property.price >= minPrice && property.price <= maxPrice
-  //     );
-  //   }
-
-  //   setFilteredProperties(filtered);
-  // }, [search, selectedCity, selectedType, minPrice, maxPrice, properties]);
 
   useEffect(() => {
     let filtered = properties;
@@ -108,7 +81,7 @@ const Home = () => {
   if (loading) {
     return (
       <motion.div
-        className="flex justify-center items-center min-h-screen"
+        className="flex justify-center items-center min-h-screen "
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -287,9 +260,22 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Button color="blue" size="md" className="mt-6 w-full">
+                  {/* <Button color="blue" size="md" className="mt-6 w-full">
                     Book Now
-                  </Button>
+                  </Button> */}
+<p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
+  See more
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    className="w-4 h-4"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+</p>
                 </motion.div>
               </div>
             </motion.div>
