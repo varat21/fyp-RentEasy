@@ -19,11 +19,11 @@ const Property = () => {
     toast.success('Property removed from bookings');
   };
 
-  const handleCheckout = () => {
-    clearBookings();
-    toast.success('Booking completed successfully!');
-    navigate('/');
-  };
+  // const handleCheckout = () => {
+  //   clearBookings();
+  //   toast.success('Booking completed successfully!');
+  //   navigate('/');
+  // };
 
   // Group properties by property ID to show booking count
   const groupedProperties = bookedProperties.reduce((acc, property) => {
@@ -147,10 +147,10 @@ const Property = () => {
               Continue Browsing
             </Button>
             <Button
-              onClick={handleCheckout}
+              // onClick={handleCheckout}
               variant="filled"
             >
-              Complete Booking
+              Complete Payment
             </Button>
           </Group>
         </Card>

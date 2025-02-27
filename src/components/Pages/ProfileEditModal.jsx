@@ -57,12 +57,12 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
     setFormValues((prevFormValues) => ({ ...prevFormValues, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormValues((prevFormValues) => ({ ...prevFormValues, profileImage: file }));
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setFormValues((prevFormValues) => ({ ...prevFormValues, profileImage: file }));
+  //   }
+  // };
 
   const onSubmit = async () => {
     const token = localStorage.getItem("token");
@@ -151,11 +151,13 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
         />
 
         <div className="flex justify-end space-x-4 mt-4">
-          <Button variant="outline" color="gray" onClick={close}>
-            Cancel
-          </Button>
+          {/* <Button variant="outline" color="gray" onClick={close}> */}
+                    <Button variant="outline" onClick={close}>Cancel</Button>
+            
+            {/* Cancel
+          </Button> */}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? <Loader size="xs" /> : "Save"}
+            {isSubmitting ? <Loader size="xs" /> : "Save Changes"}
           </Button>
         </div>
       </form>

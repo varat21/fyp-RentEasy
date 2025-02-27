@@ -116,7 +116,7 @@ className={`transition-colors duration-200 ${
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              Properties
+              BookedProperties
             </Link>
             <Link to="/about" 
 className={`transition-colors duration-200 ${
@@ -158,9 +158,12 @@ className={`transition-colors duration-200 ${
 }`}            >
               Privacy Policy
             </Link>
-            <Button>
-              <Link to="/addProperties">Add Properties</Link>
-            </Button>
+            {user && (
+  <Button>
+    <Link to="/addProperties">Add Properties</Link>
+  </Button>
+)}
+
           </nav>
 
           {/* Profile Icon */}
@@ -284,9 +287,14 @@ className={`transition-colors duration-200 ${
           {/* Profile-related links */}
           {/* <Divider my="sm" /> */}
           <Link to="/addProperties">
-            <Button className=" hover:text-blue-500 flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer">
-              Add Properties
-            </Button>
+          {user && (
+  <Link to="/addProperties">
+    <Button className="hover:text-blue-500 flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer">
+      Add Properties
+    </Button>
+  </Link>
+)}
+
           </Link>
         </div>
       </Drawer>
