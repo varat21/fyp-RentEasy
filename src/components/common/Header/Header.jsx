@@ -19,7 +19,7 @@ import {
   MdOutlinePolicy,
 } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
-import { jwtDecode } from "jwt-decode"; // Correct import
+import { jwtDecode } from "jwt-decode"; 
 import { toast } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 

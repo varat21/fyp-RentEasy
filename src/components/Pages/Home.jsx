@@ -289,8 +289,6 @@
 
 // export default Home;
 
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
@@ -310,8 +308,8 @@ const Home = () => {
   const [selectedType, setSelectedType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Current page number
-  const itemsPerPage = 6; // Number of items to show per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -352,7 +350,9 @@ const Home = () => {
     }
 
     if (selectedType && selectedType !== "All Types") {
-      filtered = filtered.filter((property) => property.type === selectedType);
+      filtered = filtered.filter(
+        (property) => property.propertyType.toLowerCase() === selectedType.toLowerCase() // Use propertyType here
+      );
     }
 
     if (minPrice !== "" && maxPrice !== "") {
@@ -370,19 +370,19 @@ const Home = () => {
   }, [search, selectedCity, selectedType, minPrice, maxPrice, properties]);
 
   // Calculate the properties to display on the current page
-  const indexOfLastItem = currentPage * itemsPerPage; // Last item index
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage; // First item index
-  const paginatedProperties = filteredProperties.slice(indexOfFirstItem, indexOfLastItem); // Slice the filtered properties array
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginatedProperties = filteredProperties.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page change
   const handlePageChange = (page) => {
-    setCurrentPage(page); // Update the current page
+    setCurrentPage(page);
   };
 
   if (loading) {
     return (
       <motion.div
-        className="flex justify-center items-center min-h-screen "
+        className="flex justify-center items-center min-h-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -427,7 +427,6 @@ const Home = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10"></div>
         </div>
-        
 
         {/* Content Above the Image */}
         <div className="absolute top-0 left-0 w-full p-12">
@@ -464,7 +463,7 @@ const Home = () => {
               onChange={setSelectedType}
               data={[
                 "All Types",
-                ...new Set(properties.map((prop) => prop.type)),
+                ...new Set(properties.map((prop) => prop.propertyType)), // Use propertyType here
               ]}
               className="w-full"
             />
@@ -511,24 +510,22 @@ const Home = () => {
               whileHover={{ scale: 1.05 }}
               onClick={() => Navigate(`/property/${property.propertyId}`)}
             >
-<div className="relative h-48">
-  <img
-    src={
-      property.images.length > 0
-        ? property.images[0]
-        : "https://via.placeholder.com/400x300?text=No+Image"
-    }
-    alt={property.title}
-    className="w-full h-full object-cover rounded-lg"
-  />
-
-  {property.status && (
-    <div className="absolute top-2 right-2 bg-blue-500 text-white text-sm font-semibold px-3 py-0 rounded-full shadow-md">
-      {property.status}
-    </div>
-  )}
-</div>
-
+              <div className="relative h-48">
+                <img
+                  src={
+                    property.images.length > 0
+                      ? property.images[0]
+                      : "https://via.placeholder.com/400x300?text=No+Image"
+                  }
+                  alt={property.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                {property.status && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white text-sm font-semibold px-3 py-0 rounded-full shadow-md">
+                    {property.status}
+                  </div>
+                )}
+              </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2 text-gray-800">
                   {property.title}
@@ -593,9 +590,9 @@ const Home = () => {
       {filteredProperties.length > itemsPerPage && (
         <div className="flex justify-center mt-8">
           <Pagination
-            page={currentPage} // Current page
-            onChange={handlePageChange} // Function to handle page change
-            total={Math.ceil(filteredProperties.length / itemsPerPage)} // Total number of pages
+            page={currentPage}
+            onChange={handlePageChange}
+            total={Math.ceil(filteredProperties.length / itemsPerPage)}
             color="blue"
             style={{ marginTop: "20px" }}
           />

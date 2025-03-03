@@ -202,7 +202,7 @@ const AddProperties = () => {
                 label="Type"
                 name="type"
                 placeholder="Select property type"
-                data={["House", "Room", "ShopHouse", "Apartment"]}
+                data={["House", "Room", "ShopHouse", "Apartment",'Flat']}
                 value={formData.type}
                 onChange={(value) =>
                   setFormData((prev) => ({ ...prev, type: value }))
