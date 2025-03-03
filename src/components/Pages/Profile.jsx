@@ -19,13 +19,12 @@ import DeletePropertiesModal from "./deleteProfilePropertiesModal";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import EditPropertiesModal from "./EditPropertiesModal";
-import BookedProperties from "./bookedProperties";
+// import BookedProperties from "./bookedProperties";
 
 const GetProfileData = () => {
   const { bookedProperties, totalAmount, removeProperty, clearBookings } =
     useBookingStore();
-    const [userId, setUserId] = useState(null);
-
+  const [userId, setUserId] = useState(null);
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,8 +38,6 @@ const GetProfileData = () => {
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
     useDisclosure(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
- 
-
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -50,19 +47,19 @@ const GetProfileData = () => {
         setLoading(false);
         return;
       }
-  
+
       try {
         const decodedToken = jwtDecode(token);
         const extractedUserId = decodedToken?.userId;
         console.log(extractedUserId);
-  
+
         if (!extractedUserId) {
           toast.error("Invalid token. Please log in again.");
           return;
         }
-  
+
         setUserId(extractedUserId); // Set userId state
-  
+
         const response = await axios.get(
           `http://localhost/rent-easy/public/profile.php/id=${extractedUserId}`,
           {
@@ -71,7 +68,7 @@ const GetProfileData = () => {
             },
           }
         );
-  
+
         if (response.data.success) {
           setProfileData(response.data.user);
           setProperties(response.data.properties || []);
@@ -84,10 +81,9 @@ const GetProfileData = () => {
         setLoading(false);
       }
     };
-  
+
     fetchProfileData();
   }, []);
-  
 
   if (loading) {
     return (
@@ -210,6 +206,7 @@ const GetProfileData = () => {
             password={profileData.password}
             id={profileData.id}
             email={profileData.email}
+            
           />
         </Tabs.Panel>
 
@@ -262,7 +259,9 @@ const GetProfileData = () => {
                                     <div
                                       className="flex items-center px-2 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold gap-3"
                                       onClick={() => {
-                                        setSelectedPropertyId(property.propertyId);
+                                        setSelectedPropertyId(
+                                          property.propertyId
+                                        );
                                         openEditModal();
                                       }}
                                     >
@@ -275,12 +274,14 @@ const GetProfileData = () => {
                                     <div
                                       className="flex justify-between items-center px-2 py-2 cursor-pointer rounded hover:bg-gray-100 font-semibold gap-3"
                                       onClick={() => {
-                                        setSelectedPropertyId(property.propertyId);
+                                        setSelectedPropertyId(
+                                          property.propertyId
+                                        );
                                         openDeleteModal();
                                       }}
                                     >
-<AiTwotoneDelete size={24} />
-<Text size="md">Delete</Text>
+                                      <AiTwotoneDelete size={24} />
+                                      <Text size="md">Delete</Text>
                                     </div>
                                   </div>
                                 </Popover.Dropdown>
@@ -320,7 +321,9 @@ const GetProfileData = () => {
                               Uploaded On
                             </Text>
                             <Text weight={600}>
-                              {moment(property.uploaded_at).format("MMM DD, YYYY")}
+                              {moment(property.uploaded_at).format(
+                                "MMM DD, YYYY"
+                              )}
                             </Text>
                           </div>
                         </div>
@@ -414,16 +417,19 @@ const GetProfileData = () => {
       </Tabs>
 
       {userId && (
-  <EditPropertiesModal
-    userId={userId}
-    opened={editModalOpened}
-    onClose={closeEditModal}
-    propertyId={selectedPropertyId}
-    property={properties.find((p) => p.propertyId === selectedPropertyId)}
-  />
-)}
-
-
+       <EditPropertiesModal
+       userId={userId}
+       opened={editModalOpened}
+       onClose={closeEditModal}
+       propertyId={selectedPropertyId}
+       property={properties.find((p) => p.propertyId === selectedPropertyId)}
+       image={
+         properties.find((p) => p.propertyId === selectedPropertyId)?.images?.[0] ||
+         "https://via.placeholder.com/400x300?text=No+Image"
+       }
+     />
+     
+      )}
 
       <DeletePropertiesModal
         opened={deleteModalOpened}

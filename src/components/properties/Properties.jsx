@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import useBookingStore from '../stores/useBookingStore';
 import { Trash } from 'lucide-react';
+import WhatApps from '../Pages/whatApps';
 
 const Property = () => {
   const { bookedProperties, totalAmount, removeProperty, clearBookings } = useBookingStore();
@@ -155,6 +156,8 @@ const Property = () => {
           </Group>
         </Card>
       </div>
+      <WhatApps />
+
     </motion.div>
   );
 };
