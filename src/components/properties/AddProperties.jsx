@@ -277,7 +277,7 @@ const AddProperties = () => {
               <MapContainer
                 center={marker}
                 zoom={13}
-                className="h-full rounded-lg"
+                className="h-full rounded-lg z-10"
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

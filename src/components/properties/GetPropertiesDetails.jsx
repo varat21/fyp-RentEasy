@@ -281,7 +281,7 @@ const GetPropertyDetails = () => {
         <MapContainer
           center={[property?.latitude, property?.longitude]}
           zoom={13}
-          className="h-64 w-full mt-4 rounded-lg shadow-md"
+          className="h-64 w-full mt-4 rounded-lg shadow-md z-10"
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={[property?.latitude, property?.longitude]}>

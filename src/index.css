@@ -2,70 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-     font-family: "Lato", sans-serif;
-     margin: 0;
-     padding: 0;
+body {
+    font-family: "Lato", sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Add this to prevent horizontal overflow */
 }
-
 
 .lato-thin {
     font-family: "Lato", sans-serif;
     font-weight: 100;
     font-style: normal;
-  }
-  
-  .lato-light {
+}
+
+.lato-light {
     font-family: "Lato", sans-serif;
     font-weight: 300;
     font-style: normal;
-  }
-  
-  .lato-regular {
+}
+
+.lato-regular {
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: normal;
-  }
-  
-  .lato-bold {
+}
+
+.lato-bold {
     font-family: "Lato", sans-serif;
     font-weight: 700;
     font-style: normal;
-  }
-  
-  .lato-black {
+}
+
+.lato-black {
     font-family: "Lato", sans-serif;
     font-weight: 900;
     font-style: normal;
-  }
-  
-  .lato-thin-italic {
+}
+
+.lato-thin-italic {
     font-family: "Lato", sans-serif;
     font-weight: 100;
     font-style: italic;
-  }
-  
-  .lato-light-italic {
+}
+
+.lato-light-italic {
     font-family: "Lato", sans-serif;
     font-weight: 300;
     font-style: italic;
-  }
-  
-  .lato-regular-italic {
+}
+
+.lato-regular-italic {
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: italic;
-  }
-  
-  .lato-bold-italic {
+}
+
+.lato-bold-italic {
     font-family: "Lato", sans-serif;
     font-weight: 700;
     font-style: italic;
-  }
-  
-  .lato-black-italic {
+}
+
+.lato-black-italic {
     font-family: "Lato", sans-serif;
     font-weight: 900;
     font-style: italic;
-  }
-  
+}

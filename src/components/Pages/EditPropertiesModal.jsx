@@ -141,9 +141,9 @@ const EditPropertiesModal = ({
   console.log(image);
 
   return (
-    <Modal opened={opened} onClose={onClose} centered size="lg" padding="xl">
+    <Modal opened={opened} onClose={onClose} centered size="lg" padding="xl" className="mt-7">
       <form onSubmit={handleSubmit}>
-        <Title order={3} className="mb-6 text-center">
+        <Title order={3} className="mb-6 text-center ">
           Edit Property Details
         </Title>
 
@@ -161,6 +161,13 @@ const EditPropertiesModal = ({
             User ID: {userId || "Not available"}
           </Text>
         </div>
+        <div className="flex justify-center items-center">
+        <img 
+  src={image || "https://via.placeholder.com/300"} 
+  alt="Property" 
+  className="w-36 h-36 rounded-full flex"
+/>
+</div>
 
         <Group grow className="mb-4">
           <TextInput
@@ -290,13 +297,13 @@ const EditPropertiesModal = ({
             disabled
           />
         </Group>
-        <div className="flex justify-center items-center">
+        {/* <div className="flex justify-center items-center">
         <img 
   src={image || "https://via.placeholder.com/300"} 
   alt="Property" 
   className="w-36 h-36 rounded-full flex"
 />
-</div>
+</div> */}
 
         <Button
           type="submit"

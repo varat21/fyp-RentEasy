@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <div className="flex h-auto bg-gray-100">
       {/* Sidebar Navigation */}
-      <aside className="fixed top-0 left-0 w-60 h-screen bg-white shadow-lg p-5 flex flex-col">
+      <aside className="fixed top-0 left-0 w-60 h-full bg-white shadow-lg p-5 flex flex-col">
         {/* Logo Section */}
         <Link to="/navbar/dashboard" className="flex items-center gap-2 mb-6">
           <img src="/images/logo.png" alt="RentEasy Logo" className="h-10" />
@@ -28,6 +28,7 @@ const Navbar = () => {
           <NavItem to="/navbar/dashboard" icon={<IoHomeOutline />} label="Dashboard" />
           <NavItem to="/navbar/users" icon={<IoPeopleOutline />} label="Users" />
           <NavItem to="/navbar/addedProperties" icon={<IoBusinessOutline />} label="Properties" />
+
         </nav>
 
         {/* Logout Button */}
