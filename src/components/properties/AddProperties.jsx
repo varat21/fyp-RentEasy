@@ -202,7 +202,7 @@ const AddProperties = () => {
                 label="Type"
                 name="type"
                 placeholder="Select property type"
-                data={["House", "Room", "ShopHouse", "Apartment"]}
+                data={["House", "Room", "ShopHouse", "Apartment",'Flat']}
                 value={formData.type}
                 onChange={(value) =>
                   setFormData((prev) => ({ ...prev, type: value }))
@@ -277,7 +277,7 @@ const AddProperties = () => {
               <MapContainer
                 center={marker}
                 zoom={13}
-                className="h-full rounded-lg"
+                className="h-full rounded-lg z-10"
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

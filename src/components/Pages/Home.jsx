@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { motion } from "framer-motion";
-import { Button, Select, TextInput, NumberInput } from "@mantine/core";
+
+import { Button, Select, TextInput, NumberInput, Pagination } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 
@@ -17,13 +18,16 @@ const Home = () => {
   const [selectedType, setSelectedType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  // console.log(selectedType);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
   // Fetch properties from API
   const fetchProperties = async () => {
     try {
       const response = await axios.get(
         "http://localhost/rent-easy/public/getProperties.php"
       );
+      console.log(response.data);
       if (response.data.success) {
         setProperties(response.data.properties);
         setFilteredProperties(response.data.properties);
@@ -39,11 +43,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // console.log(
-    //   "Available property types:",
-    //   properties.map((prop) => prop.type)
-    // );
-
     fetchProperties();
   }, []);
 
@@ -61,12 +60,13 @@ const Home = () => {
     }
 
     if (selectedType && selectedType !== "All Types") {
-      filtered = filtered.filter((property) => property.type === selectedType);
+      filtered = filtered.filter(
+        (property) => property.propertyType.toLowerCase() === selectedType.toLowerCase() // Use propertyType here
+      );
     }
 
     if (minPrice !== "" && maxPrice !== "") {
       filtered = filtered.filter((property) => {
-        // Extract numeric value from price (remove Rs, $, and other symbols)
         const price = parseFloat(property.price.replace(/[^\d.]/g, ""));
         const min = parseFloat(minPrice);
         const max = parseFloat(maxPrice);
@@ -76,12 +76,23 @@ const Home = () => {
     }
 
     setFilteredProperties(filtered);
+    setCurrentPage(1); // Reset to the first page whenever filters change
   }, [search, selectedCity, selectedType, minPrice, maxPrice, properties]);
+
+  // Calculate the properties to display on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginatedProperties = filteredProperties.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   if (loading) {
     return (
       <motion.div
-        className="flex justify-center items-center min-h-screen "
+        className="flex justify-center items-center min-h-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -108,7 +119,7 @@ const Home = () => {
       </motion.div>
     );
   }
-  console.log(selectedType);
+
   return (
     <motion.div
       className="container mx-auto px-4 w-full"
@@ -162,7 +173,7 @@ const Home = () => {
               onChange={setSelectedType}
               data={[
                 "All Types",
-                ...new Set(properties.map((prop) => prop.type)),
+                ...new Set(properties.map((prop) => prop.propertyType)), // Use propertyType here
               ]}
               className="w-full"
             />
@@ -195,11 +206,11 @@ const Home = () => {
       </motion.h1>
 
       {/* Property Listings */}
-      {filteredProperties.length === 0 ? (
+      {paginatedProperties.length === 0 ? (
         <div className="text-lg text-center mt-8">No properties found</div>
       ) : (
         <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 cursor-pointer">
-          {filteredProperties.map((property, index) => (
+          {paginatedProperties.map((property, index) => (
             <motion.div
               key={property.propertyId}
               className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform"
@@ -217,8 +228,13 @@ const Home = () => {
                       : "https://via.placeholder.com/400x300?text=No+Image"
                   }
                   alt={property.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-lg"
                 />
+                {property.status && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white text-sm font-semibold px-3 py-0 rounded-full shadow-md">
+                    {property.status}
+                  </div>
+                )}
               </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2 text-gray-800">
@@ -260,27 +276,37 @@ const Home = () => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  {/* <Button color="blue" size="md" className="mt-6 w-full">
-                    Book Now
-                  </Button> */}
-<p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
-  See more
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={2}
-    stroke="currentColor"
-    className="w-4 h-4"
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-  </svg>
-</p>
+                  <p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
+                    See more
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </p>
                 </motion.div>
               </div>
             </motion.div>
           ))}
         </motion.div>
+      )}
+
+      {/* Pagination */}
+      {filteredProperties.length > itemsPerPage && (
+        <div className="flex justify-center mt-8">
+          <Pagination
+            page={currentPage}
+            onChange={handlePageChange}
+            total={Math.ceil(filteredProperties.length / itemsPerPage)}
+            color="blue"
+            style={{ marginTop: "20px" }}
+          />
+        </div>
       )}
     </motion.div>
   );

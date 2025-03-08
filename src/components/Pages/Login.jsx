@@ -55,7 +55,7 @@ const Login = () => {
         } else if (userType === "landlord") {
           navigate("/");
         } else if (userType === "admin") {
-          navigate("/admin");
+          navigate("/navbar/dashboard");
         }
       } else {
         setError("root", {

@@ -73,13 +73,67 @@ const GetPropertyDetails = () => {
     );
   }
 
+  // const handleBooking = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     toast.error("Please log in first!");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Decode the token to get the user ID
+  //     const decodedToken = jwtDecode(token);
+  //     const userId = decodedToken?.userId; // Adjust based on your token structure
+  //     if (!userId) {
+  //       toast.error("Invalid token. Please log in again.");
+  //       return;
+  //     }
+
+  //     const formData = new FormData();
+  //     formData.append("property_id", id);
+  //     formData.append("user_id", userId); // Appending user ID from decoded token
+  //     formData.append("id", userId);
+  //     formData.append("status", "pending");
+  //     // formData.append("payment_status", "pending");
+
+  //     const response = await axios.post(
+  //       "http://localhost/rent-easy/public/bookProperty.php",
+  //       formData,
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     console.log("Booking response:", response.data); // 🔥 Log booking response
+
+  //     if (response.data.success) {
+  //       // Add the property to the booking store
+  //       useBookingStore.getState().bookProperty(property);
+  //       toast.success("Property booked successfully!");
+  //       // Navigate to the Property.jsx component
+  //       navigate("/properties");
+  //     } else {
+  //       toast.error(response.data.message || "Booking failed.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Booking error:", error);
+  //     toast.error("An error occurred while booking the property.");
+  //   }
+  // };
+
+
+
   const handleBooking = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Please log in first!");
+      // toast.error("Please log in first!");
+      navigate("/login");
       return;
     }
-
+  
+    // Check if the property is already booked
+    if (property?.status === "booked") {
+      toast.error("This property is already booked.");
+      return;
+    }
+  
     try {
       // Decode the token to get the user ID
       const decodedToken = jwtDecode(token);
@@ -88,20 +142,20 @@ const GetPropertyDetails = () => {
         toast.error("Invalid token. Please log in again.");
         return;
       }
-
+  
       const formData = new FormData();
       formData.append("property_id", id);
       formData.append("user_id", userId); // Appending user ID from decoded token
       formData.append("id", userId);
       formData.append("status", "pending");
-      formData.append("payment_status", "pending");
-
+  
       const response = await axios.post(
         "http://localhost/rent-easy/public/bookProperty.php",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
+      console.log("Booking response:", response.data); // 🔥 Log booking response
+  
       if (response.data.success) {
         // Add the property to the booking store
         useBookingStore.getState().bookProperty(property);
@@ -116,7 +170,6 @@ const GetPropertyDetails = () => {
       toast.error("An error occurred while booking the property.");
     }
   };
-
   return (
     <motion.div
       className=" mx-auto p-4 "
@@ -228,7 +281,7 @@ const GetPropertyDetails = () => {
         <MapContainer
           center={[property?.latitude, property?.longitude]}
           zoom={13}
-          className="h-64 w-full mt-4 rounded-lg shadow-md"
+          className="h-64 w-full mt-4 rounded-lg shadow-md z-10"
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={[property?.latitude, property?.longitude]}>
@@ -269,7 +322,7 @@ const GetPropertyDetails = () => {
 
       {property?.ratings?.length > 0
         ? property.ratings.map((rating, index) => {
-            // console.log(rating.user_name || "User"); // 🔥 Log the user name
+            // console.log(rating.user_name || "User"); 
             return (
               <div
                 key={index}
@@ -330,5 +383,4 @@ const GetPropertyDetails = () => {
     </motion.div>
   );
 };
-
 export default GetPropertyDetails;

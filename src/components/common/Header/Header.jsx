@@ -19,7 +19,7 @@ import {
   MdOutlinePolicy,
 } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
-import { jwtDecode } from "jwt-decode"; // Correct import
+import { jwtDecode } from "jwt-decode"; 
 import { toast } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 
@@ -148,16 +148,16 @@ className={`transition-colors duration-200 ${
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              Terms
+              Terms & Conditions
             </Link>
-            <Link to="/privacyPolicy" 
+            {/* <Link to="/privacyPolicy" 
 className={`transition-colors duration-200 ${
   location.pathname === "/privacyPolicy" 
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
               Privacy Policy
-            </Link>
+            </Link> */}
             {user && (
   <Button>
     <Link to="/addProperties">Add Properties</Link>
@@ -183,14 +183,27 @@ className={`transition-colors duration-200 ${
                   <div className="text-center text-sm font-semibold py-2">Welcome, {user.username}</div>
                 ) : null}
                 <Divider />
-                <Link
+                {/* <Link
                   to="/profile"
                   className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
                   onClick={() => setProfileOpen(false)}
                 >
                   <FaRegUser className="h-5 w-5 mr-2" />
                   Profile
-                </Link>
+                </Link> */}
+                <Link
+  to={user ? "/profile" : "/login"}
+  className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
+  onClick={() => {
+    setProfileOpen(false);
+    if (!user) {
+      navigate("/login");
+    }
+  }}
+>
+  <FaRegUser className="h-5 w-5 mr-2" />
+  Profile
+</Link>
 
                 <Link
                   to="/login"
