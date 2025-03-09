@@ -150,14 +150,14 @@ className={`transition-colors duration-200 ${
 }`}            >
               Terms & Conditions
             </Link>
-            {/* <Link to="/privacyPolicy" 
+            <Link to="/blogs" 
 className={`transition-colors duration-200 ${
-  location.pathname === "/privacyPolicy" 
+  location.pathname === "/blogs" 
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
-              Privacy Policy
-            </Link> */}
+            Blogs
+            </Link>
             {user && (
   <Button>
     <Link to="/addProperties">Add Properties</Link>

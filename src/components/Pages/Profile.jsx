@@ -6,10 +6,8 @@ import { Tabs, Divider } from "@mantine/core";
 import { Button } from "@mantine/core";
 import { CiUser } from "react-icons/ci";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
 import useBookingStore from "../stores/useBookingStore";
-import { Trash } from "lucide-react";
-import { motion } from "framer-motion";
+
 import { Card, Group, Title, Badge, Rating } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
@@ -19,11 +17,18 @@ import DeletePropertiesModal from "./deleteProfilePropertiesModal";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import EditPropertiesModal from "./EditPropertiesModal";
-// import BookedProperties from "./bookedProperties";
+import {
+  FaMoneyBillAlt,
+  FaRuler,
+  FaMapMarkerAlt,
+  FaRoad,
+  FaCompass,
+  FaCalendarAlt,
+} from "react-icons/fa";
 
 const GetProfileData = () => {
-  const { bookedProperties, totalAmount, removeProperty, clearBookings } =
-    useBookingStore();
+  // const { bookedProperties, totalAmount, removeProperty, clearBookings } =
+  //   useBookingStore();
   const [userId, setUserId] = useState(null);
 
   const [profileData, setProfileData] = useState(null);
@@ -112,7 +117,7 @@ const GetProfileData = () => {
       <Tabs
         color="teal"
         defaultValue="first"
-        className="max-w-4xl mx-auto bg-white shadow-md rounded-xl"
+        className="mx-auto bg-white shadow-md rounded-xl"
       >
         <Tabs.List className="flex justify-center mb-4 border-b border-gray-200">
           <Tabs.Tab value="first" className="text-lg font-semibold">
@@ -206,7 +211,6 @@ const GetProfileData = () => {
             password={profileData.password}
             id={profileData.id}
             email={profileData.email}
-            
           />
         </Tabs.Panel>
 
@@ -295,36 +299,67 @@ const GetProfileData = () => {
                         <Text color="dimmed" className="mt-2">
                           {property.description}
                         </Text>
-                        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Price
-                            </Text>
-                            <Text weight={600}>{property.price}</Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Location
-                            </Text>
-                            <Text weight={600}>
-                              {property.city}, {property.country}
-                            </Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Size
-                            </Text>
-                            <Text weight={600}>{property.dimension} sqft</Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Uploaded On
-                            </Text>
-                            <Text weight={600}>
-                              {moment(property.uploaded_at).format(
-                                "MMM DD, YYYY"
-                              )}
-                            </Text>
+                        <div className="flex justify-center">
+                          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mt-6 w-full">
+                            {[
+                              {
+                                label: "Price",
+                                value: ` ${property.price}`,
+                                icon: (
+                                  <FaMoneyBillAlt className="text-2xl text-blue-500" />
+                                ),
+                              },
+                              {
+                                label: "Size",
+                                value: `${property.dimension} sqft`,
+                                icon: (
+                                  <FaRuler className="text-2xl text-green-500" />
+                                ),
+                              },
+                              {
+                                label: "Location",
+                                value: `${property.city}, ${property.country}`,
+                                icon: (
+                                  <FaMapMarkerAlt className="text-2xl text-red-500" />
+                                ),
+                              },
+                              {
+                                label: "Road Type",
+                                value: property.road_type,
+                                icon: (
+                                  <FaRoad className="text-2xl text-purple-500" />
+                                ),
+                              },
+                              {
+                                label: "Facing",
+                                value: property.property_face,
+                                icon: (
+                                  <FaCompass className="text-2xl text-yellow-500" />
+                                ),
+                              },
+                              {
+                                label: "Posted on",
+                                value: moment(property.uploaded_at).format(
+                                  "MMM Do YYYY"
+                                ),
+                                icon: (
+                                  <FaCalendarAlt className="text-2xl text-pink-500" />
+                                ),
+                              },
+                            ].map((detail, index) => (
+                              <div
+                                key={index}
+                                className="bg-white p-5 rounded-lg shadow-md text-center flex flex-col items-center"
+                              >
+                                <div className="mb-2">{detail.icon}</div>
+                                <p className="text-lg font-semibold text-gray-800">
+                                  {detail.label}
+                                </p>
+                                <p className="text-gray-700 text-md mt-1">
+                                  {detail.value}
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -335,100 +370,23 @@ const GetProfileData = () => {
                 <Text color="dimmed">No properties added yet.</Text>
               )}
             </div>
-
-            {/* <div>
-              <h3 className="text-xl font-semibold mb-4 text-left">
-                Booked Properties
-              </h3>
-              {bookedProperties.length > 0 ? (
-                bookedProperties.map((property) => (
-                  <Card
-                    key={property.id}
-                    shadow="sm"
-                    padding="lg"
-                    radius="md"
-                    withBorder
-                  >
-                    <div className="flex flex-col md:flex-row gap-6">
-                      <div className="w-full md:w-1/4">
-                        <img
-                          src={property.images?.[0] || "/default-property.jpg"}
-                          alt={property.title}
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <Group>
-                          <Title order={3}>{property.title}</Title>
-                        </Group>
-                        <Text color="dimmed" className="mt-2">
-                          {property.description}
-                        </Text>
-                        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Price
-                            </Text>
-                            <Text weight={600}>{property.price}</Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Location
-                            </Text>
-                            <Text weight={600}>
-                              {property.city}, {property.country}
-                            </Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Booking Date
-                            </Text>
-                            <Text weight={600}>
-                              {moment(property.bookedAt).format("MMM DD, YYYY")}
-                            </Text>
-                          </div>
-                          <div>
-                            <Text size="sm" color="dimmed">
-                              Status
-                            </Text>
-                            <Badge color="green">Booked</Badge>
-                          </div>
-                        </div>
-                        <Button
-                          color="red"
-                          size="sm"
-                          mt="md"
-                          leftSection={<Trash />}
-                          onClick={() => removeProperty(property.id)}
-                        >
-                          Cancel Booking
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
-                ))
-              ) : (
-                <Text color="dimmed">No properties booked yet.</Text>
-              )}
-            </div> */}
-            {/* <BookedProperties id={userId}/> */}
           </div>
         </Tabs.Panel>
       </Tabs>
 
       {userId && (
-       <EditPropertiesModal
-       userId={userId}
-       opened={editModalOpened}
-       onClose={closeEditModal}
-       propertyId={selectedPropertyId}
-       property={properties.find((p) => p.propertyId === selectedPropertyId)}
-       image={
-         properties.find((p) => p.propertyId === selectedPropertyId)?.images?.[0] ||
-         "https://via.placeholder.com/400x300?text=No+Image"
-       }
-     />
-     
+        <EditPropertiesModal
+          userId={userId}
+          opened={editModalOpened}
+          onClose={closeEditModal}
+          propertyId={selectedPropertyId}
+          property={properties.find((p) => p.propertyId === selectedPropertyId)}
+          image={
+            properties.find((p) => p.propertyId === selectedPropertyId)
+              ?.images?.[0] ||
+            "https://via.placeholder.com/400x300?text=No+Image"
+          }
+        />
       )}
 
       <DeletePropertiesModal

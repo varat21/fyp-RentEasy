@@ -2,6 +2,8 @@ import React from 'react';
 import { IoLogOutOutline, IoHomeOutline, IoPeopleOutline, IoBusinessOutline, IoSearch } from 'react-icons/io5';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { FaRegMessage } from "react-icons/fa6";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -28,6 +30,10 @@ const Navbar = () => {
           <NavItem to="/navbar/dashboard" icon={<IoHomeOutline />} label="Dashboard" />
           <NavItem to="/navbar/users" icon={<IoPeopleOutline />} label="Users" />
           <NavItem to="/navbar/addedProperties" icon={<IoBusinessOutline />} label="Properties" />
+          <NavItem to="/navbar/message" icon={<FaRegMessage/>} label="Messages" />
+          <NavItem to="/navbar/message" icon={<FaRegMessage/>} label="Property Document" />
+
+
 
         </nav>
 
