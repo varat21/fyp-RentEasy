@@ -403,7 +403,7 @@ const Home = () => {
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-2">
             <FaFilter /> Filters
@@ -477,7 +477,8 @@ const Home = () => {
                 )}
               </div>
               <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{property.title}</h2>
+                <h2 className="text-xl font-semibold mb-2">  {property.price}</h2>
+                <h4 className="text-xl font-semibold mb-2"></h4>
                 <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
                 <div className="space-y-2 text-sm text-gray-500">
                   <p><FaMapMarkerAlt className="inline mr-2" />{property.city}, {property.country}</p>
@@ -488,6 +489,24 @@ const Home = () => {
                   {/* Add PropertiesViews component here */}
                   <PropertiesViews id={property.propertyId} />
                 </div>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
+                    See more
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </p>
+                </motion.div>
               </div>
             </motion.div>
           ))}

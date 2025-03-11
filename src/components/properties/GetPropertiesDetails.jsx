@@ -434,9 +434,9 @@ const PropertiesViews = ({ id }) => {
   console.log(totalViews);
 
   return (
-    <div className="bg-white p-5 rounded-lg shadow-md text-center flex flex-col items-center">
+    <div className="bg-white p-5 rounded-lg  text-center flex flex-col items-center">
       <div className="mb-2">
-        <FaEye className="text-2xl text-purple-500" />
+        <FaEye className="text-2xl text-black-500" />
       </div>
       <p className="text-lg font-semibold text-gray-800">Total Views </p>
       <p className="text-gray-700 text-md mt-1">{totalViews}</p>

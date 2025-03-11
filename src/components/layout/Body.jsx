@@ -43,6 +43,7 @@ const AddedProperties = lazy(() => import("../Admin/AddedProperties"));
 const UserProfileDetails = lazy(()=>import("../Admin/UserProfileDetails"));
 const PropertiesDetails = lazy(() => import("../Admin/PropertiesDetails"));
 const Message =lazy(()=>import("../Admin/message"));
+const PropertyDocument = lazy(() => import("../Admin/PropertyDocument"));
 
 // Layout component
 const Layout = () => {
@@ -149,7 +150,16 @@ const router = createBrowserRouter([
             <Message />
           </Suspense>
         ),
+      },
+      {
+        path:"propertyDocument",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <PropertyDocument />
+          </Suspense>
+        )
       }
+
     ],
   },
   {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { Loader } from "lucide-react";
+import { Container, Loader } from "@mantine/core"; // Import Loader from @mantine/core
 import { motion } from "framer-motion";
 import {
   Pagination,
@@ -69,7 +69,6 @@ const UserDetails = () => {
         accessorKey: "id",
         header: "ID",
       },
-
       {
         accessorKey: "name",
         header: "Name",
@@ -104,7 +103,6 @@ const UserDetails = () => {
             <Popover width={200} position="bottom-end" withArrow shadow="lg">
               <Popover.Target>
                 <ActionIcon variant="subtle" radius="md" size="lg">
-                  {/* <IconEdit size={18} /> */}
                   <BsThreeDotsVertical size={18} />
                 </ActionIcon>
               </Popover.Target>
@@ -154,12 +152,7 @@ const UserDetails = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex flex-col justify-center items-center">
-          <div className="text-lg">Loading Users...</div>
-          <div className="animate-spin">
-            <Loader />
-          </div>
-        </div>
+        <Loader size="xl" /> {/* Loader icon from @mantine/core */}
       </motion.div>
     );
   }
