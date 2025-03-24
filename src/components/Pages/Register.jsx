@@ -77,17 +77,17 @@ const Register = () => {
             autoPlay
             loop
             muted
-            className="w-full h-full object-cover rounded-xl"
+    className="w-full h-full object-cover rounded-xl filter  contrast-125 hue-rotate-180 "
           />
         </div>
 
         {/* Form Section */}
         <div className="lg:w-full flex flex-col justify-center lg:p-10 h-full">
-          <h1 className="font-extrabold text-3xl text-gray-800 mb-8 text-center lg:text-left">
-            Sign Up
-          </h1>
+        <h1 className="font-bold text-3xl text-gray-800 text-center lg:text-left">
+              Sign Up
+            </h1>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
             {/* Full Name and Phone Number */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <TextInput

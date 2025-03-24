@@ -37,7 +37,9 @@ const DeletePropertiesModal = ({ opened, onClose, propertyId }) => {
           }
         } catch (error) {
           console.error("Delete error:", error);
-          toast.error(error.response?.data?.message || "An error occurred");
+          // toast.error(error.response?.data?.message || "An error occurred");
+          toast.error( "Property is Booked by a Tenant, Cannot be Deleted");
+
         }
       };
       

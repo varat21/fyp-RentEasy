@@ -115,7 +115,7 @@ const Navbar = () => {
           <NavItem to="/navbar/dashboard" icon={<IoHomeOutline />} label="Dashboard" />
           <NavItem to="/navbar/users" icon={<IoPeopleOutline />} label="Users" />
           <NavItem to="/navbar/addedProperties" icon={<IoBusinessOutline />} label="Properties" />
-          <NavItem to="/navbar/message" icon={<FaRegMessage />} label="Messages" />
+          <NavItem to="/navbar/message" icon={<FaRegMessage />} label="Feedback" />
           <NavItem to="/navbar/propertyDocument" icon={<IoDocumentText />} label="Property Document" />
         </nav>
 

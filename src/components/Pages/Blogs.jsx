@@ -1,50 +1,93 @@
 import React from 'react';
-import { Container, Title, Text, Card, Grid } from '@mantine/core';
-import { IconMapPin, IconCash, IconFileText, IconHome, IconShield, IconUser, IconCalendar } from '@tabler/icons-react';
+import {
+  IconMapPin,
+  IconCash,
+  IconHome,
+  IconFileText,
+  IconUser,
+  IconShield,
+  IconBuilding,
+  IconTools,
+  IconAlertCircle,
+} from '@tabler/icons-react';
+
+const blogData = [
+  {
+    icon: <IconMapPin size={32} />,
+    title: 'Location Matters More Than You Think',
+    text: 'The right location enhances convenience, security, and accessibility. Assess proximity to essential services, safety, traffic conditions, and business potential (for shophouses). Visit the area at different times to gauge real living or business conditions.',
+  },
+  {
+    icon: <IconCash size={32} />,
+    title: 'Understand the Total Cost, Not Just the Rent',
+    text: 'Rent is just one part of the financial equation. Clarify security deposits, maintenance charges, utility bills, and parking fees. Compare rental prices with similar properties to ensure a fair deal.',
+  },
+  {
+    icon: <IconHome size={32} />,
+    title: 'Inspect the Property Thoroughly',
+    text: 'Never rely solely on photos or the landlord’s word. Check structural conditions, plumbing, electrical systems, furniture, and ventilation. Take photos of any damages before moving in to avoid disputes.',
+  },
+  {
+    icon: <IconFileText size={32} />,
+    title: 'Read and Understand the Lease Agreement',
+    text: 'A rental agreement is legally binding. Clarify rental duration, termination policies, repair responsibilities, and subletting restrictions. Seek legal advice if anything is unclear.',
+  },
+  {
+    icon: <IconUser size={32} />,
+    title: 'Know Your Landlord and Building Policies',
+    text: 'A responsive and fair landlord makes a huge difference. Verify the landlord’s reputation, understand building rules, and clarify business-use permissions for shophouses or apartments used as offices.',
+  },
+  {
+    icon: <IconShield size={32} />,
+    title: 'Prioritize Safety & Security',
+    text: 'Check locks, CCTV, security guards, emergency exits, and fire safety compliance. Visit the area at night to assess lighting and overall security.',
+  },
+  {
+    icon: <IconBuilding size={32} />,
+    title: 'Business Potential for Shophouses',
+    text: 'For shophouses, evaluate foot traffic, competitor presence, and zoning regulations. Ensure the location aligns with your business goals and target audience.',
+  },
+  {
+    icon: <IconTools size={32} />,
+    title: 'Maintenance and Repairs',
+    text: 'Clarify who is responsible for maintenance and repairs—landlord or tenant. Ensure the property is well-maintained to avoid unexpected costs and discomfort.',
+  },
+  {
+    icon: <IconAlertCircle size={32} />,
+    title: 'Avoid Common Pitfalls',
+    text: 'Beware of landlords who delay repairs, unclear lease terms, or properties with hidden damages. Always do thorough research and ask questions before committing.',
+  },
+];
 
 const Blogs = () => {
-  // Static data for the blog cards
-  const blogData = [
-    { icon: <IconMapPin size={28} />, title: 'Location', color: 'blue', text: 'Ensure the property is in a safe and convenient area. Check for proximity to public transport, schools, and workplaces.' },
-    { icon: <IconCash size={28} />, title: 'Budget', color: 'teal', text: 'Determine your budget and account for additional costs like utilities, maintenance, and security deposits.' },
-    { icon: <IconFileText size={28} />, title: 'Lease Agreement', color: 'orange', text: 'Read the lease agreement carefully. Look for clauses on rent increases, maintenance, and termination.' },
-    { icon: <IconHome size={28} />, title: 'Property Condition', color: 'pink', text: 'Inspect the property for damages. Document the condition with photos to avoid disputes later.' },
-    { icon: <IconShield size={28} />, title: 'Security', color: 'grape', text: 'Check for security features like locks, alarms, and surveillance. Ensure the neighborhood is safe.' },
-    { icon: <IconUser size={28} />, title: 'Landlord Reputation', color: 'cyan', text: 'Research the landlord or property management. Look for reviews or ask previous tenants.' },
-    { icon: <IconCalendar size={28} />, title: 'Future Plans', color: 'lime', text: 'Consider your long-term plans. Look for flexible lease terms if you\'re unsure about staying long.' },
-  ];
-
   return (
-    <Container size="lg" className="py-16 min-h-[50vh]">
-      {/* Header Section */}
-      <div className="text-center mb-16">
-        <Title order={1} className="text-5xl font-bold text-gray-800 mb-4">
-          What to Watch Before Renting
-        </Title>
-        <Text className="text-xl text-gray-600">
-          Essential tips for tenants looking to rent a house, room, or shop.
-        </Text>
+    <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900">
+          Essential Checklist Before Renting a House, Shophouse, or Apartment
+        </h1>
+        <p className="text-lg text-gray-600 mt-2">
+          Key considerations to ensure a smooth renting experience.
+        </p>
       </div>
 
-      {/* Blog Content */}
-      <Grid gutter="xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {blogData.map((item, index) => (
-          <Grid.Col key={index} md={6} lg={4}>
-            <Card shadow="sm" padding="lg" radius="md" className="h-full hover:shadow-md transition-shadow">
-              <div className={`bg-${item.color}-100 text-${item.color}-600 w-16 h-16 rounded-lg flex items-center justify-center mb-4`}>
-                {item.icon}
-              </div>
-              <Title order={3} className="text-2xl font-semibold text-gray-800 mb-3">
-                {item.title}
-              </Title>
-              <Text className="text-gray-600">
-                {item.text}
-              </Text>
-            </Card>
-          </Grid.Col>
+          <div
+            key={index}
+            className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition"
+          >
+            <div className="flex items-center justify-center w-14 h-14 bg-blue-100 text-blue-600 rounded-full mb-4">
+              {item.icon}
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              {item.title}
+            </h3>
+            <p className="text-gray-600">{item.text}</p>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 

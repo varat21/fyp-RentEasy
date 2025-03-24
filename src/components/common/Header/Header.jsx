@@ -110,14 +110,14 @@ const Header = () => {
             >
               Home
             </Link>
-            <Link to="/properties" 
+            {/* <Link to="/properties" 
 className={`transition-colors duration-200 ${
   location.pathname === "/properties" 
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
               BookedProperties
-            </Link>
+            </Link> */}
             <Link to="/about" 
 className={`transition-colors duration-200 ${
   location.pathname === "/about" 
@@ -142,7 +142,7 @@ className={`transition-colors duration-200 ${
 }`}            >
               FAQs
             </Link>
-            <Link to="/terms" 
+             <Link to="/terms" 
 className={`transition-colors duration-200 ${
   location.pathname === "/terms" 
     ? "text-blue-600 font-bold" 
@@ -150,14 +150,14 @@ className={`transition-colors duration-200 ${
 }`}            >
               Terms & Conditions
             </Link>
-            <Link to="/blogs" 
+           {/* <Link to="/blogs" 
 className={`transition-colors duration-200 ${
   location.pathname === "/blogs" 
     ? "text-blue-600 font-bold" 
     : "hover:text-blue-500"
 }`}            >
             Blogs
-            </Link>
+            </Link> */}
             {user && (
   <Button>
     <Link to="/addProperties">Add Properties</Link>

@@ -79,15 +79,16 @@ const Login = () => {
     <div className="relative min-h-screen flex justify-center items-center p-10 m-10">
       <div className="absolute z-10 flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-md p-10 gap-8 border-gray-200 shadow-md">
         {/* Video Section */}
-        <div className="hidden lg:block lg:w-fill w-[50%]">
-          <video
-            src="/images/lottee.mp4"
-            autoPlay
-            loop
-            muted
-            className="w-full h-full object-cover rounded-xl"
-          />
-        </div>
+        <div className="w-full h-full bg-white p-2 rounded-xl">
+  <video
+    src="/images/lottee.mp4"
+    autoPlay
+    loop
+    muted
+    className="w-full h-full object-cover rounded-xl filter  contrast-125 hue-rotate-180 "
+  />
+</div>
+
 
         {/* Form Section */}
         <div className="lg:w-1/2 w-full flex flex-col justify-center p-8 lg:p-12 rounded-lg space-y-8">

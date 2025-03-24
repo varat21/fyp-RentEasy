@@ -9,6 +9,7 @@ import {
   Group,
   Text,
   ActionIcon,
+  Switch
 } from "@mantine/core";
 import { IconSearch, IconTrash, IconEdit } from "@tabler/icons-react";
 import toast from "react-hot-toast";
@@ -23,6 +24,10 @@ import { Popover } from "@mantine/core";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Navigate, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import { SiTicktick } from "react-icons/si";
+import { RxCrossCircled } from "react-icons/rx";
+
+
 
 const UserDetails = () => {
   const Navigate = useNavigate();
@@ -86,10 +91,30 @@ const UserDetails = () => {
         header: "Role",
       },
       {
-        accessorKey: "is_verified",
-        header: "Verified",
-        cell: (info) => (Number(info.getValue()) === 1 ? "Yes" : "No"),
+        accessorKey: "status",
+        header: "Status",
+        cell: (info) => (
+          <Switch
+            size="md"
+            onLabel="ON"
+            offLabel="OFF"
+            checked={info.getValue() === "unblocked"} // Set the switch state based on the status
+            onChange={(event) => {
+              const newStatus = event.currentTarget.checked ? "unblocked" : "blocked"; // Toggle status
+              const updatedUsers = users.map((user) =>
+                user.id === info.row.original.id ? { ...user, status: newStatus } : user
+              );
+              setUsers(updatedUsers); // Update the local state
+            }}
+          />
+        ),
       },
+     
+{
+  accessorKey: "is_verified",
+  header: "Verified",
+  cell: (info) => (Number(info.getValue()) === 1 ? <SiTicktick className="text-blue-600 w-5 h-5"/> : <RxCrossCircled className="text-red-500 w-5 h-5"/>),
+},
       {
         accessorKey: "created_at",
         header: "Joined",
@@ -177,7 +202,7 @@ const UserDetails = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="text-3xl font-bold text-center mb-8">User Management</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">User Details</h1>
 
       {/* Search Bar */}
       <div className="mb-6">

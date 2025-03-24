@@ -80,7 +80,7 @@ const PropertiesDetails = () => {
         const { data } = await axios.get(
           `http://localhost/rent-easy/public/getPropertiesDetails.php?propertyId=${id}`
         );
-        console.log("API Response:", data); // 🔥 Log API response
+        console.log("API Response:", data); 
 
         if (data.success && data.properties?.length) {
           const fetchedProperty = data.properties[0];
@@ -219,9 +219,14 @@ const PropertiesDetails = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
         {/* Left Column - Property Info */}
         <div className="md:col-span-2">
+          <div className="flex items-center gap-10">
+
           <h1 className="text-4xl font-bold text-gray-900">
             {property?.title}
           </h1>
+          <PropertiesViews id={id} />
+
+          </div>
           <p className="text-gray-600 mt-3 text-lg">{property?.description}</p>
 
           {/* Property Details Grid */}
@@ -271,7 +276,7 @@ const PropertiesDetails = () => {
                   <p className="text-gray-700 text-md mt-1">{detail.value}</p>
                 </div>
               ))}
-              <PropertiesViews id={id} />
+              {/* <PropertiesViews id={id} /> */}
             </div>
           </div>
         </div>

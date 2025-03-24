@@ -71,6 +71,7 @@ const RatingModal = ({ open, setOpen, propertyId }) => {
           },
         }
       );
+      console.log(requestData)
 
       if (response.data.success) {
         toast.success("Review added successfully!");

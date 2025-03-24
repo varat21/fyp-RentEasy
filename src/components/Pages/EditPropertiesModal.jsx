@@ -273,12 +273,12 @@ const EditPropertiesModal = ({
         <Group grow className="mb-4">
         <Select
   label="Type"
-  name="type"
+  name="propertyType"
   placeholder="Select property type"
   data={["House", "Room", "ShopHouse", "Apartment"]}
-  value={formValues.type}
-  onChange={(value) => setFormValues((prev) => ({ ...prev, type: value }))}
-  required // Add the required prop here
+  value={formValues.propertyType}
+  onChange={(value) => setFormValues(prev => ({ ...prev, propertyType: value }))}
+  required
 />
 
           <TextInput

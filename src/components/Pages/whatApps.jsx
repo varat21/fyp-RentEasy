@@ -11,7 +11,7 @@ const WhatsAppButton = () => {
         // aria-label="Chat on WhatsApp"
         className="text-green-500 hover:text-green-600 transition duration-300 ease-in-out"
       >
-        <BiLogoWhatsappSquare className="text-[100px] drop-shadow-lg hover:scale-110 transition-transform duration-300 " />
+        <BiLogoWhatsappSquare className="text-[60px] drop-shadow-lg hover:scale-110 transition-transform duration-300 " />
       </a>
     </div>
   );
