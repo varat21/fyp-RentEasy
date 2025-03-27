@@ -69,7 +69,7 @@ function Footer() {
 
         {/* Footer Bottom */}
         <div className="mt-10 border-t border-gray-200 pt-6 text-center text-sm text-gray-600">
-          <p>© 2024 RentEasy, Inc. All rights reserved.</p>
+          <p>© 2025 RentEasy, Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>

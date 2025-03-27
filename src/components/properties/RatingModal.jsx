@@ -12,8 +12,10 @@ import {
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const RatingModal = ({ open, setOpen, propertyId }) => {
+  const Navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
@@ -33,7 +35,8 @@ const RatingModal = ({ open, setOpen, propertyId }) => {
     e.preventDefault();
 
     if (!token) {
-      toast.error("Please login first!");
+      // toast.error("Please login first!");
+      Navigate("/login");
       return;
     }
 
@@ -68,6 +71,7 @@ const RatingModal = ({ open, setOpen, propertyId }) => {
           },
         }
       );
+      console.log(requestData)
 
       if (response.data.success) {
         toast.success("Review added successfully!");

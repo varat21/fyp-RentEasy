@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   const isAuthenticated = !!token; // Extract token if user exists
 
-  console.log('ProtectedRoute - Is authenticated?', !!isAuthenticated); // Debugging line
+  // console.log('ProtectedRoute - Is authenticated?', !!isAuthenticated); // Debugging line
 
   useEffect(() => {
     if (!isAuthenticated) {

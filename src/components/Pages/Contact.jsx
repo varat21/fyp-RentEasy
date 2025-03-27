@@ -58,6 +58,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                type="text"
               />
               <TextInput
                 label="Mobile Number"
@@ -67,6 +68,7 @@ const Contact = () => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 required
+                type="number"
               />
               <TextInput
                 label="Email Address"
@@ -76,6 +78,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                type="email"
               />
               <label className="block text-gray-700 font-semibold">Message</label>
               <textarea
@@ -86,6 +89,7 @@ const Contact = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                type="text"
               ></textarea>
 
               <Button fullWidth type="submit">Submit</Button>
