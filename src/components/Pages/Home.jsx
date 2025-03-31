@@ -46,6 +46,7 @@ const Home = () => {
       const response = await axios.get(
         "http://localhost/rent-easy/public/getProperties.php"
       );
+      console.log(response.data);
       if (response.data.success) {
         setProperties(response.data.properties);
         setFilteredProperties(response.data.properties); // Set initial filtered properties
@@ -156,6 +157,7 @@ const Home = () => {
       </motion.div>
     );
   }
+
 
   return (
     <motion.div
@@ -273,11 +275,12 @@ const Home = () => {
         <div className="text-lg text-center mt-8">No properties found</div>
       ) : (
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
           {paginatedProperties.map((property, index) => (
+
             <motion.div
               key={property.propertyId}
               className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
@@ -287,6 +290,7 @@ const Home = () => {
               whileHover={{ scale: 1.01 }}
               onClick={() => navigate(`/property/${property.propertyId}`)}
             >
+              
               <div className="relative h-48">
                 <img
                   src={

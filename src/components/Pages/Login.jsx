@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import ForgetPasswordModal from "./ForgetPassword/ForgetPasswordModal";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const Login = () => {
   const { resolver } = useLoginValidation();
@@ -126,12 +127,14 @@ const Login = () => {
               <span className="px-4 text-gray-600">or</span>
               <div className="flex-grow h-px bg-gray-300"></div>
             </div>
-
-            <Button fullWidth variant="light" color="blue">
-              <FcGoogle className="mr-2" />
-              Sign In with Google
-            </Button>
-
+<div className="flex justify-center items-center">
+            {/* <Button fullWidth variant="light" color="blue"> */}
+              {/* <FcGoogle className="mr-2" /> */}
+              {/* Sign In with Google */}
+             {/* < GoogleLoginButton/> */}
+             <GoogleLoginButton/>
+            {/* </Button> */}
+            </div>
             <div className="text-center mt-6 text-sm text-gray-600">
               Don't have an account?{" "}
               <span

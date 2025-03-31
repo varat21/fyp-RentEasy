@@ -1,4 +1,3 @@
-
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import { useParams, useNavigate } from "react-router-dom";
@@ -218,7 +217,6 @@
 //       </div>
 //       <PropertiesViews id={id} />
 
-
 //       {/* Property Details Section */}
 //       <Rating
 //         value={
@@ -239,13 +237,11 @@
 
 //       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
 
-
 //         {/* Left Column - Property Info */}
 //         <div className="md:col-span-2">
 //           <h1 className="text-4xl font-bold text-gray-900">
 //             {property?.title}
 //           </h1>
-
 
 //           <p className="text-gray-600 mt-3 text-lg">{property?.description}</p>
 
@@ -462,9 +458,6 @@
 
 // export default GetPropertyDetails;
 
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -489,8 +482,8 @@ import {
   FaBath,
   FaStar,
 } from "react-icons/fa";
-import 'leaflet/dist/leaflet.css';
-export  const PropertiesViews = ({ id }) => {
+import "leaflet/dist/leaflet.css";
+export const PropertiesViews = ({ id }) => {
   const [totalViews, setTotalViews] = useState(0);
 
   useEffect(() => {
@@ -518,41 +511,10 @@ export  const PropertiesViews = ({ id }) => {
   );
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const GetPropertyDetails = () => {
   const { bookProperty } = useBookingStore();
   const navigate = useNavigate();
   const { id } = useParams();
-  
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -566,7 +528,7 @@ const GetPropertyDetails = () => {
         const { data } = await axios.get(
           `http://localhost/rent-easy/public/getPropertiesDetails.php?propertyId=${id}`
         );
-        
+
         if (data.success && data.properties?.length) {
           const fetchedProperty = data.properties[0];
           setProperty({
@@ -641,11 +603,16 @@ const GetPropertyDetails = () => {
   };
 
   if (loading) return <div className="text-center p-10">Loading...</div>;
-  if (error) return <div className="text-center text-red-500 p-10">{error}</div>;
+  if (error)
+    return <div className="text-center text-red-500 p-10">{error}</div>;
 
-  const avgRating = property?.ratings?.length > 0 
-    ? (property.ratings.reduce((acc, r) => acc + r.rating, 0) / property.ratings.length).toFixed(1)
-    : 0;
+  const avgRating =
+    property?.ratings?.length > 0
+      ? (
+          property.ratings.reduce((acc, r) => acc + r.rating, 0) /
+          property.ratings.length
+        ).toFixed(1)
+      : 0;
 
   return (
     <motion.div
@@ -660,12 +627,16 @@ const GetPropertyDetails = () => {
         <div className="flex flex-wrap items-center gap-4 mt-2 text-gray-600">
           <div className="flex items-center">
             <FaMapMarkerAlt className="mr-1" />
-            <span>{property?.city}, {property?.country}</span>
+            <span>
+              {property?.city}, {property?.country}
+            </span>
           </div>
           <PropertiesViews id={id} />
           <div className="flex items-center">
             <FaStar className="text-yellow-400 mr-1" />
-            <span>{avgRating} ({property?.ratings?.length || 0} reviews)</span>
+            <span>
+              {avgRating} ({property?.ratings?.length || 0} reviews)
+            </span>
           </div>
         </div>
       </div>
@@ -684,15 +655,17 @@ const GetPropertyDetails = () => {
               />
             </div>
             <div className="flex gap-2 overflow-x-auto pb-4">
-              {property?.images?.filter(img => img).map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="w-20 h-20 object-cover rounded cursor-pointer hover:opacity-80"
-                  onClick={() => setSelectedImage(img)}
-                />
-              ))}
+              {property?.images
+                ?.filter((img) => img)
+                .map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-20 h-20 object-cover rounded cursor-pointer hover:opacity-80"
+                    onClick={() => setSelectedImage(img)}
+                  />
+                ))}
             </div>
           </div>
 
@@ -741,7 +714,6 @@ const GetPropertyDetails = () => {
                 center={[property?.latitude, property?.longitude]}
                 zoom={15}
                 style={{ height: "100%", width: "100%", zIndex: 10 }}
-
               >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <Marker position={[property?.latitude, property?.longitude]}>
@@ -771,7 +743,9 @@ const GetPropertyDetails = () => {
                         className="w-12 h-12 rounded-full"
                       />
                       <div>
-                        <p className="font-semibold">{rating.user_name || "User"}</p>
+                        <p className="font-semibold">
+                          {rating.user_name || "User"}
+                        </p>
                         <p className="text-gray-500 text-sm">
                           {moment(rating.date).format("MMMM YYYY")}
                         </p>
@@ -803,9 +777,9 @@ const GetPropertyDetails = () => {
                   Rs.{property?.price}
                 </span>
               </div>
-              <Button 
-                fullWidth 
-                size="lg" 
+              <Button
+                fullWidth
+                size="lg"
                 onClick={handleBooking}
                 className="bg-blue-600 hover:bg-blue-700"
                 disabled={property?.status === "booked"}
@@ -832,12 +806,14 @@ const GetPropertyDetails = () => {
                 <FaPhone className="text-gray-500 mr-2" />
                 <span>{property?.owner_contact}</span>
               </div>
-              <Button 
-                fullWidth 
-                variant="outline" 
-                size="md" 
+              <Button
+                fullWidth
+                variant="outline"
+                size="md"
                 className="mt-4"
-                onClick={() => window.location.href = `tel:${property?.owner_contact}`}
+                onClick={() =>
+                  (window.location.href = `tel:${property?.owner_contact}`)
+                }
               >
                 Call Owner
               </Button>
@@ -853,11 +829,19 @@ const GetPropertyDetails = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Posted:</span>
-                  <span>{moment(property?.uploaded_at).format("MMM D, YYYY")}</span>
+                  <span>
+                    {moment(property?.uploaded_at).format("MMM D, YYYY")}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status:</span>
-                  <span className={property?.status === "available" ? "text-green-500" : "text-red-500"}>
+                  <span
+                    className={
+                      property?.status === "available"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }
+                  >
                     {property?.status}
                   </span>
                 </div>

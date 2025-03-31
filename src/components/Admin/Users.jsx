@@ -94,19 +94,8 @@ const UserDetails = () => {
         accessorKey: "status",
         header: "Status",
         cell: (info) => (
-          <Switch
-            size="md"
-            onLabel="ON"
-            offLabel="OFF"
-            checked={info.getValue() === "unblocked"} // Set the switch state based on the status
-            onChange={(event) => {
-              const newStatus = event.currentTarget.checked ? "unblocked" : "blocked"; // Toggle status
-              const updatedUsers = users.map((user) =>
-                user.id === info.row.original.id ? { ...user, status: newStatus } : user
-              );
-              setUsers(updatedUsers); // Update the local state
-            }}
-          />
+          <Switch size ="md" onLabel="Block" offLabel ="UNBLOCK"/>
+         
         ),
       },
      

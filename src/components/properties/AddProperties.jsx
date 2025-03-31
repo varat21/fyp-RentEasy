@@ -1,5 +1,3 @@
-
-
 // import React, { useState } from "react";
 // import L from "leaflet";
 // import "leaflet/dist/leaflet.css";
@@ -27,7 +25,7 @@
 
 // // Configure Leaflet marker icon
 // const markerIcon = L.icon({
-//   iconUrl: "./icon.png", 
+//   iconUrl: "./icon.png",
 //   iconSize: [35, 35],
 // });
 
@@ -97,8 +95,6 @@
 //     const { name, value } = e.target;
 //     setFormData((prev) => ({ ...prev, [name]: value }));
 //   };
-
-  
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault(); // Prevent default form submission
@@ -306,7 +302,7 @@
 //               Property Features
 //             </h2>
 //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//               {/* <div className="flex items-center gap-4"> 
+//               {/* <div className="flex items-center gap-4">
 //                  <TextInput
 //                 label="Dimension"
 //                 name="dimension"
@@ -331,7 +327,7 @@
 //                 size="md"
 //                 onChange={handleInputChange}
 //                 required
-//               /> 
+//               />
 //               <TextInput
 //                 label="Road Type"
 //                 name="road_type"
@@ -462,7 +458,6 @@
 //   );
 // };
 // export default AddProperties;
-
 
 import React, { useState } from "react";
 import L from "leaflet";
@@ -596,8 +591,7 @@ const AddProperties = () => {
       } else {
         toast.error(response.data.message || "Please Login!");
       }
-      navigate("/"); 
-
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error(
@@ -642,22 +636,26 @@ const AddProperties = () => {
                   />
                 )}
               />
-              <Controller
-                name="price"
-                control={control}
-                defaultValue=""
-                rules={{ required: "Price is required" }}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    label="Rent Price"
-                    placeholder="E.g., 1000"
-                    size="md"
-                    type="number"
-                    error={errors.price?.message}
-                  />
-                )}
-              />
+            <div className="flex items-center gap-1">
+  <span className="text-xl">Rs.</span>
+  <Controller
+    name="price"
+    control={control}
+    defaultValue=""
+    rules={{ required: "Price is required" }}
+    render={({ field }) => (
+      <TextInput
+        {...field}
+        label="Rent Price"
+        placeholder="E.g., 1000"
+        size="md"
+        type="number"
+        error={errors.price?.message}
+      />
+    )}
+  />
+</div>
+
               <Controller
                 name="type"
                 control={control}
@@ -670,6 +668,35 @@ const AddProperties = () => {
                     placeholder="Select property type"
                     data={["House", "Room", "ShopHouse", "Apartment"]}
                     error={errors.type?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="bedrooms"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Bed Rooms"
+                    placeholder="E.g., 4"
+                    size="md"
+                    type="number"
+                  />
+                )}
+              />
+
+              <Controller
+                name="bathrooms"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Bathrooms"
+                    placeholder="E.g., 2"
+                    size="md"
+                    type="number"
                   />
                 )}
               />
