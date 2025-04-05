@@ -477,83 +477,133 @@ const Dashboard = () => {
         </Grid.Col>
       </Grid>
 
-      <Card shadow="sm" padding="lg" className="mt-8">
-        <Title order={3} className="mb-4 text-2xl font-bold">
-          Latest Users
-        </Title>
-        <div className="relative overflow-x-auto sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  ID
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Phone
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Role
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Verified
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Joined
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.users.map((user) => (
-                <tr key={user.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {user.id}
-                  </td>
-                  <td className="px-6 py-4">
-                    {user.name}
-                  </td>
-                  <td className="px-6 py-4">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4">
-                    {user.phoneNumber}
-                  </td>
-                  <td className="px-6 py-4">
-                    {user.userType}
-                  </td>
-                  <td className="px-6 py-4">
-                    {Number(user.is_verified) === 1 ? "Yes" : "No"}
-                  </td>
-                  <td className="px-6 py-4">
-                    {moment(user.created_at).fromNow()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p
-          className="text-blue-600 font-medium flex items-center justify-center gap-1 cursor-pointer hover:underline mt-4"
-          onClick={() => navigate("/navbar/users")}
-        >
-          See more
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-4 h-4"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </p>
-      </Card>
+   
+<Card shadow="sm" padding="lg" className="mt-8 bg-white rounded-xl border border-gray-100">
+  <Title order={3} className="mb-6 text-2xl font-semibold text-gray-800">
+    Latest Users
+  </Title>
+
+  <div className="bg-white rounded-lg overflow-hidden border border-gray-200">
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-left text-gray-700">
+        <thead className="text-xs text-gray-600 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" className="px-6 py-3 font-medium">
+              <div className="flex items-center">
+                ID
+                <svg className="w-3 h-3 ml-1.5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                </svg>
+              </div>
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              Name
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              Email
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              Phone
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              Role
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              <div className="flex items-center">
+                Verified
+                <svg className="w-3 h-3 ml-1.5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                </svg>
+              </div>
+            </th>
+            <th scope="col" className="px-6 py-3 font-medium">
+              Joined
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.users.map((user) => (
+            <tr key={user.id} className="bg-white border-b hover:bg-gray-50 transition-colors duration-150">
+              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                {user.id}
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-9 w-9">
+                    <img 
+                      className="h-9 w-9 rounded-full object-cover border border-gray-200" 
+                      src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`} 
+                      alt={user.name} 
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {user.name}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="text-sm text-gray-700 truncate max-w-[180px]">
+                  {user.email}
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="text-sm text-gray-600">
+                  {user.phoneNumber || '-'}
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <span className={`px-2.5 py-1 inline-flex text-xs leading-4 font-medium rounded-full 
+                  ${user.userType === 'admin' ? 'bg-purple-100 text-purple-800' : 
+                    user.userType === 'moderator' ? 'bg-blue-100 text-blue-800' : 
+                    'bg-green-100 text-green-800'}`}>
+                  {user.userType}
+                </span>
+              </td>
+              <td className="px-6 py-4">
+                {Number(user.is_verified) === 1 ? (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className="h-2 w-2 rounded-full bg-green-500 mr-1.5"></span> Verified
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <span className="h-2 w-2 rounded-full bg-red-500 mr-1.5"></span> Unverified
+                  </span>
+                )}
+              </td>
+              <td className="px-6 py-4">
+                <div className="text-sm text-gray-700">
+                  <div className="whitespace-nowrap">{moment(user.created_at).format('MMM D, YYYY')}</div>
+                  <div className="text-xs text-gray-500">{moment(user.created_at).fromNow()}</div>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div className="mt-5 text-center">
+    <button 
+      onClick={() => navigate("/navbar/users")}
+      className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200"
+    >
+      View all users
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+        stroke="currentColor"
+        className="w-4 h-4 ml-1"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</Card>
     </Container>
   );
 };
