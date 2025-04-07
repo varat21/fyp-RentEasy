@@ -600,6 +600,313 @@
 // export default GetProfileData;
 
 
+// import React, { useEffect, useState } from "react";
+// import { useDisclosure } from "@mantine/hooks";
+// import ProfileEditModal from "./ProfileEditModal";
+// import axios from "axios";
+// import { Tabs, Card, Group, Title, Text, Button } from "@mantine/core";
+// import { CiUser } from "react-icons/ci";
+// import moment from "moment";
+// import useBookingStore from "../stores/useBookingStore";
+// import { toast } from "react-hot-toast";
+// import { jwtDecode } from "jwt-decode";
+// import { AiTwotoneDelete } from "react-icons/ai";
+// import { MdEdit } from "react-icons/md";
+// import EditPropertiesModal from "./EditPropertiesModal";
+// import { useNavigate } from "react-router-dom";
+// import { Trash } from "lucide-react";
+// import DeletePropertiesModal from "./deleteProfilePropertiesModal";
+
+// const GetProfileData = () => {
+//   const [userId, setUserId] = useState(null);
+//   const [profileData, setProfileData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [opened, { open, close }] = useDisclosure(false);
+//   const [properties, setProperties] = useState([]);
+//   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+//   const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
+//   const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
+//   const [khaltiCheckout, setKhaltiCheckout] = useState(null);
+
+//   const { bookedProperties, totalAmount, removeProperty, clearBookings } = useBookingStore();
+//   const navigate = useNavigate();
+
+//   // Load Khalti script
+//   useEffect(() => {
+//     const script = document.createElement("script");
+//     script.src = "https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js";
+//     script.onload = () => {
+//       const config = {
+//         publicKey: "1edff6b3231843e1915302852d5ed217", // Replace with your actual key
+//         productIdentity: "rent_easy_booking",
+//         productName: "Property Booking",
+//         productUrl: window.location.href,
+//         eventHandler: {
+//           onSuccess(payload) {
+//             verifyKhaltiPayment(payload);
+//           },
+//           onError() {
+//             toast.error("Payment failed!");
+//           },
+//           onClose() {},
+//         },
+//       };
+//       setKhaltiCheckout(new window.KhaltiCheckout(config));
+//     };
+//     document.body.appendChild(script);
+
+//     return () => {
+//       document.body.removeChild(script);
+//     };
+//   }, []);
+
+//   // Fetch profile data
+//   useEffect(() => {
+//     const fetchProfileData = async () => {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         setLoading(false);
+//         return;
+//       }
+
+//       try {
+//         const decodedToken = jwtDecode(token);
+//         setUserId(decodedToken?.userId);
+
+//         const response = await axios.get(
+//           `http://localhost/rent-easy/public/profile.php/id=${decodedToken?.userId}`,
+//           { headers: { Authorization: `Bearer ${token}` } }
+//         );
+
+//         if (response.data.success) {
+//           setProfileData(response.data.user);
+//           setProperties(response.data.properties || []);
+//         }
+//       } catch (err) {
+//         console.error(err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchProfileData();
+//   }, []);
+
+//   const verifyKhaltiPayment = async (payload) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       const response = await axios.post(
+//         "http://localhost/rent-easy/public/khaltiPayment/verify-payment.php",
+//         payload,
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       if (response.data.success && response.data.status === "Completed") {
+//         toast.success("Payment successful!");
+//         clearBookings();
+//         navigate("/payment-success");
+//       } else {
+//         toast.error("Payment verification failed");
+//       }
+//     } catch (error) {
+//       toast.error("Payment verification error");
+//     }
+//   };
+
+//   const handleKhaltiPayment = () => {
+//     if (!khaltiCheckout) {
+//       toast.error("Payment system not ready");
+//       return;
+//     }
+//     if (bookedProperties.length === 0) {
+//       toast.error("No properties booked");
+//       return;
+//     }
+
+//     const amountInPaisa = totalAmount * 100;
+//     khaltiCheckout.show({ amount: amountInPaisa });
+//   };
+
+//   const handleRemoveProperty = (bookingId) => {
+//     removeProperty(bookingId);
+//     toast.success("Property removed");
+//   };
+
+//   if (loading) return <div className="text-center text-xl mt-20">Loading...</div>;
+//   if (!profileData) return <div className="text-center text-xl mt-20 text-red-500">No profile data found</div>;
+
+//   return (
+//     <div className="min-h-screen bg-white p-6">
+//       {/* Header */}
+//       <div className="max-w-4xl mx-auto bg-white rounded-lg   p-6 mb-6">
+//         <h1 className="text-3xl font-bold text-gray-800 text-center">My Dashboard</h1>
+//       </div>
+
+//       {/* Tabs */}
+//       <div className="max-w-4xl mx-auto">
+//         <Tabs defaultValue="first">
+//           <Tabs.List className="mb-6 flex justify-center gap-4">
+//             <Tabs.Tab value="first" className="text-lg font-medium">Booked Properties</Tabs.Tab>
+//             <Tabs.Tab value="second" className="text-lg font-medium">My Profile</Tabs.Tab>
+//             <Tabs.Tab value="third" className="text-lg font-medium">My Properties</Tabs.Tab>
+//           </Tabs.List>
+
+//           {/* Booked Properties Tab */}
+//           <Tabs.Panel value="first">
+//             <div className="space-y-6">
+//               <h2 className="text-2xl font-semibold text-gray-700">Booked Properties</h2>
+//               {bookedProperties.length > 0 ? (
+//                 bookedProperties.map((property) => (
+//                   <Card key={property.bookingId} withBorder shadow="sm" padding="lg" radius="md">
+//                     <div className="flex flex-col md:flex-row gap-4">
+//                       <img
+//                         src={property.images?.[0] || "/default-property.jpg"}
+//                         alt={property.title}
+//                         className="w-full md:w-1/3 h-40 object-cover rounded-md"
+//                       />
+//                       <div className="flex-1">
+//                         <Group position="apart">
+//                           <Title order={3} className="text-gray-800">{property.title}</Title>
+//                           <Button
+//                             variant="subtle"
+//                             color="red"
+//                             onClick={() => handleRemoveProperty(property.bookingId)}
+//                           >
+//                             <Trash size={18} />
+//                           </Button>
+//                         </Group>
+//                         <Text className="text-gray-600">Price: {property.price} NPR</Text>
+//                         <Text className="text-gray-600">Location: {property.city}, {property.country}</Text>
+//                         <Text className="text-gray-500 text-sm">
+//                           Booked on: {moment(property.bookingDate).format("MMM DD, YYYY")}
+//                         </Text>
+//                       </div>
+//                     </div>
+//                   </Card>
+//                 ))
+//               ) : (
+//                 <Text className="text-gray-500 text-center">No properties booked yet.</Text>
+//               )}
+//               <Card withBorder shadow="sm" padding="lg" radius="md">
+//                 <Group position="apart">
+//                   <Text className="text-lg font-semibold">Total: {totalAmount} NPR</Text>
+//                   <Group>
+//                     <Button variant="outline" color="gray" onClick={() => navigate("/")}>
+//                       Browse More
+//                     </Button>
+//                     <Button
+//                       color="blue"
+//                       onClick={handleKhaltiPayment}
+//                       disabled={bookedProperties.length === 0}
+//                     >
+//                       Pay Now
+//                     </Button>
+//                   </Group>
+//                 </Group>
+//               </Card>
+//             </div>
+//           </Tabs.Panel>
+
+//           {/* My Profile Tab */}
+//           <Tabs.Panel value="second">
+//             <Card withBorder shadow="sm" padding="lg" radius="md">
+//               <div className="text-center">
+//                 {profileData.image ? (
+//                   <img
+//                     src={profileData.image}
+//                     alt="Profile"
+//                     className="w-24 h-24 mx-auto rounded-full border-2 border-gray-300"
+//                   />
+//                 ) : (
+//                   <CiUser className="w-24 h-24 mx-auto text-gray-400" />
+//                 )}
+//                 <Title order={2} className="mt-4 text-gray-800">{profileData.name}</Title>
+//                 <Text className="text-gray-600 mt-2">Email: {profileData.email}</Text>
+//                 <Text className="text-gray-600">Phone: {profileData.phoneNumber || "Not set"}</Text>
+//                 <Button className="mt-4" variant="outline" color="blue" onClick={open}>
+//                   Edit Profile
+//                 </Button>
+//               </div>
+//             </Card>
+//           </Tabs.Panel>
+
+//           {/* My Properties Tab */}
+//           <Tabs.Panel value="third">
+//             <div className="space-y-6">
+//               <h2 className="text-2xl font-semibold text-gray-700">My Added Properties</h2>
+//               {properties.length > 0 ? (
+//                 properties.map((property) => (
+//                   <Card key={property.id} withBorder shadow="sm" padding="lg" radius="md">
+//                     <div className="flex flex-col md:flex-row gap-4">
+//                       <img
+//                         src={property.images[0] || "https://via.placeholder.com/400x300"}
+//                         alt={property.title}
+//                         className="w-full md:w-1/3 h-40 object-cover rounded-md"
+//                       />
+//                       <div className="flex-1">
+//                         <Group position="apart">
+//                           <Title order={3} className="text-gray-800">{property.title}</Title>
+//                           <Group>
+//                             <Button
+//                               variant="subtle"
+//                               color="blue"
+//                               onClick={() => {
+//                                 setSelectedPropertyId(property.propertyId);
+//                                 openEditModal();
+//                               }}
+//                             >
+//                               <MdEdit size={18} />
+//                             </Button>
+//                             <Button
+//                               variant="subtle"
+//                               color="red"
+//                               onClick={() => {
+//                                 setSelectedPropertyId(property.propertyId);
+//                                 openDeleteModal();
+//                               }}
+//                             >
+//                               <AiTwotoneDelete size={18} />
+//                             </Button>
+//                           </Group>
+//                         </Group>
+//                         <Text className="text-gray-600">Price: {property.price} NPR</Text>
+//                         <Text className="text-gray-600">Location: {property.city}, {property.country}</Text>
+//                       </div>
+//                     </div>
+//                   </Card>
+//                 ))
+//               ) : (
+//                 <Text className="text-gray-500 text-center">No properties added yet.</Text>
+//               )}
+//             </div>
+//           </Tabs.Panel>
+//         </Tabs>
+//       </div>
+
+//       {/* Modals */}
+//       <ProfileEditModal opened={opened} close={close} {...profileData} />
+//       <EditPropertiesModal
+//         userId={userId}
+//         opened={editModalOpened}
+//         onClose={closeEditModal}
+//         propertyId={selectedPropertyId}
+//         property={properties.find((p) => p.propertyId === selectedPropertyId)}
+//       />
+//       <DeletePropertiesModal
+//         opened={deleteModalOpened}
+//         onClose={closeDeleteModal}
+//         propertyId={selectedPropertyId}
+//       />
+//     </div>
+//   );
+// };
+
+// export default GetProfileData;
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditModal from "./ProfileEditModal";
@@ -637,7 +944,7 @@ const GetProfileData = () => {
     script.src = "https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js";
     script.onload = () => {
       const config = {
-        publicKey: "test_public_key_YOUR_KEY_HERE", // Replace with your actual key
+        publicKey: "1edff6b3231843e1915302852d5ed217", // Replace with your actual key
         productIdentity: "rent_easy_booking",
         productName: "Property Booking",
         productUrl: window.location.href,
@@ -659,6 +966,13 @@ const GetProfileData = () => {
       document.body.removeChild(script);
     };
   }, []);
+
+
+
+  const handleAddPropertyClick = () => {
+    navigate("/addProperties"); // Navigate to the add property page
+  };
+
 
   // Fetch profile data
   useEffect(() => {
@@ -749,6 +1063,15 @@ const GetProfileData = () => {
             <Tabs.Tab value="first" className="text-lg font-medium">Booked Properties</Tabs.Tab>
             <Tabs.Tab value="second" className="text-lg font-medium">My Profile</Tabs.Tab>
             <Tabs.Tab value="third" className="text-lg font-medium">My Properties</Tabs.Tab>
+            <Tabs.Tab 
+          value="fourth" 
+          className="text-lg font-medium"
+          onClick={handleAddPropertyClick} // Add onClick handler
+        >
+          Add Property
+        </Tabs.Tab>
+      {/* </Tabs.List> */}
+
           </Tabs.List>
 
           {/* Booked Properties Tab */}
