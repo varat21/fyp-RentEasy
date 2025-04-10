@@ -923,6 +923,7 @@ import EditPropertiesModal from "./EditPropertiesModal";
 import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 import DeletePropertiesModal from "./deleteProfilePropertiesModal";
+import PaymentButton from "./PaymentButton";
 
 const GetProfileData = () => {
   const [userId, setUserId] = useState(null);
@@ -944,7 +945,7 @@ const GetProfileData = () => {
     script.src = "https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js";
     script.onload = () => {
       const config = {
-        publicKey: "1edff6b3231843e1915302852d5ed217", // Replace with your actual key
+        publicKey: "987654", 
         productIdentity: "rent_easy_booking",
         productName: "Property Booking",
         productUrl: window.location.href,
@@ -1006,40 +1007,40 @@ const GetProfileData = () => {
     fetchProfileData();
   }, []);
 
-  const verifyKhaltiPayment = async (payload) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://localhost/rent-easy/public/khaltiPayment/verify-payment.php",
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  // const verifyKhaltiPayment = async (payload) => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const response = await axios.post(
+  //       "http://localhost/rent-easy/public/khaltiPayment/verify-payment.php",
+  //       payload,
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
 
-      if (response.data.success && response.data.status === "Completed") {
-        toast.success("Payment successful!");
-        clearBookings();
-        navigate("/payment-success");
-      } else {
-        toast.error("Payment verification failed");
-      }
-    } catch (error) {
-      toast.error("Payment verification error");
-    }
-  };
+  //     if (response.data.success && response.data.status === "Completed") {
+  //       toast.success("Payment successful!");
+  //       clearBookings();
+  //       navigate("/payment-success");
+  //     } else {
+  //       toast.error("Payment verification failed");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Payment verification error");
+  //   }
+  // };
 
-  const handleKhaltiPayment = () => {
-    if (!khaltiCheckout) {
-      toast.error("Payment system not ready");
-      return;
-    }
-    if (bookedProperties.length === 0) {
-      toast.error("No properties booked");
-      return;
-    }
+  // const handleKhaltiPayment = () => {
+  //   if (!khaltiCheckout) {
+  //     toast.error("Payment system not ready");
+  //     return;
+  //   }
+  //   if (bookedProperties.length === 0) {
+  //     toast.error("No properties booked");
+  //     return;
+  //   }
 
-    const amountInPaisa = totalAmount * 100;
-    khaltiCheckout.show({ amount: amountInPaisa });
-  };
+  //   const amountInPaisa = totalAmount * 100;
+  //   khaltiCheckout.show({ amount: amountInPaisa });
+  // };
 
   const handleRemoveProperty = (bookingId) => {
     removeProperty(bookingId);
@@ -1118,12 +1119,12 @@ const GetProfileData = () => {
                       Browse More
                     </Button>
                     <Button
-                      color="blue"
-                      onClick={handleKhaltiPayment}
-                      disabled={bookedProperties.length === 0}
-                    >
-                      Pay Now
-                    </Button>
+  color="blue"
+  onClick={() => navigate('/payment')} // Navigate to the payment page
+  disabled={bookedProperties.length === 0}
+>
+  Pay Now
+</Button>
                   </Group>
                 </Group>
               </Card>
