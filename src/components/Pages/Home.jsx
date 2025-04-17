@@ -26,19 +26,19 @@ const Home = () => {
   const navigate = useNavigate();
 
   // State variables
-  const [properties, setProperties] = useState([]); // All properties from API
-  const [filteredProperties, setFilteredProperties] = useState([]); // Filtered properties
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(""); // Error message
-  const [search, setSearch] = useState(""); // Search input
-  const [selectedCity, setSelectedCity] = useState(""); // Selected city filter
-  const [selectedType, setSelectedType] = useState(""); // Selected property type filter
-  const [minPrice, setMinPrice] = useState(""); // Minimum price filter
-  const [maxPrice, setMaxPrice] = useState(""); // Maximum price filter
-  const [tempMinPrice, setTempMinPrice] = useState(""); // Temporary min price for input
-  const [tempMaxPrice, setTempMaxPrice] = useState(""); // Temporary max pri
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 6; // Number of items per page
+  const [properties, setProperties] = useState([]); 
+  const [filteredProperties, setFilteredProperties] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(""); 
+  const [search, setSearch] = useState(""); 
+  const [selectedCity, setSelectedCity] = useState(""); 
+  const [selectedType, setSelectedType] = useState(""); 
+  const [minPrice, setMinPrice] = useState(""); 
+  const [maxPrice, setMaxPrice] = useState(""); 
+  const [tempMinPrice, setTempMinPrice] = useState(""); 
+  const [tempMaxPrice, setTempMaxPrice] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 6; 
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -247,9 +247,9 @@ const Home = () => {
               value={tempMinPrice}
               onChange={(value) => setTempMinPrice(value)}
               className="flex-1"
-              icon={<span className="text-gray-500">$</span>}
+              icon={<span className="text-gray-500">Rs</span>}
             />
-            <span className="text-gray-500 mx-1">-</span>
+            <span className="text-gray-500 mx-1"></span>
             <NumberInput
               placeholder="Max Price"
               value={tempMaxPrice}
@@ -315,7 +315,7 @@ const Home = () => {
                 </div>
 
                 <h2 className="text-xl font-semibold mb-1">
-                  Rs. {property.price}
+                  Rs. {property.price}<span className="space-y-2 text-sm text-gray-500">/per month</span>
                 </h2>
 
                 <p className="text-gray-600 mb-4 line-clamp-2">

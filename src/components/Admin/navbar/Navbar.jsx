@@ -85,7 +85,7 @@
 
 import React from 'react';
 import { IoLogOutOutline, IoHomeOutline, IoPeopleOutline, IoBusinessOutline, IoSearch } from 'react-icons/io5';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'; // Changed from Link to NavLink
 import { toast } from 'react-hot-toast';
 import { FaRegMessage } from "react-icons/fa6";
 import { IoDocumentText } from "react-icons/io5";
@@ -101,14 +101,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex h-auto bg-gray-100 font-sans font-semibold"> {/* Apply font-sans or your desired font */}
+    <div className="flex h-auto bg-gray-100 font-sans font-semibold">
       {/* Sidebar Navigation */}
       <aside className="fixed top-0 left-0 w-60 h-full bg-white shadow-lg p-5 flex flex-col">
         {/* Logo Section */}
-        <Link to="/navbar/dashboard" className="flex items-center gap-2 mb-6">
+        <NavLink to="/navbar/dashboard" className="flex items-center gap-2 mb-6">
           <img src="/images/logo.png" alt="RentEasy Logo" className="h-10" />
           <span className="text-xl font-bold text-gray-700">RentEasy</span>
-        </Link>
+        </NavLink>
 
         {/* Navigation Links */}
         <nav className="space-y-4 flex-1">
@@ -152,12 +152,19 @@ const Navbar = () => {
   );
 };
 
-// Reusable Navigation Link Component
+// Updated NavItem component using NavLink
 const NavItem = ({ to, icon, label }) => (
-  <Link to={to} className="flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-gray-200">
+  <NavLink 
+    to={to} 
+    className={({ isActive }) => 
+      `flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-gray-200 ${
+        isActive ? 'bg-blue-100 text-blue-600' : ''
+      }`
+    }
+  >
     <span className="text-xl">{icon}</span>
     <span>{label}</span>
-  </Link>
+  </NavLink>
 );
 
 export default Navbar;
