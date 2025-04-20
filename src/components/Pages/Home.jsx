@@ -26,19 +26,19 @@ const Home = () => {
   const navigate = useNavigate();
 
   // State variables
-  const [properties, setProperties] = useState([]); // All properties from API
-  const [filteredProperties, setFilteredProperties] = useState([]); // Filtered properties
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(""); // Error message
-  const [search, setSearch] = useState(""); // Search input
-  const [selectedCity, setSelectedCity] = useState(""); // Selected city filter
-  const [selectedType, setSelectedType] = useState(""); // Selected property type filter
-  const [minPrice, setMinPrice] = useState(""); // Minimum price filter
-  const [maxPrice, setMaxPrice] = useState(""); // Maximum price filter
-  const [tempMinPrice, setTempMinPrice] = useState(""); // Temporary min price for input
-  const [tempMaxPrice, setTempMaxPrice] = useState(""); // Temporary max pri
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 6; // Number of items per page
+  const [properties, setProperties] = useState([]); 
+  const [filteredProperties, setFilteredProperties] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(""); 
+  const [search, setSearch] = useState(""); 
+  const [selectedCity, setSelectedCity] = useState(""); 
+  const [selectedType, setSelectedType] = useState(""); 
+  const [minPrice, setMinPrice] = useState(""); 
+  const [maxPrice, setMaxPrice] = useState(""); 
+  const [tempMinPrice, setTempMinPrice] = useState(""); 
+  const [tempMaxPrice, setTempMaxPrice] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 6; 
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -46,6 +46,7 @@ const Home = () => {
       const response = await axios.get(
         "http://localhost/rent-easy/public/getProperties.php"
       );
+      console.log(response.data);
       if (response.data.success) {
         setProperties(response.data.properties);
         setFilteredProperties(response.data.properties); // Set initial filtered properties
@@ -157,6 +158,7 @@ const Home = () => {
     );
   }
 
+
   return (
     <motion.div
       className="container mx-auto px-4"
@@ -245,9 +247,9 @@ const Home = () => {
               value={tempMinPrice}
               onChange={(value) => setTempMinPrice(value)}
               className="flex-1"
-              icon={<span className="text-gray-500">$</span>}
+              icon={<span className="text-gray-500">Rs</span>}
             />
-            <span className="text-gray-500 mx-1">-</span>
+            <span className="text-gray-500 mx-1"></span>
             <NumberInput
               placeholder="Max Price"
               value={tempMaxPrice}
@@ -273,21 +275,23 @@ const Home = () => {
         <div className="text-lg text-center mt-8">No properties found</div>
       ) : (
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
           {paginatedProperties.map((property, index) => (
+
             <motion.div
               key={property.propertyId}
-              className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
+              className="bg-white rounded-lg  overflow-hidden cursor-pointer border  border-gray-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
               whileHover={{ scale: 1.01 }}
               onClick={() => navigate(`/property/${property.propertyId}`)}
             >
-              <div className="relative h-48">
+              
+              <div className="relative h-48 border border-gray-200 rounded-t-lg overflow-hidden">
                 <img
                   src={
                     property.images[0] ||
@@ -311,7 +315,7 @@ const Home = () => {
                 </div>
 
                 <h2 className="text-xl font-semibold mb-1">
-                  Rs. {property.price}
+                  Rs. {property.price}<span className="space-y-2 text-sm text-gray-500">/per month</span>
                 </h2>
 
                 <p className="text-gray-600 mb-4 line-clamp-2">

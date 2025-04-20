@@ -5,6 +5,8 @@ import Footer from "../common/Footer/Footer";
 import WhatsApps from "../Pages/whatApps";
 import ProtectedRoute from "./ProtectedRoute";
 import { NotFoundImage } from "../NotFoundImage";
+// import PaymentButton from "../Pages/PaymentButton";
+import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 
 // Lazy load components
 const Login = lazy(() => import("../Pages/Login"));
@@ -173,6 +175,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      // {
+      //   path: "/payment",
+      //   element: (
+      //     <Suspense fallback={<div>Loading...</div>}>
+      //       <PaymentButton/>
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "/contact",
         element: (
@@ -276,6 +286,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <GetPropertiesDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/paymentSuccess",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <PaymentSuccess />
           </Suspense>
         ),
       },

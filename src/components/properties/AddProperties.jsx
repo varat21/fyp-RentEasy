@@ -24,32 +24,23 @@
 // import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 // import { Image } from "@mantine/core";
 // import { useNavigate } from "react-router-dom";
+// import { useForm, Controller } from "react-hook-form";
 
 // // Configure Leaflet marker icon
 // const markerIcon = L.icon({
-//   iconUrl: "./icon.png", 
+//   iconUrl: "./icon.png",
 //   iconSize: [35, 35],
 // });
 
 // const AddProperties = () => {
-//   const Navigate = useNavigate();
-//   const [formData, setFormData] = useState({
-//     title: "",
-//     price: "",
-//     type: "",
-//     country: "",
-//     city: "",
-//     municipality: "",
-//     ward_no: "",
-//     province: "",
-//     dimension: "",
-//     road_type: "",
-//     property_face: "",
-//     description: "",
-//     image: [],
-//     document: "",
-//   });
-
+//   const navigate = useNavigate();
+//   const {
+//     control,
+//     handleSubmit,
+//     setError,
+//     clearErrors,
+//     formState: { errors },
+//   } = useForm();
 //   const [marker, setMarker] = useState([28.26689, 83.96851]);
 //   const [images, setImages] = useState([]);
 //   const [documents, setDocuments] = useState([]);
@@ -63,6 +54,7 @@
 //       return true;
 //     });
 //     setImages((prev) => [...prev, ...validFiles]);
+//     clearErrors("images"); // Clear the error if images are uploaded
 //   };
 
 //   const handleDocumentDrop = (files) => {
@@ -78,13 +70,18 @@
 
 //   const removeImage = (index) => {
 //     setImages((prev) => prev.filter((_, i) => i !== index));
+//     if (images.length === 1) {
+//       setError("images", {
+//         type: "required",
+//         message: "At least one image is required",
+//       });
+//     }
 //   };
 
 //   const removeDocument = (index) => {
 //     setDocuments((prev) => prev.filter((_, i) => i !== index));
 //   };
 
-//   // Map event handler to update marker position
 //   const MapEventsHandler = () => {
 //     useMapEvents({
 //       click: ({ latlng }) => setMarker([latlng.lat, latlng.lng]),
@@ -92,16 +89,14 @@
 //     return null;
 //   };
 
-//   // Handle form input changes
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//   };
-
-  
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault(); // Prevent default form submission
+//   const onSubmit = async (data) => {
+//     if (images.length === 0) {
+//       setError("images", {
+//         type: "required",
+//         message: "At least one image is required",
+//       });
+//       return;
+//     }
 
 //     const token = localStorage.getItem("token");
 //     if (!token) {
@@ -110,19 +105,17 @@
 //     }
 
 //     const form = new FormData();
-//     Object.keys(formData).forEach((key) => form.append(key, formData[key]));
+//     Object.keys(data).forEach((key) => form.append(key, data[key]));
 //     form.append("latitude", marker[0]);
 //     form.append("longitude", marker[1]);
 
-//    // Append multiple images
-//   images.forEach((image, index) => {
-//     form.append(`images[${index}]`, image);
-//   });
+//     images.forEach((image, index) => {
+//       form.append(`images[${index}]`, image);
+//     });
 
-//   // Append multiple documents
-//   documents.forEach((document, index) => {
-//     form.append(`documents[${index}]`, document);
-//   });
+//     documents.forEach((document, index) => {
+//       form.append(`documents[${index}]`, document);
+//     });
 
 //     try {
 //       const response = await axios.post(
@@ -133,29 +126,13 @@
 
 //       if (response.data.success) {
 //         toast.success(response.data.message || "Property added successfully!");
-//         Navigate("/");
-//         // Optionally reset form after successful submission
-//         setFormData({
-//           title: "",
-//           price: "",
-//           type: "",
-//           country: "",
-//           city: "",
-//           municipality: "",
-//           ward_no: "",
-//           province: "",
-//           dimension: "",
-//           road_type: "",
-//           property_face: "",
-//           description: "",
-//           image: [],
-//           document: [],
-//         });
+//         navigate("/");
 //         setImages([]);
 //         setDocuments([]);
 //       } else {
-//         toast.error(response.data.message || "Something went wrong!");
+//         toast.error(response.data.message || "Please Login!");
 //       }
+//       navigate("/");
 //     } catch (error) {
 //       console.error(error);
 //       toast.error(
@@ -170,7 +147,7 @@
 //       <Toaster
 //         toastOptions={{
 //           style: {
-//             zIndex: 10000, // Ensures the toast appears above everything else
+//             zIndex: 10000,
 //           },
 //         }}
 //       />
@@ -181,37 +158,88 @@
 //         <p className="text-gray-600 text-center mt-2">
 //           Fill out the form below to add your property listing.
 //         </p>
-//         <form onSubmit={handleSubmit} enctype="multipart/form-data">
+//         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
 //           <div className="mt-8 space-y-6">
 //             {/* Property Details */}
 //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//               <TextInput
-//                 label="Title"
+//               <Controller
 //                 name="title"
-//                 placeholder="E.g., House for Rent"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Title is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Title"
+//                     placeholder="E.g., House for Rent"
+//                     size="md"
+//                     error={errors.title?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="Rent Price"
-//                 name="price"
-//                 placeholder="E.g., Rs 1000"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="number"
-//               />
-//               <Select
-//                 label="Type"
+//             <div className="flex items-center gap-1">
+//   <span className="text-xl">Rs.</span>
+//   <Controller
+//     name="price"
+//     control={control}
+//     defaultValue=""
+//     rules={{ required: "Price is required" }}
+//     render={({ field }) => (
+//       <TextInput
+//         {...field}
+//         label="Rent Price"
+//         placeholder="E.g., 1000"
+//         size="md"
+//         type="number"
+//         error={errors.price?.message}
+//       />
+//     )}
+//   />
+// </div>
+
+//               <Controller
 //                 name="type"
-//                 placeholder="Select property type"
-//                 data={["House", "Room", "ShopHouse", "Apartment",'Flat']}
-//                 value={formData.type}
-//                 onChange={(value) =>
-//                   setFormData((prev) => ({ ...prev, type: value }))
-//                 }
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Type is required" }}
+//                 render={({ field }) => (
+//                   <Select
+//                     {...field}
+//                     label="Type"
+//                     placeholder="Select property type"
+//                     data={["House", "Room", "ShopHouse", "Apartment"]}
+//                     error={errors.type?.message}
+//                   />
+//                 )}
+//               />
+//               <Controller
+//                 name="bedrooms"
+//                 control={control}
+//                 defaultValue=""
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Bed Rooms"
+//                     placeholder="E.g., 4"
+//                     size="md"
+//                     type="number"
+//                   />
+//                 )}
+//               />
+
+//               <Controller
+//                 name="bathrooms"
+//                 control={control}
+//                 defaultValue=""
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Bathrooms"
+//                     placeholder="E.g., 2"
+//                     size="md"
+//                     type="number"
+//                   />
+//                 )}
 //               />
 //             </div>
 
@@ -220,50 +248,81 @@
 //               Address Details
 //             </h2>
 //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//               <TextInput
-//                 label="Country"
+//               <Controller
 //                 name="country"
-//                 placeholder="Enter your country"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Country is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Country"
+//                     placeholder="Enter your country"
+//                     size="md"
+//                     error={errors.country?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="City"
+//               <Controller
 //                 name="city"
-//                 placeholder="Enter your city"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "City is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="City"
+//                     placeholder="Enter your city"
+//                     size="md"
+//                     error={errors.city?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="Municipality"
+//               <Controller
 //                 name="municipality"
-//                 placeholder="Enter municipality"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Municipality is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Municipality"
+//                     placeholder="Enter municipality"
+//                     size="md"
+//                     error={errors.municipality?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="Ward No."
+//               <Controller
 //                 name="ward_no"
-//                 placeholder="Enter ward number"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="number"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Ward number is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Ward No."
+//                     placeholder="Enter ward number"
+//                     size="md"
+//                     type="number"
+//                     error={errors.ward_no?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="Province"
+//               <Controller
 //                 name="province"
-//                 placeholder="Enter province"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Province is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Province"
+//                     placeholder="Enter province"
+//                     size="md"
+//                     error={errors.province?.message}
+//                   />
+//                 )}
 //               />
 //             </div>
 
@@ -271,16 +330,21 @@
 //             <h2 className="text-lg font-semibold text-gray-700">
 //               Property Description
 //             </h2>
-//             <textarea
-//               className="w-full border rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               rows="5"
-//               placeholder="Describe the property details..."
+//             <Controller
 //               name="description"
-//               type="text"
-//               onChange={handleInputChange}
-//               required
-
-//             ></textarea>
+//               control={control}
+//               defaultValue=""
+//               rules={{ required: "Description is required" }}
+//               render={({ field }) => (
+//                 <textarea
+//                   {...field}
+//                   className="w-full border rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+//                   rows="5"
+//                   placeholder="Describe the property details..."
+//                   error={errors.description?.message}
+//                 />
+//               )}
+//             />
 
 //             {/* Map Section */}
 //             <h2 className="text-lg font-semibold text-gray-700">
@@ -306,50 +370,50 @@
 //               Property Features
 //             </h2>
 //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//               {/* <div className="flex items-center gap-4"> 
-//                  <TextInput
-//                 label="Dimension"
+//               <Controller
 //                 name="dimension"
-//                 placeholder="Width"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Dimension is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Total Area"
+//                     placeholder="E.g., 50 ft"
+//                     size="md"
+//                     error={errors.dimension?.message}
+//                   />
+//                 )}
 //               />
-//                 <TextInput
-//                 label="Dimension"
-//                 name="dimension"
-//                 placeholder="length"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//               />
-//               </div> */}
-//               <TextInput
-//                 label="Total Area"
-//                 name="dimension"
-//                 placeholder="E.g., 50 ft"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//               /> 
-//               <TextInput
-//                 label="Road Type"
+//               <Controller
 //                 name="road_type"
-//                 placeholder="E.g., Asphalt"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
-
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Road type is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Road Type"
+//                     placeholder="E.g., Asphalt"
+//                     size="md"
+//                     error={errors.road_type?.message}
+//                   />
+//                 )}
 //               />
-//               <TextInput
-//                 label="Property Face"
+//               <Controller
 //                 name="property_face"
-//                 placeholder="E.g., North Facing"
-//                 size="md"
-//                 onChange={handleInputChange}
-//                 required
-//                 type="text"
+//                 control={control}
+//                 defaultValue=""
+//                 rules={{ required: "Property face is required" }}
+//                 render={({ field }) => (
+//                   <TextInput
+//                     {...field}
+//                     label="Property Face"
+//                     placeholder="E.g., North Facing"
+//                     size="md"
+//                     error={errors.property_face?.message}
+//                   />
+//                 )}
 //               />
 //             </div>
 
@@ -374,6 +438,11 @@
 //                   <Text>Drag images here or click to select</Text>
 //                 </Group>
 //               </Dropzone>
+//               {errors.images && (
+//                 <Text color="red" size="sm" className="mt-1">
+//                   {errors.images.message}
+//                 </Text>
+//               )}
 
 //               {/* Uploaded Image Previews */}
 //               <div className="mt-6 grid grid-cols-4 gap-4 ">
@@ -403,10 +472,10 @@
 //                 multiple
 //                 onDrop={handleDocumentDrop}
 //                 accept={[
-//                   ...IMAGE_MIME_TYPE, // Include all image MIME types
-//                   "application/pdf", // PDF files
-//                   "application/msword", // DOC files
-//                   "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX files
+//                   ...IMAGE_MIME_TYPE,
+//                   "application/pdf",
+//                   "application/msword",
+//                   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 //                 ]}
 //                 className="mt-2 border rounded-md p-4"
 //               >
@@ -421,13 +490,11 @@
 //                 {documents.map((document, index) => (
 //                   <div key={index} className="relative">
 //                     {document.type.startsWith("image/") ? (
-//                       // Display image preview
 //                       <Image
 //                         src={URL.createObjectURL(document)}
 //                         alt={`Document-${index}`}
 //                       />
 //                     ) : (
-//                       // Display document icon and name
 //                       <Tooltip label={document.name} withArrow>
 //                         <div className="p-2 bg-gray-100 rounded-md flex items-center space-x-2">
 //                           <IconFile size={32} />
@@ -450,7 +517,6 @@
 //               color="blue"
 //               size="md"
 //               className="mt-6 w-full"
-//               // onClick={handleSubmit}
 //               type="submit"
 //             >
 //               Submit Property
@@ -461,7 +527,10 @@
 //     </div>
 //   );
 // };
+
 // export default AddProperties;
+
+
 
 
 import React, { useState } from "react";
@@ -508,6 +577,39 @@ const AddProperties = () => {
   const [marker, setMarker] = useState([28.26689, 83.96851]);
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
+
+  const cities = [
+    "Kathmandu",
+    "Pokhara",
+    "Lalitpur",
+    "Bhaktapur",
+    "Biratnagar",
+    "Birgunj",
+    "Butwal",
+    "Dharan",
+    "Nepalgunj",
+    "Janakpur",
+    "Hetauda",
+    "Dhangadhi",
+    "Itahari",
+    "Ghorahi",
+    "Tulsipur",
+    "Bharatpur",
+    "Siddharthanagar",
+    "Gorkha",
+    "Bhadrapur",
+    "Lahan",
+    "Birtamod",
+    "Rajbiraj",
+    "Kalaiya",
+    "Tansen",
+    "Inaruwa",
+    "Dhankuta",
+    "Ilam",
+    "Banepa",
+    "Malangwa",
+    "Baglung"
+  ];
 
   const handleImageDrop = (files) => {
     const validFiles = files.filter((file) => {
@@ -596,8 +698,7 @@ const AddProperties = () => {
       } else {
         toast.error(response.data.message || "Please Login!");
       }
-      navigate("/"); 
-
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error(
@@ -642,22 +743,26 @@ const AddProperties = () => {
                   />
                 )}
               />
-              <Controller
-                name="price"
-                control={control}
-                defaultValue=""
-                rules={{ required: "Price is required" }}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    label="Rent Price"
-                    placeholder="E.g., 1000"
-                    size="md"
-                    type="number"
-                    error={errors.price?.message}
-                  />
-                )}
-              />
+              <div className="flex items-center gap-1">
+                <span className="text-xl">Rs.</span>
+                <Controller
+                  name="price"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Price is required" }}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      label="Rent Price"
+                      placeholder="E.g., 1000"
+                      size="md"
+                      type="number"
+                      error={errors.price?.message}
+                    />
+                  )}
+                />
+              </div>
+
               <Controller
                 name="type"
                 control={control}
@@ -670,6 +775,35 @@ const AddProperties = () => {
                     placeholder="Select property type"
                     data={["House", "Room", "ShopHouse", "Apartment"]}
                     error={errors.type?.message}
+                  />
+                )}
+              />
+              <Controller
+                name="bedrooms"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Bed Rooms"
+                    placeholder="E.g., 4"
+                    size="md"
+                    type="number"
+                  />
+                )}
+              />
+
+              <Controller
+                name="bathrooms"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label="Bathrooms"
+                    placeholder="E.g., 2"
+                    size="md"
+                    type="number"
                   />
                 )}
               />
@@ -701,12 +835,13 @@ const AddProperties = () => {
                 defaultValue=""
                 rules={{ required: "City is required" }}
                 render={({ field }) => (
-                  <TextInput
+                  <Select
                     {...field}
                     label="City"
-                    placeholder="Enter your city"
-                    size="md"
+                    placeholder="Select city"
+                    data={cities.map(city => ({ value: city, label: city }))}
                     error={errors.city?.message}
+                    searchable
                   />
                 )}
               />

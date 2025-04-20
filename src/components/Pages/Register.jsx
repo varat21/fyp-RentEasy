@@ -194,10 +194,10 @@ const Register = () => {
           </div>
 
           {/* Google Sign Up */}
-          <Button fullWidth variant="light" color="blue" mt="md">
+          {/* <Button fullWidth variant="light" color="blue" mt="md">
             <FcGoogle className="mr-2" />
             Sign up with Google
-          </Button>
+          </Button> */}
 
           {/* Sign In Redirect */}
           <div className="flex items-center justify-center mt-4 text-sm text-gray-600">
