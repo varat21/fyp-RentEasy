@@ -769,16 +769,19 @@ const EditPropertiesModal = ({
           />
         </Group>
 
-        <Button
-          type="submit"
-          fullWidth
-          size="md"
-          className="bg-teal-500 hover:bg-teal-600"
-          disabled={isSubmitting}
-          loading={isSubmitting}
-        >
-          Save Changes
-        </Button>
+        <div className="sticky bottom-0 right-0 w-full flex justify-end p-4 z-50">
+  <Button
+    type="submit"
+    size="md"
+    fullWidth
+
+    className="bg-teal-500 hover:bg-teal-600"
+    disabled={isSubmitting}
+    loading={isSubmitting}
+  >
+    Submit
+  </Button>
+</div>
       </form>
     </Modal>
   );

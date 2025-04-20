@@ -283,7 +283,7 @@ const Home = () => {
 
             <motion.div
               key={property.propertyId}
-              className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer border  border-gray-300"
+              className="bg-white rounded-lg  overflow-hidden cursor-pointer border  border-gray-300"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}

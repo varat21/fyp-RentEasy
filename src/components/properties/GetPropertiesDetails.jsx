@@ -934,7 +934,7 @@ export const PropertiesViews = ({ id }) => {
   }, [id]);
 
   return (
-    <div className="flex items-center gap-2 text-gray-700">
+    <div className="flex items-center gap-2 text-gray-700 d-inline-flex">
       <FaEye className="text-gray-500" />
       <span>{totalViews} views</span>
     </div>

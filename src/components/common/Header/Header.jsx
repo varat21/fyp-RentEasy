@@ -701,7 +701,9 @@ import { FaQq, FaRegUser } from "react-icons/fa";
 import { MdContactPhone, MdOutlinePolicy } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
 import { toast } from "react-hot-toast";
-import { AuthContext } from "../../hooks/AuthContext"; // Adjust path as needed
+import { AuthContext } from "../../hooks/AuthContext"; 
+import { AiFillPropertySafety } from "react-icons/ai";
+
 
 const Header = () => {
   const location = useLocation();
@@ -818,12 +820,36 @@ const Header = () => {
                       <FaRegUser className="h-5 w-5 mr-2" />
                       Profile
                     </Link>
+                    <Link to="/addProperties" 
+                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
+
+                    onClick={closeDrawer}>
+              <button 
+                      className="w-full text-left  py-2 hover:bg-gray-100 flex items-center"
+                      >
+                        <AiFillPropertySafety className="h-5 w-5 mr-2"/>
+
+                Add Properties
+              </button>
+            </Link>
+
+
+
+
+
+
+
+
+
+
+
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center"
                     >
                       <IoLogOutOutline className="mr-2" /> Logout
                     </button>
+                   
                   </>
                 ) : (
                   <Link

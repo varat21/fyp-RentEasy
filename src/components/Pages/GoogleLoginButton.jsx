@@ -149,7 +149,7 @@ const GoogleLoginButton = ({ onSuccess = () => {} }) => {
 
   const handleLoginFailure = () => {
     console.error("Google Login Failed - User canceled or error occurred");
-    toast.error("Google login failed. Please try again."); // Replaced alert with toast
+    toast.error("Google login failed. Please try again."); 
   };
 
   return (

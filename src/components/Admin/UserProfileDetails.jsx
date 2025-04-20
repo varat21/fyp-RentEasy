@@ -90,9 +90,9 @@ const UserProfileDetails = () => {
 
   return (
     <div className="bg-white p-6 mt-20">
-      <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">
+      {/* <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">
         User Dashboard
-      </h1>
+      </h1> */}
 
       <Tabs
         color="teal"
