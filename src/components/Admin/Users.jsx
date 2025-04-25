@@ -458,12 +458,12 @@ const UserDetails = () => {
   if (loading) {
     return (
       <motion.div
-        className="flex justify-center items-center min-h-screen"
+        className="min-h-screen flex items-center justify-center bg-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Loader size="xl" />
+        <Loader className="text-blue-700 w-12 h-12 animate-spin" />
       </motion.div>
     );
   }

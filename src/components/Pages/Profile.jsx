@@ -28,7 +28,6 @@
 // import { v4 as uuidv4 } from "uuid";
 // import CryptoJS from "crypto-js";
 
-
 // const GetProfileData = () => {
 //   // State and hooks
 //   const [userId, setUserId] = useState(null);
@@ -44,8 +43,8 @@
 //   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
 //   // Zustand store
-//   const { bookedProperties, totalAmount, removeProperty, clearBookings } = useBookingStore();
-//   console.log({ bookedProperties, totalAmount, removeProperty, clearBookings });
+//   const { bookedProperty, totalAmount, removeProperty, clearBookings } = useBookingStore();
+//   console.log({ bookedProperty, totalAmount, removeProperty, clearBookings });
 
 //   const navigate = useNavigate();
 
@@ -57,19 +56,18 @@
 //     const decodedToken = jwtDecode(token);
 //     const userId = decodedToken?.userId;
 
-//     // Validate bookedProperties and totalAmount
-//     if (!bookedProperties.length || totalAmount <= 0) {
-//       console.error("No booked properties or invalid total amount");
+//     // Validate bookedProperty and totalAmount
+//     if (!bookedProperty || totalAmount <= 0) {
+//       console.error("No booked property or invalid total amount");
 //       return "";
 //     }
 
-//     const firstProperty = bookedProperties[0];
-//     const bookingId = firstProperty?.bookingId || `bk_${Date.now()}`; // Use bookingId, not booking_id
-//     const propertyId = firstProperty?.propertyId || firstProperty?.id; // Fallback to id if propertyId is missing
+//     const bookingId = bookedProperty?.bookingId || `bk_${Date.now()}`;
+//     const propertyId = bookedProperty?.propertyId || bookedProperty?.id;
 //     const transaction_uuid = uuidv4();
 
 //     // Ensure totalAmount is a valid number
-//     const amount = totalAmount > 0 ? totalAmount : firstProperty?.price || 0;
+//     const amount = totalAmount > 0 ? totalAmount : bookedProperty?.price || 0;
 
 //     return `http://localhost:5173/paymentSuccess?booking_id=${bookingId}&amount=${amount}&propertyId=${propertyId}&transaction_uuid=${transaction_uuid}&user_id=${userId}`;
 //   };
@@ -90,14 +88,14 @@
 //     secret: "8gBm/:&EnhH.1/q",
 //   });
 
-//   // Update formData when totalAmount or bookedProperties change
+//   // Update formData when totalAmount or bookedProperty change
 //   useEffect(() => {
-//     if (!bookedProperties.length || totalAmount <= 0) {
-//       console.warn("No booked properties or invalid total amount");
+//     if (!bookedProperty || totalAmount <= 0) {
+//       console.warn("No booked property or invalid total amount");
 //       return;
 //     }
 
-//     const amount = totalAmount > 0 ? totalAmount.toString() : bookedProperties[0]?.price?.toString() || "0";
+//     const amount = totalAmount > 0 ? totalAmount.toString() : bookedProperty?.price?.toString() || "0";
 //     const taxAmount = "0";
 //     const serviceCharge = "0";
 //     const deliveryCharge = "0";
@@ -120,7 +118,7 @@
 //       transaction_uuid: uuidv4(),
 //       success_url: successUrl,
 //     }));
-//   }, [totalAmount, bookedProperties]);
+//   }, [totalAmount, bookedProperty]);
 
 //   // Generate signature for eSewa payment
 //   const generateSignature = (total_amount, transaction_uuid, product_code, secret) => {
@@ -173,9 +171,9 @@
 //     fetchProfileData();
 //   }, []);
 
-//   const handleRemoveProperty = (bookingId) => {
-//     removeProperty(bookingId);
-//     customToast.success("Property removed from bookings");
+//   const handleRemoveProperty = () => {
+//     removeProperty();
+//     toast.success("Property removed from bookings");
 //   };
 
 //   const calculateAverageRating = (ratings) => {
@@ -190,19 +188,19 @@
 
 //   const handlePaymentSubmit = () => {
 //     if (!selectedPaymentMethod) {
-//       customToast.error("Please select a payment method");
+//       toast.error("Please select a payment method");
 //       return;
 //     }
 
 //     if (selectedPaymentMethod === "esewa") {
 //       if (Number(formData.total_amount) <= 0) {
-//         customToast.error("Total amount must be greater than 0");
+//         toast.error("Total amount must be greater than 0");
 //         return;
 //       }
 //       setPaymentProcessing(true);
 //       document.getElementById("esewa-form").submit();
 //     } else {
-//       customToast.success(`Payment method ${selectedPaymentMethod} selected!`);
+//       toast.success(`Payment method ${selectedPaymentMethod} selected!`);
 //       setPaymentModalOpen(false);
 //     }
 //   };
@@ -210,8 +208,8 @@
 //   if (loading) {
 //     return (
 //       <div className="min-h-screen flex items-center justify-center bg-white">
-// <Loader className="text-blue-700 w-15 h-15 animate-spin" /> 
-//      </div>
+//         <Loader className="text-blue-700 w-12 h-12 animate-spin" />
+//       </div>
 //     );
 //   }
 
@@ -223,9 +221,9 @@
 //     );
 //   }
 
-//   const handleAddPropertyClick = () => {
-//     navigate("/addProperties");
-//   };
+//   // const handleAddPropertyClick = () => {
+//   //   navigate("/addProperties");
+//   // };
 
 //   return (
 //     <div className="bg-white p-6 mt-20 min-h-[50vh]">
@@ -234,7 +232,7 @@
 //       <Tabs color="teal" defaultValue="first" className="mx-auto bg-white shadow-md rounded-xl">
 //         <Tabs.List className="flex justify-center mb-4 border-b border-gray-200">
 //           <Tabs.Tab value="first" className="text-lg font-semibold">
-//             Booked Properties
+//             Booked Property
 //           </Tabs.Tab>
 //           <Tabs.Tab value="second" className="text-lg font-semibold">
 //             My Profile
@@ -242,16 +240,9 @@
 //           <Tabs.Tab value="third" className="text-lg font-semibold">
 //             My Properties
 //           </Tabs.Tab>
-//           {/* <Tabs.Tab
-//             value="fourth"
-//             className="text-lg font-medium"
-//             onClick={handleAddPropertyClick}
-//           >
-//             Add Property
-//           </Tabs.Tab> */}
 //         </Tabs.List>
 
-//         {/* Booked Properties Tab */}
+//         {/* Booked Property Tab */}
 //         <Tabs.Panel value="first" pt="xs">
 //           <motion.div
 //             initial={{ opacity: 0 }}
@@ -259,115 +250,100 @@
 //             transition={{ duration: 0.5 }}
 //             className="container mx-auto p-4"
 //           >
-//             <h3 className="text-xl font-semibold mb-4 text-left">My Booked Properties</h3>
+//             <h3 className="text-xl font-semibold mb-4 text-left">My Booked Property</h3>
 
-//             {bookedProperties.length > 0 ? (
-//               bookedProperties.map((property) => (
-//                 <Card
-//                   key={property.bookingId}
-//                   shadow="sm"
-//                   padding="lg"
-//                   radius="md"
-//                   withBorder
-//                   className="mb-6"
-//                 >
-//                   <div className="flex flex-col md:flex-row gap-6">
-//                     <div className="w-full md:w-1/4">
-//                       <img
-//                         src={property.images?.[0] || "/default-property.jpg"}
-//                         alt={property.title}
-//                         className="w-full h-48 object-cover rounded-lg"
-//                       />
+//             {bookedProperty ? (
+//               <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-6">
+//                 <div className="flex flex-col md:flex-row gap-6">
+//                   <div className="w-full md:w-1/4">
+//                     <img
+//                       src={bookedProperty.images?.[0] || "/default-property.jpg"}
+//                       alt={bookedProperty.title}
+//                       className="w-full h-48 object-cover rounded-lg"
+//                     />
+//                   </div>
+
+//                   <div className="flex-1">
+//                     <div className="flex justify-between items-start">
+//                       <Group>
+//                         <Title order={3}>{bookedProperty.title}</Title>
+//                         <Badge variant="filled" size="lg">
+//                           Booking #1
+//                         </Badge>
+//                       </Group>
+//                       <Button
+//                         onClick={handleRemoveProperty}
+//                         variant="subtle"
+//                         color="red"
+//                       >
+//                         <Trash size={20} />
+//                       </Button>
 //                     </div>
 
-//                     <div className="flex-1">
-//                       <div className="flex justify-between items-start">
-//                         <Group>
-//                           <Title order={3}>{property.title}</Title>
-//                           <Badge variant="filled" size="lg">
-//                             Booking #{bookedProperties.findIndex((p) => p.bookingId === property.bookingId) + 1}
-//                           </Badge>
-//                         </Group>
-//                         <Button
-//                           onClick={() => handleRemoveProperty(property.bookingId)}
-//                           variant="subtle"
-//                           color="red"
-//                         >
-//                           <Trash size={20} />
-//                         </Button>
+//                     <Text color="dimmed" className="mt-2">
+//                       {bookedProperty.description}
+//                     </Text>
+
+//                     {bookedProperty.ratings?.length > 0 && (
+//                       <div className="mt-4 flex items-center gap-2">
+//                         <Rating
+//                           value={calculateAverageRating(bookedProperty.ratings)}
+//                           readOnly
+//                           size="sm"
+//                         />
+//                         <Text size="sm" color="dimmed">
+//                           {calculateAverageRating(bookedProperty.ratings)} ({bookedProperty.ratings.length} reviews)
+//                         </Text>
 //                       </div>
+//                     )}
 
-//                       <Text color="dimmed" className="mt-2">
-//                         {property.description}
-//                       </Text>
-
-//                       {property.ratings?.length > 0 && (
-//                         <div className="mt-4 flex items-center gap-2">
-//                           <Rating
-//                             value={calculateAverageRating(property.ratings)}
-//                             readOnly
-//                             size="sm"
-//                           />
-//                           <Text size="sm" color="dimmed">
-//                             {calculateAverageRating(property.ratings)} ({property.ratings.length} reviews)
-//                           </Text>
-//                         </div>
-//                       )}
-
-//                       <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-//                         <div>
-//                           <Text size="sm" color="dimmed">
-//                             Price
-//                           </Text>
-//                           <Text weight={600}>Rs. {property.price}</Text>
-//                         </div>
-//                         <div>
-//                           <Text size="sm" color="dimmed">
-//                             Location
-//                           </Text>
-//                           <Text weight={600}>
-//                             {property.city}, {property.country}
-//                           </Text>
-//                         </div>
-//                         <div>
-//                           <Text size="sm" color="dimmed">
-//                             Size
-//                           </Text>
-//                           <Text weight={600}>{property.dimension} sqft</Text>
-//                         </div>
-//                         <div>
-//                           <Text size="sm" color="dimmed">
-//                             Booked On
-//                           </Text>
-//                           <Text weight={600}>
-//                             {moment(property.bookingDate).format("MMM DD, YYYY")}
-//                           </Text>
-//                         </div>
+//                     <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+//                       <div>
+//                         <Text size="sm" color="dimmed">
+//                           Price
+//                         </Text>
+//                         <Text weight={600}>Rs. {bookedProperty.price}</Text>
+//                       </div>
+//                       <div>
+//                         <Text size="sm" color="dimmed">
+//                           Location
+//                         </Text>
+//                         <Text weight={600}>
+//                           {bookedProperty.city}, {bookedProperty.country}
+//                         </Text>
+//                       </div>
+//                       <div>
+//                         <Text size="sm" color="dimmed">
+//                           Size
+//                         </Text>
+//                         <Text weight={600}>{bookedProperty.dimension} sqft</Text>
+//                       </div>
+//                       <div>
+//                         <Text size="sm" color="dimmed">
+//                           Booked On
+//                         </Text>
+//                         <Text weight={600}>
+//                           {moment(bookedProperty.bookingDate).format("MMM DD, YYYY")}
+//                         </Text>
 //                       </div>
 //                     </div>
 //                   </div>
-//                 </Card>
-//               ))
+//                 </div>
+//               </Card>
 //             ) : (
-//               <Text color="dimmed">No properties booked yet.</Text>
+//               <Text color="dimmed">No property booked yet.</Text>
 //             )}
 
 //             <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-8">
 //               <Group position="apart" className="mb-6">
 //                 <Title order={3}>Booking Summary</Title>
-//                 <Text size="sm" color="dimmed">
-//                   Total Bookings: {bookedProperties.length}
-//                 </Text>
 //               </Group>
 
 //               <Group position="right" spacing="md">
-//                 {/* <Button onClick={() => navigate("/")} variant="outline">
-//                   Continue Browsing
-//                 </Button> */}
 //                 <Button
 //                   onClick={() => setPaymentModalOpen(true)}
 //                   variant="filled"
-//                   disabled={bookedProperties.length === 0 || totalAmount <= 0}
+//                   disabled={!bookedProperty || totalAmount <= 0}
 //                 >
 //                   Complete Payment
 //                 </Button>
@@ -377,9 +353,8 @@
 //         </Tabs.Panel>
 
 //         {/* My Profile Tab */}
-//          <Tabs.Panel value="second" pt="xs">
+//         <Tabs.Panel value="second" pt="xs">
 //           <div className="bg-white rounded-xl shadow-lg p-6 max-w-md mx-auto">
-//             {/* <h2 className="text-xl font-semibold mb-6 text-gray-800">My Profile</h2> */}
 //             <div className="text-center mb-6">
 //               {profileData.image ? (
 //                 <img
@@ -389,11 +364,12 @@
 //                 />
 //               ) : (
 //                 <div className="w-24 h-24 mx-auto rounded-full bg-orange-500 flex items-center justify-center text-white text-2xl font-bold">
-//  <img
-//                   src={`https://ui-avatars.com/api/?name=${profileData.name}&background=random&size=100`}
-//                   alt="Owner"
-//                   className="w-16 h-16 rounded-full"
-//                 />                </div>
+//                   <img
+//                     src={`https://ui-avatars.com/api/?name=${profileData.name}&background=random&size=100`}
+//                     alt="Owner"
+//                     className="w-16 h-16 rounded-full"
+//                   />
+//                 </div>
 //               )}
 //             </div>
 
@@ -414,6 +390,18 @@
 //                 <p className="text-sm font-medium text-gray-600">Phone</p>
 //                 <p className="text-lg font-semibold text-gray-800">
 //                   {profileData.phoneNumber || "N/A"}
+//                 </p>
+//               </div>
+//               <div>
+//                 <p className="text-sm font-medium text-gray-600">Address</p>
+//                 <p className="text-lg font-semibold text-gray-800">
+//                   {profileData.address || "N/A"}
+//                 </p>
+//               </div>
+//               <div>
+//                 <p className="text-sm font-medium text-gray-600">User Type</p>
+//                 <p className="text-lg font-semibold text-gray-800">
+//                   {profileData.userType}
 //                 </p>
 //               </div>
 //               <div>
@@ -603,7 +591,7 @@
 //                 <p className="text-sm text-center">eSewa Mobile Wallet</p>
 //               </div>
 
-//               {/* khalti Pay */}
+//               {/* Khalti Pay */}
 //               <div
 //                 className={`p-4 border rounded-lg cursor-pointer flex flex-col items-center justify-center ${
 //                   selectedPaymentMethod === "khalti"
@@ -614,29 +602,12 @@
 //               >
 //                 <img
 //                   src="/khalti.png"
-//                   alt="khalti Pay"
+//                   alt="Khalti Pay"
 //                   className="w-28 h-14 mb-2"
 //                 />
 //                 <p className="text-sm text-center">Pay with Khalti</p>
 //               </div>
-
-//               {/* Cash on Delivery */}
-//               {/* <div
-//                 className={`p-4 border rounded-lg cursor-pointer flex flex-col items-center justify-center ${
-//                   selectedPaymentMethod === "cod"
-//                     ? "border-blue-500 bg-blue-50"
-//                     : "border-gray-200"
-//                 }`}
-//                 onClick={() => handlePaymentMethodSelect("cod")}
-//               >
-//                 <img
-//                   src="https://via.placeholder.com/40?text=COD"
-//                   alt="Cash on Delivery"
-//                   className="w-10 h-10 mb-2"
-//                 />
-//                 <p className="text-sm text-center">Cash on Delivery</p>
-//               </div>*/}
-//             </div> 
+//             </div>
 
 //             {/* Hidden eSewa Form */}
 //             {selectedPaymentMethod === "esewa" && (
@@ -695,7 +666,6 @@
 // export default GetProfileData;
 
 
-
 import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import ProfileEditModal from "./ProfileEditModal";
@@ -742,7 +712,6 @@ const GetProfileData = () => {
 
   // Zustand store
   const { bookedProperty, totalAmount, removeProperty, clearBookings } = useBookingStore();
-  console.log({ bookedProperty, totalAmount, removeProperty, clearBookings });
 
   const navigate = useNavigate();
 
@@ -754,7 +723,6 @@ const GetProfileData = () => {
     const decodedToken = jwtDecode(token);
     const userId = decodedToken?.userId;
 
-    // Validate bookedProperty and totalAmount
     if (!bookedProperty || totalAmount <= 0) {
       console.error("No booked property or invalid total amount");
       return "";
@@ -764,14 +732,13 @@ const GetProfileData = () => {
     const propertyId = bookedProperty?.propertyId || bookedProperty?.id;
     const transaction_uuid = uuidv4();
 
-    // Ensure totalAmount is a valid number
     const amount = totalAmount > 0 ? totalAmount : bookedProperty?.price || 0;
 
     return `http://localhost:5173/paymentSuccess?booking_id=${bookingId}&amount=${amount}&propertyId=${propertyId}&transaction_uuid=${transaction_uuid}&user_id=${userId}`;
   };
 
-  // Form data for eSewa payment
-  const [formData, setFormData] = useState({
+  // eSewa form data
+  const [esewaFormData, setEsewaFormData] = useState({
     amount: "0",
     tax_amount: "0",
     total_amount: "0",
@@ -786,7 +753,17 @@ const GetProfileData = () => {
     secret: "8gBm/:&EnhH.1/q",
   });
 
-  // Update formData when totalAmount or bookedProperty change
+  // Khalti form data
+  const [khaltiFormData, setKhaltiFormData] = useState({
+    public_key: "test_public_key_xxx", // Replace with your Khalti public key
+    amount: "0", // Amount in paisa (e.g., 1000 for Rs. 10)
+    purchase_order_id: uuidv4(),
+    purchase_order_name: "Property Booking",
+    return_url: "",
+    website_url: "http://localhost:5173",
+  });
+
+  // Update eSewa formData when totalAmount or bookedProperty change
   useEffect(() => {
     if (!bookedProperty || totalAmount <= 0) {
       console.warn("No booked property or invalid total amount");
@@ -806,7 +783,7 @@ const GetProfileData = () => {
 
     const successUrl = generateSuccessUrl();
 
-    setFormData((prev) => ({
+    setEsewaFormData((prev) => ({
       ...prev,
       amount: amount,
       tax_amount: taxAmount,
@@ -818,22 +795,40 @@ const GetProfileData = () => {
     }));
   }, [totalAmount, bookedProperty]);
 
-  // Generate signature for eSewa payment
-  const generateSignature = (total_amount, transaction_uuid, product_code, secret) => {
+  // Update Khalti formData when totalAmount or bookedProperty change
+  useEffect(() => {
+    if (!bookedProperty || totalAmount <= 0) {
+      console.warn("No booked property or invalid total amount");
+      return;
+    }
+
+    const amountInPaisa = totalAmount > 0 ? totalAmount * 100 : bookedProperty?.price * 100 || 0; // Convert to paisa
+    const successUrl = generateSuccessUrl();
+
+    setKhaltiFormData((prev) => ({
+      ...prev,
+      amount: amountInPaisa.toString(),
+      purchase_order_id: uuidv4(),
+      return_url: successUrl,
+    }));
+  }, [totalAmount, bookedProperty]);
+
+  // Generate eSewa signature
+  const generateEsewaSignature = (total_amount, transaction_uuid, product_code, secret) => {
     const hashString = `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
     const hash = CryptoJS.HmacSHA256(hashString, secret);
     const signature = CryptoJS.enc.Base64.stringify(hash);
     return signature;
   };
 
-  // Calculate signature when formData changes
+  // Calculate eSewa signature when formData changes
   useEffect(() => {
-    const { total_amount, transaction_uuid, product_code, secret } = formData;
+    const { total_amount, transaction_uuid, product_code, secret } = esewaFormData;
     if (total_amount && transaction_uuid && product_code) {
-      const hashedSignature = generateSignature(total_amount, transaction_uuid, product_code, secret);
-      setFormData((prev) => ({ ...prev, signature: hashedSignature }));
+      const hashedSignature = generateEsewaSignature(total_amount, transaction_uuid, product_code, secret);
+      setEsewaFormData((prev) => ({ ...prev, signature: hashedSignature }));
     }
-  }, [formData.total_amount, formData.transaction_uuid]);
+  }, [esewaFormData.total_amount, esewaFormData.transaction_uuid]);
 
   // Fetch profile data
   useEffect(() => {
@@ -891,12 +886,19 @@ const GetProfileData = () => {
     }
 
     if (selectedPaymentMethod === "esewa") {
-      if (Number(formData.total_amount) <= 0) {
+      if (Number(esewaFormData.total_amount) <= 0) {
         toast.error("Total amount must be greater than 0");
         return;
       }
       setPaymentProcessing(true);
       document.getElementById("esewa-form").submit();
+    } else if (selectedPaymentMethod === "khalti") {
+      if (Number(khaltiFormData.amount) <= 0) {
+        toast.error("Total amount must be greater than 0");
+        return;
+      }
+      setPaymentProcessing(true);
+      document.getElementById("khalti-form").submit();
     } else {
       toast.success(`Payment method ${selectedPaymentMethod} selected!`);
       setPaymentModalOpen(false);
@@ -906,7 +908,7 @@ const GetProfileData = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader className="text-blue-700 w-15 h-15 animate-spin" />
+        <Loader className="text-blue-700 w-12 h-12 animate-spin" />
       </div>
     );
   }
@@ -918,10 +920,6 @@ const GetProfileData = () => {
       </div>
     );
   }
-
-  const handleAddPropertyClick = () => {
-    navigate("/addProperties");
-  };
 
   return (
     <div className="bg-white p-6 mt-20 min-h-[50vh]">
@@ -1088,6 +1086,18 @@ const GetProfileData = () => {
                 <p className="text-sm font-medium text-gray-600">Phone</p>
                 <p className="text-lg font-semibold text-gray-800">
                   {profileData.phoneNumber || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-600">Address</p>
+                <p className="text-lg font-semibold text-gray-800">
+                  {profileData.address || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-600">User Type</p>
+                <p className="text-lg font-semibold text-gray-800">
+                  {profileData.userType}
                 </p>
               </div>
               <div>
@@ -1303,17 +1313,34 @@ const GetProfileData = () => {
                 method="POST"
                 className="hidden"
               >
-                <input type="hidden" name="amount" value={formData.amount} />
-                <input type="hidden" name="tax_amount" value={formData.tax_amount} />
-                <input type="hidden" name="total_amount" value={formData.total_amount} />
-                <input type="hidden" name="transaction_uuid" value={formData.transaction_uuid} />
-                <input type="hidden" name="product_code" value={formData.product_code} />
-                <input type="hidden" name="product_service_charge" value={formData.product_service_charge} />
-                <input type="hidden" name="product_delivery_charge" value={formData.product_delivery_charge} />
-                <input type="hidden" name="success_url" value={formData.success_url} />
-                <input type="hidden" name="failure_url" value={formData.failure_url} />
-                <input type="hidden" name="signed_field_names" value={formData.signed_field_names} />
-                <input type="hidden" name="signature" value={formData.signature} />
+                <input type="hidden" name="amount" value={esewaFormData.amount} />
+                <input type="hidden" name="tax_amount" value={esewaFormData.tax_amount} />
+                <input type="hidden" name="total_amount" value={esewaFormData.total_amount} />
+                <input type="hidden" name="transaction_uuid" value={esewaFormData.transaction_uuid} />
+                <input type="hidden" name="product_code" value={esewaFormData.product_code} />
+                <input type="hidden" name="product_service_charge" value={esewaFormData.product_service_charge} />
+                <input type="hidden" name="product_delivery_charge" value={esewaFormData.product_delivery_charge} />
+                <input type="hidden" name="success_url" value={esewaFormData.success_url} />
+                <input type="hidden" name="failure_url" value={esewaFormData.failure_url} />
+                <input type="hidden" name="signed_field_names" value={esewaFormData.signed_field_names} />
+                <input type="hidden" name="signature" value={esewaFormData.signature} />
+              </form>
+            )}
+
+            {/* Hidden Khalti Form */}
+            {selectedPaymentMethod === "khalti" && (
+              <form
+                id="khalti-form"
+                action="https://a.khalti.com/api/v2/epayment/initiate/"
+                method="POST"
+                className="hidden"
+              >
+                <input type="hidden" name="public_key" value={khaltiFormData.public_key} />
+                <input type="hidden" name="amount" value={khaltiFormData.amount} />
+                <input type="hidden" name="purchase_order_id" value={khaltiFormData.purchase_order_id} />
+                <input type="hidden" name="purchase_order_name" value={khaltiFormData.purchase_order_name} />
+                <input type="hidden" name="return_url" value={khaltiFormData.return_url} />
+                <input type="hidden" name="website_url" value={khaltiFormData.website_url} />
               </form>
             )}
           </div>

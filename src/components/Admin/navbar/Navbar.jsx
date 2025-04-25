@@ -89,6 +89,10 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'; // Changed from
 import { toast } from 'react-hot-toast';
 import { FaRegMessage } from "react-icons/fa6";
 import { IoDocumentText } from "react-icons/io5";
+import { FaMoneyBills } from "react-icons/fa6";
+import { TbBrandBooking } from "react-icons/tb";
+
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -115,6 +119,10 @@ const Navbar = () => {
           <NavItem to="/navbar/dashboard" icon={<IoHomeOutline />} label="Dashboard" />
           <NavItem to="/navbar/users" icon={<IoPeopleOutline />} label="Users" />
           <NavItem to="/navbar/addedProperties" icon={<IoBusinessOutline />} label="Properties" />
+          <NavItem to="/navbar/paymentInformation" icon={<FaMoneyBills />} label="Payment" />
+          <NavItem to="/navbar/bookingInformation" icon={<TbBrandBooking />} label="Booking" />
+
+
           <NavItem to="/navbar/message" icon={<FaRegMessage />} label="Feedback" />
           <NavItem to="/navbar/propertyDocument" icon={<IoDocumentText />} label="Property Document" />
         </nav>

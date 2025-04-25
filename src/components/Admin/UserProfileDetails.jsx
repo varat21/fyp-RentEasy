@@ -109,71 +109,69 @@ const UserProfileDetails = () => {
         </Tabs.List>
 
         <Tabs.Panel value="first" pt="xs">
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
-            <div className="text-center mb-6">
-              {profileData.image ? (
-                <img
-                  src={profileData.image}
-                  alt="User Profile"
-                  className="w-32 h-32 mx-auto rounded-full border-4 border-black"
-                />
-              ) : (
-                <CiUser className="w-32 h-32 mx-auto rounded-full border-4 border-black" />
-              )}
-
-              <div className="flex mt-4 items-center justify-center">
-                <div className="text-sm font-medium text-gray-700 dark:text-white">
-                  Name:
-                </div>
-                <div className="text-lg font-semibold text-gray-800 dark:text-white capitalize">
-                  {profileData.name || "N/A"}
-                </div>
-              </div>
-              <div className="flex mt-4 items-center justify-center">
-                <div className="text-sm font-medium text-gray-700 dark:text-white">
-                  Address:
-                </div>
-                <p className="text-lg font-semibold text-gray-800 dark:text-white capitalize">
-                  {profileData.address || "N/A"}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap justify-between p-10">
-              <div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Phone:
-                </span>
-                <span className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {profileData.phoneNumber || "N/A"}
-                </span>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Gender:
-                </span>
-                <span className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {profileData.gender || "N/A"}
-                </span>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email:
-                </span>
-                <span className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {profileData.email || "N/A"}
-                </span>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  User Type:
-                </span>
-                <span className="text-lg font-semibold text-gray-800 dark:text-white">
-                  {profileData.userType || "N/A"}
-                </span>
-              </div>
-            </div>
-          </div>
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-md mx-auto">
+                      <div className="text-center mb-6">
+                        {profileData.image ? (
+                          <img
+                            src={profileData.image}
+                            alt="User Profile"
+                            className="w-24 h-24 mx-auto rounded-full border-2 border-gray-300"
+                          />
+                        ) : (
+                          <div className="w-24 h-24 mx-auto rounded-full bg-orange-500 flex items-center justify-center text-white text-2xl font-bold">
+                            <img
+                              src={`https://ui-avatars.com/api/?name=${profileData.name}&background=random&size=100`}
+                              alt="Owner"
+                              className="w-16 h-16 rounded-full"
+                            />
+                          </div>
+                        )}
+                      </div>
+          
+                      <div className="space-y-4 text-center">
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Name</p>
+                          <p className="text-lg font-semibold text-gray-800 capitalize">
+                            {profileData.name || "N/A"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Email</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {profileData.email || "N/A"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Phone</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {profileData.phoneNumber || "N/A"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Address</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {profileData.address}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Gender</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {profileData.gender}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">User Type</p>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {profileData.userType}
+                          </p>
+                        </div>
+                        <div>
+                         
+                        </div>
+                      </div>
+          
+                   
+                    </div>
         </Tabs.Panel>
 
         <Tabs.Panel value="second" pt="xs">
@@ -207,7 +205,7 @@ const UserProfileDetails = () => {
                       <div className="flex-1">
                         <div className="flex-col justify-end items-center">
                           <div className="flex justify-end">
-                            <div className="cursor-pointer">
+                            {/* <div className="cursor-pointer">
                               <Popover
                                 width={120}
                                 position="bottom"
@@ -234,7 +232,7 @@ const UserProfileDetails = () => {
                                   </div>
                                 </Popover.Dropdown>
                               </Popover>
-                            </div>
+                            </div> */}
                           </div>
                           <Group>
                             <Title order={3}>{property.title}</Title>
