@@ -912,6 +912,7 @@ import {
   FaStar,
 } from "react-icons/fa";
 import "leaflet/dist/leaflet.css";
+import { BiLogoWhatsappSquare } from "react-icons/bi";
 
 export const PropertiesViews = ({ id }) => {
   const [totalViews, setTotalViews] = useState(0);
@@ -934,10 +935,10 @@ export const PropertiesViews = ({ id }) => {
   }, [id]);
 
   return (
-    <div className="flex items-center gap-2 text-gray-700 d-inline-flex">
-      <FaEye className="text-gray-500" />
-      <span>{totalViews} views</span>
-    </div>
+    <div className="flex items-center gap-2 text-gray-700 display-inline">
+    <FaEye className="text-gray-500" />
+    <span>{totalViews} views</span>
+  </div>
   );
 };
 
@@ -1237,7 +1238,7 @@ const GetPropertyDetails = () => {
                 <FaPhone className="text-gray-500 mr-2" />
                 <span>{property?.owner_contact}</span>
               </div>
-              <Button
+              {/* <Button
                 fullWidth
                 variant="outline"
                 size="md"
@@ -1247,7 +1248,25 @@ const GetPropertyDetails = () => {
                 }
               >
                 Call Owner
-              </Button>
+              </Button> */}
+
+
+
+<Button
+  fullWidth
+  variant="outline"
+  size="md"
+  className="mt-4"
+  onClick={() => {
+    // Ensure property?.owner_contact exists to avoid errors
+    if (property?.owner_contact) {
+      // Open WhatsApp link in a new tab
+      window.open(`https://wa.me/${property.owner_contact}`, '_blank');
+    }
+  }}
+>
+                Call Owner
+</Button>
             </div>
 
             {/* Quick Facts */}

@@ -7,6 +7,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import { NotFoundImage } from "../NotFoundImage";
 // import PaymentButton from "../Pages/PaymentButton";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
+// import BookingInformation from "../Admin/BookingInformation";   
+import PaymentInformation from "../Admin/PaymentInformation";
+import BookingInformation from "../Admin/bookingInformation";
+
 
 // Lazy load components
 const Login = lazy(() => import("../Pages/Login"));
@@ -126,6 +130,24 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <AddedProperties />
+          </Suspense>
+        ),
+      },
+      {
+        path: "bookingInformation",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <BookingInformation/>
+          </Suspense>
+        ),
+      },
+
+
+      {
+        path: "paymentInformation",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <PaymentInformation />
           </Suspense>
         ),
       },
@@ -273,14 +295,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "/blogs",
-        element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Blogs />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "/blogs",
+      //   element: (
+      //     <Suspense fallback={<div>Loading...</div>}>
+      //       <Blogs />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "/property/:id",
         element: (
