@@ -291,7 +291,7 @@ const Home = () => {
               onClick={() => navigate(`/property/${property.propertyId}`)}
             >
               
-              <div className="relative h-48 border border-gray-200 rounded-t-lg overflow-hidden">
+              <div className="relative h-48 border border-black-200 rounded-t-lg overflow-hidden ">
                 <img
                   src={
                     property.images[0] ||

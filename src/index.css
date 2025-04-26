@@ -1,14 +1,19 @@
+/* global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 body {
     font-family: "Lato", sans-serif;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Add this to prevent horizontal overflow */
+    overflow-x: hidden;
 }
 
+
+
+/* Lato font styles (unchanged) */
 .lato-thin {
     font-family: "Lato", sans-serif;
     font-weight: 100;
