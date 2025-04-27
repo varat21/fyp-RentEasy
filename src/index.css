@@ -5,6 +5,7 @@
 body {
     font-family: "Lato", sans-serif;
     margin: 0;
+background-color: white;    
     padding: 0;
     overflow-x: hidden; /* Add this to prevent horizontal overflow */
 }

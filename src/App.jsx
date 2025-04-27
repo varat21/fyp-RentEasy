@@ -8,7 +8,7 @@ import { AuthProvider } from "./components/hooks/AuthContext";
 // Define the App component
 export default function App() {
   return (
-    <MantineProvider>
+    <MantineProvider defaultColorScheme="light" forceColorScheme="light">
       <AuthProvider>
             <Toaster />
 

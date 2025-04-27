@@ -10,7 +10,7 @@ import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 // import BookingInformation from "../Admin/BookingInformation";   
 import PaymentInformation from "../Admin/PaymentInformation";
 import BookingInformation from "../Admin/bookingInformation";
-
+import KhaltiPayment from "../Pages/khaltiPayment";
 
 // Lazy load components
 const Login = lazy(() => import("../Pages/Login"));
@@ -25,7 +25,6 @@ const Contact = lazy(() => import("../Pages/Contact"));
 const LandLord = lazy(() => import("../properties/LandLord"));
 const AddProperties = lazy(() => import("../properties/AddProperties"));
 const EmailVerification = lazy(() => import("../Pages/VerifyEmail"));
-const Blogs = lazy(() => import("../Pages/Blogs"));
 
 const ForgetPasswordModal = lazy(() =>
   import("../Pages/ForgetPassword/ForgetPasswordModal")
@@ -319,6 +318,15 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/khaltiPayment",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <KhaltiPayment />
+          </Suspense>
+        ),
+      },
+     
       {
         path: "*",
         element: <NotFoundImage />,

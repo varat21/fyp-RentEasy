@@ -209,11 +209,13 @@ const Home = () => {
               !minPrice &&
               !maxPrice
             }
+            className="color-white"
+
           >
             Clear Filters
           </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white">
           <TextInput
             placeholder="Search by title"
             value={search}

@@ -83,8 +83,8 @@ const TermsAndConditions = () => {
             href="mailto:support@renteasy.com"
             className="text-blue-600 hover:underline"
           >
-            support@renteasy.com
-          </a>.
+renteasye@gmail.com
+</a>.
         </p>
       </section>
     </div>
