@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { motion } from 'framer-motion';
 import {
   Button,
   Select,
@@ -8,8 +9,8 @@ import {
   NumberInput,
   Pagination,
   Loader,
-} from "@mantine/core";
-import { useNavigate } from "react-router-dom";
+} from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 import {
   FaMapMarkerAlt,
   FaUser,
@@ -18,55 +19,140 @@ import {
   FaFilter,
   FaTimes,
   FaSearch,
-} from "react-icons/fa";
-import moment from "moment";
-import { PropertiesViews } from "../properties/GetPropertiesDetails";
+} from 'react-icons/fa';
+import { format } from 'date-fns';
+import { debounce } from 'lodash';
+import { PropertiesViews } from '../properties/GetPropertiesDetails';
+
+// Memoized PropertyCard to prevent unnecessary re-renders
+const PropertyCard = React.memo(({ property, index, navigateToProperty }) => (
+  <motion.div
+    className="bg-white rounded-lg overflow-hidden cursor-pointer border border-gray-300"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3, delay: index * 0.1 }}
+    whileHover={{ scale: 1.01 }}
+    onClick={() => navigateToProperty(property.propertyId)}
+  >
+    <div className="relative h-48 border border-gray-200 rounded-t-lg overflow-hidden">
+      <img
+        src={
+          property.images[0] ||
+          'https://via.placeholder.com/400x300?text=No+Image'
+        }
+        alt={property.title}
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
+      {property.status && (
+        <div className="absolute top-2 right-2 bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
+          {property.status}
+        </div>
+      )}
+    </div>
+    <div className="p-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold mb-1 text-gray-800">
+          {property.title}
+        </h2>
+        <PropertiesViews id={property.propertyId} />
+      </div>
+      <h2 className="text-xl font-semibold mb-1">
+        Rs. {property.price}
+        <span className="space-y-2 text-sm text-gray-500">/per month</span>
+      </h2>
+      <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
+      <div className="space-y-2 text-sm text-gray-500">
+        <p>
+          <FaMapMarkerAlt className="inline mr-2" />
+          {property.city}, {property.country}
+        </p>
+        <p>
+          <FaUser className="inline mr-2" />
+          {property.owner_name}
+        </p>
+        <p>
+          <FaPhone className="inline mr-2" />
+          {property.owner_contact}
+        </p>
+        <p>
+          <FaCalendarAlt className="inline mr-2" />
+          {format(new Date(property.uploaded_at), 'MMM do yyyy')}
+        </p>
+      </div>
+      <p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
+        See more
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-4 h-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </p>
+    </div>
+  </motion.div>
+));
 
 const Home = () => {
   const navigate = useNavigate();
 
   // State variables
-  const [properties, setProperties] = useState([]); 
-  const [filteredProperties, setFilteredProperties] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(""); 
-  const [search, setSearch] = useState(""); 
-  const [selectedCity, setSelectedCity] = useState(""); 
-  const [selectedType, setSelectedType] = useState(""); 
-  const [minPrice, setMinPrice] = useState(""); 
-  const [maxPrice, setMaxPrice] = useState(""); 
-  const [tempMinPrice, setTempMinPrice] = useState(""); 
-  const [tempMaxPrice, setTempMaxPrice] = useState(""); 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const itemsPerPage = 6; 
+  const [properties, setProperties] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [search, setSearch] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [tempMinPrice, setTempMinPrice] = useState('');
+  const [tempMaxPrice, setTempMaxPrice] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-  // Fetch properties from API
-  const fetchProperties = async () => {
-    try {
+  // Memoized navigation handler
+  const navigateToProperty = useCallback(
+    (id) => navigate(`/property/${id}`),
+    [navigate]
+  );
+
+  // Debounced search handler
+  const debouncedSetSearch = useCallback(
+    debounce((value) => setSearch(value), 300),
+    []
+  );
+
+  // Fetch properties with React Query
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['properties'],
+    queryFn: async () => {
       const response = await axios.get(
-        "http://localhost/rent-easy/public/getProperties.php"
+        'http://localhost/rent-easy/public/getProperties.php'
       );
-      console.log(response.data);
       if (response.data.success) {
-        setProperties(response.data.properties);
-        setFilteredProperties(response.data.properties); // Set initial filtered properties
-      } else {
-        setError("Failed to fetch properties");
+        return response.data.properties;
       }
-    } catch (err) {
-      setError("Error connecting to the server");
-    } finally {
-      setLoading(false);
+      throw new Error('Failed to fetch properties');
+    },
+  });
+
+  // Update properties when data is fetched
+  useEffect(() => {
+    if (data) {
+      setProperties(data);
+      setFilteredProperties(data);
     }
-  };
+  }, [data]);
 
-  // Fetch properties when the component loads
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  // Filter properties based on search, city, type, and price range
-  useEffect(() => {
+  // Memoized filter logic
+  const filteredPropertiesMemo = useMemo(() => {
     let filtered = properties;
 
     // Filter by search term
@@ -77,31 +163,58 @@ const Home = () => {
     }
 
     // Filter by city
-    if (selectedCity && selectedCity !== "All Cities") {
+    if (selectedCity && selectedCity !== 'All Cities') {
       filtered = filtered.filter((property) => property.city === selectedCity);
     }
 
     // Filter by property type
-    if (selectedType && selectedType !== "All Types") {
+    if (selectedType && selectedType !== 'All Types') {
       filtered = filtered.filter(
         (property) =>
           property.propertyType.toLowerCase() === selectedType.toLowerCase()
       );
     }
 
-    // Filter by price range (only if both values are set)
-    if (minPrice !== "" && maxPrice !== "") {
+    // Filter by price range
+    if (minPrice !== '' && maxPrice !== '') {
       filtered = filtered.filter((property) => {
-        const price = parseFloat(property.price.replace(/[^\d.]/g, ""));
+        const price = parseFloat(property.price.replace(/[^\d.]/g, ''));
         const min = parseFloat(minPrice);
         const max = parseFloat(maxPrice);
         return price >= min && price <= max;
       });
     }
 
-    setFilteredProperties(filtered);
-    setCurrentPage(1); // Reset to the first page
+    return filtered;
   }, [search, selectedCity, selectedType, properties, minPrice, maxPrice]);
+
+  // Update filtered properties and reset page
+  useEffect(() => {
+    setFilteredProperties(filteredPropertiesMemo);
+    setCurrentPage(1);
+  }, [filteredPropertiesMemo]);
+
+  // Memoized select options
+  const cityOptions = useMemo(
+    () => ['All Cities', ...new Set(properties.map((prop) => prop.city))],
+    [properties]
+  );
+
+  const typeOptions = useMemo(
+    () => ['All Types', ...new Set(properties.map((prop) => prop.propertyType))],
+    [properties]
+  );
+
+  // Memoized pagination
+  const paginatedProperties = useMemo(
+    () =>
+      filteredProperties.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      ),
+    [filteredProperties, currentPage]
+  );
+
   // Handle price search button click
   const handlePriceSearch = () => {
     setMinPrice(tempMinPrice);
@@ -110,30 +223,23 @@ const Home = () => {
 
   // Reset all filters
   const resetFilters = () => {
-    setSearch("");
-    setSelectedCity("");
-    setSelectedType("");
-    setMinPrice("");
-    setMaxPrice("");
+    setSearch('');
+    setSelectedCity('');
+    setSelectedType('');
+    setMinPrice('');
+    setMaxPrice('');
+    setTempMinPrice('');
+    setTempMaxPrice('');
     setFilteredProperties(properties);
-    setTempMinPrice("");
-    setTempMaxPrice("");
   };
 
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const paginatedProperties = filteredProperties.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
+  // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Show loading spinner while fetching data
-  if (loading) {
+  // Loading state
+  if (isLoading) {
     return (
       <motion.div
         className="flex justify-center items-center min-h-screen"
@@ -145,7 +251,7 @@ const Home = () => {
     );
   }
 
-  // Show error message if there's an error
+  // Error state
   if (error) {
     return (
       <motion.div
@@ -153,11 +259,10 @@ const Home = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="text-red-500 text-lg">{error}</div>
+        <div className="text-red-500 text-lg">{error.message}</div>
       </motion.div>
     );
   }
-
 
   return (
     <motion.div
@@ -171,6 +276,7 @@ const Home = () => {
           src="/images/bgImage.jpg"
           alt="Property"
           className="w-full h-full object-cover rounded-lg shadow-lg"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center p-4">
           <motion.h1
@@ -195,7 +301,7 @@ const Home = () => {
       {/* Filter Section */}
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold flex items-center  gap-2">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
             <FaFilter /> Filters
           </h2>
           <Button
@@ -210,7 +316,6 @@ const Home = () => {
               !maxPrice
             }
             className="color-white"
-
           >
             Clear Filters
           </Button>
@@ -219,30 +324,22 @@ const Home = () => {
           <TextInput
             placeholder="Search by title"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => debouncedSetSearch(e.target.value)}
           />
           <Select
             placeholder="Filter by city"
             value={selectedCity}
             onChange={setSelectedCity}
-            data={[
-              "All Cities",
-              ...new Set(properties.map((prop) => prop.city)),
-            ]}
+            data={cityOptions}
           />
-
           <Select
             placeholder="Property Type"
             value={selectedType}
             onChange={setSelectedType}
-            data={[
-              "All Types",
-              ...new Set(properties.map((prop) => prop.propertyType)),
-            ]}
-            withCheckIcon={false} // This removes the tick mark
-            style={{ width: "100%" }}
+            data={typeOptions}
+            withCheckIcon={false}
+            style={{ width: '100%' }}
           />
-
           <div className="flex gap-2 items-end">
             <NumberInput
               placeholder="Min Price"
@@ -282,84 +379,12 @@ const Home = () => {
           animate={{ opacity: 1 }}
         >
           {paginatedProperties.map((property, index) => (
-
-            <motion.div
+            <PropertyCard
               key={property.propertyId}
-              className="bg-white rounded-lg  overflow-hidden cursor-pointer border  border-gray-300"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              whileHover={{ scale: 1.01 }}
-              onClick={() => navigate(`/property/${property.propertyId}`)}
-            >
-              
-              <div className="relative h-48 border border-gray-200 rounded-t-lg overflow-hidden">
-                <img
-                  src={
-                    property.images[0] ||
-                    "https://via.placeholder.com/400x300?text=No+Image"
-                  }
-                  alt={property.title}
-                  className="w-full h-full object-cover"
-                />
-                {property.status && (
-                  <div className="absolute top-2 right-2 bg-blue-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
-                    {property.status}
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold mb-1 text-gray-800">
-                    {property.title}
-                  </h2>
-                  <PropertiesViews id={property.propertyId} />
-                </div>
-
-                <h2 className="text-xl font-semibold mb-1">
-                  Rs. {property.price}<span className="space-y-2 text-sm text-gray-500">/per month</span>
-                </h2>
-
-                <p className="text-gray-600 mb-4 line-clamp-2">
-                  {property.description}
-                </p>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <p>
-                    <FaMapMarkerAlt className="inline mr-2" />
-                    {property.city}, {property.country}
-                  </p>
-                  <p>
-                    <FaUser className="inline mr-2" />
-                    {property.owner_name}
-                  </p>
-                  <p>
-                    <FaPhone className="inline mr-2" />
-                    {property.owner_contact}
-                  </p>
-                  <p>
-                    <FaCalendarAlt className="inline mr-2" />
-                    {moment(property.uploaded_at).format("MMM Do YYYY")}
-                  </p>
-                </div>
-                <p className="text-blue-600 font-medium flex items-center gap-1 cursor-pointer hover:underline">
-                  See more
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </p>
-              </div>
-            </motion.div>
+              property={property}
+              index={index}
+              navigateToProperty={navigateToProperty}
+            />
           ))}
         </motion.div>
       )}

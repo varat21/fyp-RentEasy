@@ -16,7 +16,7 @@ const TermsAndConditions = () => {
       <section className="mb-10">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           1. Welcome
-        </h2>
+        </h2>console.log('Terms and Conditions component rendered');
         <p className="text-gray-600 leading-relaxed">
           Hello and welcome to RentEasy! By using our website or app, you agree to follow these rules. If you don’t agree, please don’t use our service.
         </p>
