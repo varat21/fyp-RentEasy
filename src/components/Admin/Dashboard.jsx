@@ -3,7 +3,6 @@ import { Card, Text, Title, Container, Flex } from "@mantine/core";
 import {
   FiUsers,
   FiHome,
-  FiDollarSign,
   FiBookmark,
   FiArrowRight,
 } from "react-icons/fi";
@@ -11,8 +10,6 @@ import { BarChart } from "@mantine/charts";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { FaRegMessage } from "react-icons/fa6";
-import { FaMoneyBills } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
 
 const Dashboard = () => {
@@ -38,13 +35,11 @@ const Dashboard = () => {
         const dashboardResponse = await axios.get(
           "http://localhost/rent-easy/public/Admin/totalUsers.php"
         );
-        console.log("Dashboard API Response:", dashboardResponse.data);
 
         // Fetch payment details from the new API
         const paymentResponse = await axios.get(
           "http://localhost/rent-easy/public/admin/paymentDetails.php"
         );
-        console.log("Payment API Response:", paymentResponse.data);
 
         if (dashboardResponse.data.success && paymentResponse.data.success) {
           setData({
@@ -307,7 +302,7 @@ const Dashboard = () => {
 
               <BarChart
                 h={300}
-                w={350}
+                w={450}
                 data={data.combinedGrowthData}
                 dataKey="month"
                 xAxisProps={{ padding: { left: 30, right: 30 } }}

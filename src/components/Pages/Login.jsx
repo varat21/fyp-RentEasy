@@ -1,11 +1,5 @@
-
-
 import React from "react";
-import {
-  PasswordInput,
-  TextInput,
-  Button,
-} from "@mantine/core";
+import { PasswordInput, TextInput, Button } from "@mantine/core";
 import { FcGoogle } from "react-icons/fc";
 import { useLoginValidation } from "../hooks/formValidate";
 import { useForm } from "react-hook-form";
@@ -37,12 +31,12 @@ const Login = () => {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
-  
+
       const response = await axios.post(
-        "http://localhost/rent-easy/auth/login.php", 
+        "http://localhost/rent-easy/auth/login.php",
         formData
       );
-      
+
       if (response.data.success) {
         // Check if user status is 'block'
         if (response.data.status === "block") {
@@ -52,7 +46,7 @@ const Login = () => {
 
         localStorage.setItem("token", response.data.token);
         toast.success("Login successful");
-  
+
         const userType = response.data.userType;
         if (userType === "tenant") {
           navigate("/");
@@ -152,4 +146,3 @@ const Login = () => {
 };
 
 export default Login;
-

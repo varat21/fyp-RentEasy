@@ -5,12 +5,13 @@ import Footer from "../common/Footer/Footer";
 import WhatsApps from "../Pages/whatApps";
 import ProtectedRoute from "./ProtectedRoute";
 import { NotFoundImage } from "../NotFoundImage";
-// import PaymentButton from "../Pages/PaymentButton";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
-// import BookingInformation from "../Admin/BookingInformation";   
 import PaymentInformation from "../Admin/PaymentInformation";
 import BookingInformation from "../Admin/bookingInformation";
-import KhaltiPayment from "../Pages/khaltiPayment";
+import BookingHistory from "../Pages/BookingHistory";
+import TermsAndConditions from "../properties/TermsAndConditions";
+import KhaltiPaymentSuccess from "../Pages/khaltiPaymentSuccess";
+import ChatBot from "../Pages/ChatBot";
 
 // Lazy load components
 const Login = lazy(() => import("../Pages/Login"));
@@ -19,10 +20,8 @@ const Register = lazy(() => import("../Pages/Register"));
 const Home = lazy(() => import("../Pages/Home"));
 const About = lazy(() => import("../Pages/About"));
 const FAQ = lazy(() => import("../Pages/FAQ"));
-// const TermsAndConditions = lazy(() => import("../Pages/TermsAndConditions"));
-// const PrivacyPolicy = lazy(() => import("../Pages/PrivacyPolicy"));
+
 const Contact = lazy(() => import("../Pages/Contact"));
-// const LandLord = lazy(() => import("../properties/LandLord"));
 const AddProperties = lazy(() => import("../properties/AddProperties"));
 const EmailVerification = lazy(() => import("../Pages/VerifyEmail"));
 
@@ -30,7 +29,6 @@ const ForgetPasswordModal = lazy(() =>
   import("../Pages/ForgetPassword/ForgetPasswordModal")
 );
 const UpdatePassword = lazy(() =>
-  // import("../Pages/ForgetPassword/UpdatePassword")
 import("../Pages/ForgetPassword/UpdatePassword ")
 );
 
@@ -38,7 +36,6 @@ const GetProfileData = lazy(() => import("../Pages/Profile"));
 const GetPropertiesDetails = lazy(() =>
   import("../properties/GetPropertiesDetails")
 );
-// const Properties = lazy(() => import("../properties/Properties"));
 
 // Admin Components
 const Navbar = lazy(() => import("../Admin/navbar/Navbar"));
@@ -58,6 +55,8 @@ const Layout = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
       </Suspense>
+            <ChatBot/>
+
       <WhatsApps />
       <Footer />
     </>
@@ -167,7 +166,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "message", // Dynamic id parameter
+        path: "message", 
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <Message />
@@ -196,14 +195,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "/payment",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <PaymentButton/>
-      //     </Suspense>
-      //   ),
-      // },
+    
       {
         path: "/contact",
         element: (
@@ -228,30 +220,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "/properties",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <Properties />
-      //     </Suspense>
-      //   ),
-      // },
-      // {
-      //   path: "/terms",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <TermsAndConditions />
-      //     </Suspense>
-      //   ),
-      // },
-      // {
-      //   path: "/privacyPolicy",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <PrivacyPolicy />
-      //     </Suspense>
-      //   ),
-      // },
+     
       {
         path: "/profile",
         element: (
@@ -260,14 +229,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "/landlord",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <LandLord />
-      //     </Suspense>
-      //   ),
-      // },
+      
       {
         path: "/logout",
         element: (
@@ -294,14 +256,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "/blogs",
-      //   element: (
-      //     <Suspense fallback={<div>Loading...</div>}>
-      //       <Blogs />
-      //     </Suspense>
-      //   ),
-      // },
+    
       {
         path: "/property/:id",
         element: (
@@ -319,10 +274,27 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/khaltiPayment",
+      
+      path: "/bookingHistory",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+          <BookingHistory/>
+        </Suspense>
+      ),
+    },
+      {
+        path: "/khalti-PaymentSuccess",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <KhaltiPayment />
+            <KhaltiPaymentSuccess />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/terms",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <TermsAndConditions />
           </Suspense>
         ),
       },

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const useBookingStore = create((set) => ({
   bookedProperty: null,
@@ -6,7 +6,7 @@ const useBookingStore = create((set) => ({
   userId: null,
   appliedPromoCode: null,
   bookProperty: (property) => {
-    console.log('Booking property:', property);
+    // console.log("Booking property:", property);
     set(() => {
       const priceAsNumber = Number(property.price);
       const newState = {
@@ -17,12 +17,12 @@ const useBookingStore = create((set) => ({
         },
         totalAmount: priceAsNumber,
       };
-      console.log('New state:', newState);
+      // console.log("New state:", newState);
       return newState;
     });
   },
   removeProperty: () => {
-    console.log('Removing property');
+    // console.log("Removing property");
     set(() => ({
       bookedProperty: null,
       totalAmount: 0,
@@ -30,11 +30,11 @@ const useBookingStore = create((set) => ({
     }));
   },
   clearBookings: () => {
-    console.log('Clearing bookings');
-    set({ 
-      bookedProperty: null, 
-      totalAmount: 0, 
-      appliedPromoCode: null 
+    // console.log("Clearing bookings");
+    set({
+      bookedProperty: null,
+      totalAmount: 0,
+      appliedPromoCode: null,
     });
   },
   setUserId: (id) => set({ userId: id }),

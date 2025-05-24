@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -7,10 +5,11 @@ import moment from "moment";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import RatingModal from "./RatingModal";
-import { Button, Rating } from "@mantine/core";
+import { Button, Rating, Paper, Skeleton } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import useBookingStore from "../stores/useBookingStore";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   FaMoneyBillAlt,
   FaRuler,
@@ -25,7 +24,7 @@ import {
   FaStar,
 } from "react-icons/fa";
 import "leaflet/dist/leaflet.css";
-import { BiLogoWhatsappSquare } from "react-icons/bi";
+// import { BiLogoWhatsappSquare } from "react-icons/bi";
 
 export const PropertiesViews = ({ id }) => {
   const [totalViews, setTotalViews] = useState(0);
@@ -49,9 +48,9 @@ export const PropertiesViews = ({ id }) => {
 
   return (
     <div className="flex items-center gap-2 text-gray-700 display-inline">
-    <FaEye className="text-gray-500" />
-    <span>{totalViews} views</span>
-  </div>
+      <FaEye className="text-gray-500" />
+      <span>{totalViews} views</span>
+    </div>
   );
 };
 
@@ -59,6 +58,7 @@ const GetPropertyDetails = () => {
   const { bookProperty } = useBookingStore();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuth();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -108,10 +108,10 @@ const GetPropertyDetails = () => {
       return;
     }
 
-    if (property?.status === "booked") {
-      toast.error("This property is already booked.");
-      return;
-    }
+    // if (property?.status === "booked") {
+    //   toast.error("This property is already booked.");
+    //   return;
+    // }
 
     try {
       const decodedToken = jwtDecode(token);
@@ -135,21 +135,155 @@ const GetPropertyDetails = () => {
 
       if (response.data.success) {
         const bookingId = response.data.booking_id;
-        bookProperty({ ...property, bookingId }); // Pass bookingId to Zustand store
+        bookProperty({ ...property, bookingId });
         toast.success("Property booked successfully!");
         navigate("/profile?tab=third");
       } else {
         toast.error(response.data.message || "Booking failed.");
       }
     } catch (error) {
-      console.error("Booking error:", error);
+      // console.error("Booking error:", error);
       toast.error("An error occurred while booking the property.");
     }
   };
 
-  if (loading) return <div className="text-center p-10">Loading...</div>;
-  if (error)
-    return <div className="text-center text-red-500 p-10">{error}</div>;
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto p-4"
+      >
+        {/* Property Header */}
+        <div className="mb-6">
+          <Skeleton height={40} width="50%" mb="md" />
+          <div className="flex flex-wrap items-center gap-4">
+            <Skeleton height={20} width="20%" />
+            <Skeleton height={20} width="15%" />
+            <Skeleton height={20} width="15%" />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Column */}
+          <div className="lg:w-2/3">
+            {/* Image Gallery */}
+            <div className="mb-6">
+              <Skeleton height={384} width="100%" radius="xl" mb="md" />
+              <div className="flex gap-2">
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} height={80} width={80} radius="md" />
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+              <Skeleton height={30} width="30%" mb="md" />
+              <Skeleton height={20} width="100%" mb="sm" />
+              <Skeleton height={20} width="80%" />
+            </div>
+
+            {/* Features */}
+            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+              <Skeleton height={30} width="30%" mb="md" />
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[...Array(6)].map((_, index) => (
+                  <Skeleton key={index} height={20} width="100%" />
+                ))}
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+              <Skeleton height={30} width="30%" mb="md" />
+              <Skeleton height={256} width="100%" radius="lg" />
+            </div>
+
+            {/* Reviews */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex justify-between items-center mb-4">
+                <Skeleton height={30} width="30%" />
+                <Skeleton height={40} width="20%" />
+              </div>
+              <div className="space-y-4">
+                {[...Array(2)].map((_, index) => (
+                  <div key={index} className="border-b pb-4">
+                    <div className="flex items-center gap-4">
+                      <Skeleton height={48} width={48} circle />
+                      <div>
+                        <Skeleton height={20} width="20%" mb="sm" />
+                        <Skeleton height={16} width="15%" />
+                      </div>
+                    </div>
+                    <Skeleton height={20} width="30%" mb="sm" />
+                    <Skeleton height={20} width="100%" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="lg:w-1/3">
+            <div className="sticky top-4 space-y-6">
+              {/* Pricing Card */}
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <Skeleton height={30} width="30%" mb="md" />
+                <div className="flex justify-between items-center mb-4">
+                  <Skeleton height={20} width="20%" />
+                  <Skeleton height={30} width="40%" />
+                </div>
+                <Skeleton height={40} width="100%" />
+              </div>
+
+              {/* Owner Info */}
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <Skeleton height={30} width="30%" mb="md" />
+                <div className="flex items-center gap-4">
+                  <Skeleton height={64} width={64} circle />
+                  <div>
+                    <Skeleton height={20} width="30%" mb="sm" />
+                    <Skeleton height={16} width="20%" />
+                  </div>
+                </div>
+                <Skeleton height={20} width="40%" mt="md" />
+                <Skeleton height={40} width="100%" mt="md" />
+              </div>
+
+              {/* Quick Facts */}
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <Skeleton height={30} width="30%" mb="md" />
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, index) => (
+                    <div key={index} className="flex justify-between">
+                      <Skeleton height={20} width="30%" />
+                      <Skeleton height={20} width="20%" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (error) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-center text-red-500 p-10"
+      >
+        {error}
+      </motion.div>
+    );
+  }
 
   const avgRating =
     property?.ratings?.length > 0
@@ -158,6 +292,9 @@ const GetPropertyDetails = () => {
           property.ratings.length
         ).toFixed(1)
       : 0;
+
+  // const otherUserId =
+  //   user?.userType === "tenant" ? property?.id : property?.tenant_id;
 
   return (
     <motion.div
@@ -216,13 +353,13 @@ const GetPropertyDetails = () => {
 
           {/* Description */}
           <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-            <h2 className="text-2xl font-semibold mb-4">Description</h2>
+            <h2 className="text-2xl mb-4">Description</h2>
             <p className="text-gray-700">{property?.description}</p>
           </div>
 
           {/* Features */}
           <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-            <h2 className="text-2xl font-semibold mb-4">Features</h2>
+            <h2 className="text-2xl  mb-4">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="flex items-center">
                 <FaBed className="text-blue-500 mr-2" />
@@ -319,7 +456,8 @@ const GetPropertyDetails = () => {
               <div className="flex justify-between items-center mb-4">
                 <span className="text-gray-600">Rent:</span>
                 <span className="text-2xl font-bold text-blue-600">
-                  Rs.{property?.price}<span className="space-y-2 text-sm text-gray-500">/per month</span>
+                  Rs.{property?.price}
+                  <span className="text-sm text-gray-500">/per month</span>
                 </span>
               </div>
               <Button
@@ -351,35 +489,22 @@ const GetPropertyDetails = () => {
                 <FaPhone className="text-gray-500 mr-2" />
                 <span>{property?.owner_contact}</span>
               </div>
-              {/* <Button
+              <Button
                 fullWidth
                 variant="outline"
                 size="md"
                 className="mt-4"
-                onClick={() =>
-                  (window.location.href = `tel:${property?.owner_contact}`)
-                }
+                onClick={() => {
+                  if (property?.owner_contact) {
+                    window.open(
+                      `https://wa.me/${property.owner_contact}`,
+                      "_blank"
+                    );
+                  }
+                }}
               >
-                Call Owner
-              </Button> */}
-
-
-
-<Button
-  fullWidth
-  variant="outline"
-  size="md"
-  className="mt-4"
-  onClick={() => {
-    // Ensure property?.owner_contact exists to avoid errors
-    if (property?.owner_contact) {
-      // Open WhatsApp link in a new tab
-      window.open(`https://wa.me/${property.owner_contact}`, '_blank');
-    }
-  }}
->
-                Call Owner
-</Button>
+                Contact via WhatsApp
+              </Button>
             </div>
 
             {/* Quick Facts */}

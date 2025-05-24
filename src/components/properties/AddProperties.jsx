@@ -1,14 +1,7 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMapEvents,
-  Tooltip,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import {
   TextInput,
   Button,
@@ -16,10 +9,11 @@ import {
   Select,
   ActionIcon,
   Text,
+  Skeleton,
 } from "@mantine/core";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
-import { IconUpload, IconPhoto, IconX, IconFile } from "@tabler/icons-react";
+import { IconPhoto, IconX } from "@tabler/icons-react";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { Image } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +37,7 @@ const AddProperties = () => {
   const [marker, setMarker] = useState([28.26689, 83.96851]);
   const [images, setImages] = useState([]);
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const cities = [
     "Kathmandu",
@@ -74,25 +69,53 @@ const AddProperties = () => {
     "Ilam",
     "Banepa",
     "Malangwa",
-    "Baglung"
+    "Baglung",
   ];
+
+  useEffect(() => {
+    // Check token and set up component without delay
+    const checkSetup = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Please log in first!");
+          navigate("/login");
+          return;
+        }
+      } catch (error) {
+        console.error("Setup error:", error);
+        toast.error("Failed to initialize. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkSetup();
+  }, [navigate]);
 
   const handleImageDrop = (files) => {
     const validFiles = files.filter((file) => {
       if (file.size > 2000000) {
-        toast.error("File size should be less than 2MB");
+        toast.error("Image size should be less than 2MB");
+        return false;
+      }
+      if (!IMAGE_MIME_TYPE.includes(file.type)) {
+        toast.error("Only image files (jpg, jpeg, png, webp) are allowed");
         return false;
       }
       return true;
     });
     setImages((prev) => [...prev, ...validFiles]);
-    clearErrors("images"); // Clear the error if images are uploaded
+    clearErrors("images");
   };
 
   const handleDocumentDrop = (files) => {
     const validFiles = files.filter((file) => {
       if (file.size > 2000000) {
-        toast.error("File size should be less than 2MB");
+        toast.error("Image size should be less than 2MB");
+        return false;
+      }
+      if (!IMAGE_MIME_TYPE.includes(file.type)) {
+        toast.error("Only image files (jpg, jpeg, png, webp) are allowed");
         return false;
       }
       return true;
@@ -174,8 +197,61 @@ const AddProperties = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center p-6">
+        <div className="rounded-xl shadow-lg p-8 w-full max-w-5xl bg-white">
+          <Skeleton height={40} width="30%" mb="lg" mx="auto" />
+          <Skeleton height={20} width="50%" mb="xl" mx="auto" />
+          <div className="space-y-6">
+            {/* Property Details */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(5)].map((_, index) => (
+                <Skeleton key={index} height={60} width="100%" />
+              ))}
+            </div>
+
+            {/* Address Details */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(5)].map((_, index) => (
+                <Skeleton key={index} height={60} width="100%" />
+              ))}
+            </div>
+
+            {/* Property Description */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <Skeleton height={120} width="100%" />
+
+            {/* Map Section */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <Skeleton height={220} width="100%" radius="lg" />
+
+            {/* Property Features */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, index) => (
+                <Skeleton key={index} height={60} width="100%" />
+              ))}
+            </div>
+
+            {/* Image Upload */}
+            <Skeleton height={30} width="20%" mb="md" />
+            <Skeleton height={100} width="100%" mb="md" />
+            <Skeleton height={30} width="20%" mb="md" />
+            <Skeleton height={100} width="100%" mb="md" />
+
+            {/* Submit Button */}
+            <Skeleton height={40} width="100%" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex justify-center items-center p-6">
+    <div className="min-h-[150vh]flex justify-center items-center p-6">
       <Toaster
         toastOptions={{
           style: {
@@ -183,7 +259,7 @@ const AddProperties = () => {
           },
         }}
       />
-      <div className="rounded-xl shadow-lg p-8 w-full max-w-5xl bg-white">
+      <div className="rounded-xl shadow-lg p-8 w-full  bg-white">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Post Property
         </h1>
@@ -193,7 +269,7 @@ const AddProperties = () => {
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           <div className="mt-8 space-y-6">
             {/* Property Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <Controller
                 name="title"
                 control={control}
@@ -209,25 +285,23 @@ const AddProperties = () => {
                   />
                 )}
               />
-              <div className="flex items-center gap-1">
-                <span className="text-xl">Rs.</span>
-                <Controller
-                  name="price"
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: "Price is required" }}
-                  render={({ field }) => (
-                    <TextInput
-                      {...field}
-                      label="Rent Price"
-                      placeholder="E.g., 1000"
-                      size="md"
-                      type="number"
-                      error={errors.price?.message}
-                    />
-                  )}
-                />
-              </div>
+             
+              <Controller
+                name="price"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Price is required" }}
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    label=" Price in Rs."
+                    placeholder="E.g., Rs.1000"
+                    size="md"
+                    type="number"
+                    error={errors.price?.message}
+                  />
+                )}
+              />
 
               <Controller
                 name="type"
@@ -279,7 +353,7 @@ const AddProperties = () => {
             <h2 className="text-lg font-semibold text-gray-700">
               Address Details
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <Controller
                 name="country"
                 control={control}
@@ -305,7 +379,7 @@ const AddProperties = () => {
                     {...field}
                     label="City"
                     placeholder="Select city"
-                    data={cities.map(city => ({ value: city, label: city }))}
+                    data={cities.map((city) => ({ value: city, label: city }))}
                     error={errors.city?.message}
                     searchable
                   />
@@ -383,14 +457,14 @@ const AddProperties = () => {
             <h2 className="text-lg font-semibold text-gray-700">
               Select Location on Map
             </h2>
-            <div className="h-[220px] bg-gray-200 rounded-lg">
+            <div className="h-[220px] w-full bg-gray-200 rounded-lg">
               <MapContainer
                 center={marker}
                 zoom={13}
                 className="h-full rounded-lg z-10"
               >
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <Marker icon={markerIcon} position={marker}></Marker>
@@ -412,7 +486,7 @@ const AddProperties = () => {
                   <TextInput
                     {...field}
                     label="Total Area"
-                    placeholder="E.g., 50 ft"
+                    placeholder="E.g., 50 sqft"
                     size="md"
                     error={errors.dimension?.message}
                   />
@@ -452,7 +526,7 @@ const AddProperties = () => {
 
             {/* File Upload Section */}
             <h2 className="text-lg font-semibold text-gray-700 mt-9">
-              Upload Files
+              Upload Images
             </h2>
 
             {/* Image Upload */}
@@ -478,7 +552,7 @@ const AddProperties = () => {
               )}
 
               {/* Uploaded Image Previews */}
-              <div className="mt-6 grid grid-cols-4 gap-4 ">
+              <div className="mt-6 grid grid-cols-4 gap-4">
                 {images.map((image, index) => (
                   <div key={index} className="relative">
                     <Image
@@ -496,45 +570,31 @@ const AddProperties = () => {
               </div>
             </div>
 
-            {/* Document Upload */}
+            {/* Additional Images Upload */}
             <div className="mt-4">
               <label className="font-semibold text-gray-700">
-                Property Documents and Images
+                Additional Property Images
               </label>
               <Dropzone
                 multiple
                 onDrop={handleDocumentDrop}
-                accept={[
-                  ...IMAGE_MIME_TYPE,
-                  "application/pdf",
-                  "application/msword",
-                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                ]}
+                accept={IMAGE_MIME_TYPE}
                 className="mt-2 border rounded-md p-4"
               >
                 <Group position="center" spacing="xl">
-                  <IconFile size={32} />
-                  <Text>Drag documents or images here or click to select</Text>
+                  <IconPhoto size={32} />
+                  <Text>Drag additional images here or click to select</Text>
                 </Group>
               </Dropzone>
 
-              {/* Uploaded Document and Image Previews */}
+              {/* Uploaded Additional Image Previews */}
               <div className="mt-6 grid grid-cols-4 gap-4">
                 {documents.map((document, index) => (
                   <div key={index} className="relative">
-                    {document.type.startsWith("image/") ? (
-                      <Image
-                        src={URL.createObjectURL(document)}
-                        alt={`Document-${index}`}
-                      />
-                    ) : (
-                      <Tooltip label={document.name} withArrow>
-                        <div className="p-2 bg-gray-100 rounded-md flex items-center space-x-2">
-                          <IconFile size={32} />
-                          <Text>{document.name}</Text>
-                        </div>
-                      </Tooltip>
-                    )}
+                    <Image
+                      src={URL.createObjectURL(document)}
+                      alt={`Additional-Image-${index}`}
+                    />
                     <ActionIcon
                       onClick={() => removeDocument(index)}
                       className="absolute top-0 right-0 text-red-600"

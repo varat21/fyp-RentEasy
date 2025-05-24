@@ -1,16 +1,7 @@
-
-
-
 import { useState, useRef, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Added useNavigate
-import {
-  Avatar,
-  Drawer,
-  Button,
-  Divider,
-} from "@mantine/core";
+import { Avatar, Drawer, Button, Divider } from "@mantine/core";
 import { FcAbout } from "react-icons/fc";
-import { LuTableProperties } from "react-icons/lu";
 import { TbLetterMSmall } from "react-icons/tb";
 import { CiLogin, CiHome } from "react-icons/ci";
 import { FiAlignJustify } from "react-icons/fi";
@@ -19,14 +10,13 @@ import { FaQq, FaRegUser } from "react-icons/fa";
 import { MdContactPhone, MdOutlinePolicy } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
 import { toast } from "react-hot-toast";
-import { AuthContext } from "../../hooks/AuthContext"; 
+import { AuthContext } from "../../hooks/AuthContext";
 import { AiFillPropertySafety } from "react-icons/ai";
-
 
 const Header = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Added for navigation
-  const { user, logout } = useContext(AuthContext); // Use context for user and logout
+  const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const profileRef = useRef(null);
@@ -138,28 +128,16 @@ const Header = () => {
                       <FaRegUser className="h-5 w-5 mr-2" />
                       Profile
                     </Link>
-                    <Link to="/addProperties" 
-                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
-
-                    onClick={closeDrawer}>
-              <button 
-                      className="w-full text-left  py-2 hover:bg-gray-100 flex items-center"
-                      >
-                        <AiFillPropertySafety className="h-5 w-5 mr-2"/>
-
-                Add Properties
-              </button>
-            </Link>
-
-
-
-
-
-
-
-
-
-
+                    <Link
+                      to="/addProperties"
+                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-200 cursor-pointer rounded-md"
+                      onClick={closeDrawer}
+                    >
+                      <button className="w-full text-left  py-2 hover:bg-gray-100 flex items-center">
+                        <AiFillPropertySafety className="h-5 w-5 mr-2" />
+                        Add Properties
+                      </button>
+                    </Link>
 
                     <button
                       onClick={handleLogout}
@@ -167,7 +145,6 @@ const Header = () => {
                     >
                       <IoLogOutOutline className="mr-2" /> Logout
                     </button>
-                   
                   </>
                 ) : (
                   <Link
@@ -217,13 +194,7 @@ const Header = () => {
             <FcAbout className="h-5 w-5 mr-2" />
             About
           </Link>
-          <Link
-            to="/properties"
-            className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
-            onClick={closeDrawer}
-          >
-            <LuTableProperties className="h-5 w-5 mr-2" /> Properties
-          </Link>
+
           <Link
             to="/contact"
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
@@ -231,7 +202,6 @@ const Header = () => {
           >
             <MdContactPhone className="h-5 w-5 mr-2" /> Contact
           </Link>
-          <Divider my="sm" />
           <Link
             to="/faq"
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
@@ -244,14 +214,7 @@ const Header = () => {
             className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
             onClick={closeDrawer}
           >
-            <TbLetterMSmall className="h-5 w-5 mr-2" /> Terms
-          </Link>
-          <Link
-            to="/privacy-policy"
-            className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 transition cursor-pointer"
-            onClick={closeDrawer}
-          >
-            <MdOutlinePolicy className="h-5 w-5 mr-2" /> Privacy Policy
+            <TbLetterMSmall className="h-5 w-5 mr-2" /> Terms & Conditions
           </Link>
 
           {user && user.userType !== "google" && (

@@ -37,7 +37,7 @@ const EmailVerification = () => {
         // Redirect to login page after successful verification
         
           navigate('/login');
-        ;
+        
       } else {
         // Verification failed
         // setErrorMessage(response.data.message);

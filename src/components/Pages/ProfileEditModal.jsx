@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, TextInput, Loader, Group } from "@mantine/core";
+import { Modal, Button, TextInput, Loader, Group, Avatar } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,18 @@ const validationSchema = z.object({
     .max(15, "Phone Number is too long"),
 });
 
-const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, password, gender, defaultValues, email }) => {
+const ProfileEditModal = ({
+  opened,
+  close,
+  id,
+  name,
+  address,
+  phoneNumber,
+  password,
+  gender,
+  defaultValues,
+  email,
+}) => {
   const {
     register,
     handleSubmit,
@@ -56,14 +67,6 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
     const { name, value } = e.target;
     setFormValues((prevFormValues) => ({ ...prevFormValues, [name]: value }));
   };
-
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setFormValues((prevFormValues) => ({ ...prevFormValues, profileImage: file }));
-  //   }
-  // };
-
   const onSubmit = async () => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -93,6 +96,7 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
       if (response.data.success) {
         toast.success("Profile updated successfully");
         close();
+        window.location.reload();
       } else {
         toast.error(response.data.message || "Failed to update profile");
       }
@@ -105,15 +109,21 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
   return (
     <Modal opened={opened} onClose={close} title="Edit Profile" centered>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-32 h-32 mx-auto rounded-full border-4 border-black overflow-hidden mb-4">
+        <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
           {formValues.profileImage ? (
-            <img
-              src={URL.createObjectURL(formValues.profileImage)}
-              alt="Uploaded"
-              className="w-full h-full object-cover"
+            <Avatar
+              src={formValues.profileImage}
+              size={120}
+              radius="xl"
+              className="border-4 border-gray-100 shadow-sm"
             />
           ) : (
-            <CiUser className="w-full h-full" />
+            <Avatar
+              src={`https://ui-avatars.com/api/?name=${formValues.name}&background=random&size=120`}
+              size={120}
+              radius="xl"
+              className="border-4 border-gray-100 shadow-sm"
+            />
           )}
         </div>
         {/* <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" /> */}
@@ -151,11 +161,9 @@ const ProfileEditModal = ({ opened, close, id, name, address, phoneNumber, passw
         />
 
         <div className="flex justify-end space-x-4 mt-4">
-          {/* <Button variant="outline" color="gray" onClick={close}> */}
-                    <Button variant="outline" onClick={close}>Cancel</Button>
-            
-            {/* Cancel
-          </Button> */}
+          <Button variant="outline" onClick={close}>
+            Cancel
+          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? <Loader size="xs" /> : "Save Changes"}
           </Button>
