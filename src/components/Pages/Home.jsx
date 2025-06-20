@@ -16,7 +16,6 @@ import {
   Menu,
   Text,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
 import { useNavigate } from "react-router-dom";
 import {
   FaMapMarkerAlt,
@@ -54,7 +53,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState("");
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   // Fetch properties from API
   const fetchProperties = async () => {
@@ -116,17 +115,7 @@ const Home = () => {
       });
     }
 
-    // Apply date range filter
-    // if (dateRange[0] && dateRange[1]) {
-    //   filtered = filtered.filter((property) => {
-    //     const availableFrom = moment(property.availableFrom);
-    //     const startDate = moment(dateRange[0]);
-    //     const endDate = moment(dateRange[1]);
-    //     return availableFrom.isBetween(startDate, endDate, null, "[]");
-    //   });
-    // }
-
-    // Apply sorting
+  
     switch (sortBy) {
       case "price_asc":
         filtered.sort((a, b) => {
@@ -190,17 +179,7 @@ const Home = () => {
     setFilteredProperties(properties);
   };
 
-  // const formatDateRange = () => {
-  //   if (!dateRange[0] && !dateRange[1]) return "Any date";
-  //   if (dateRange[0] && !dateRange[1])
-  //     return moment(dateRange[0]).format("MMM D, YYYY");
-  //   if (dateRange[0] && dateRange[1]) {
-  //     return `${moment(dateRange[0]).format("MMM D")} - ${moment(
-  //       dateRange[1]
-  //     ).format("MMM D, YYYY")}`;
-  //   }
-  //   return "Any date";
-  // };
+ 
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

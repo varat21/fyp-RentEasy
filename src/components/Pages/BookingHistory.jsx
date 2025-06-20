@@ -41,7 +41,6 @@ const BookingHistory = () => {
         const decodedToken = jwtDecode(token);
         const extractedUserId = decodedToken?.userId;
         setUserId(extractedUserId);
-
         const response = await axios.get(
           `http://localhost/rent-easy/public/bookings.php?userId=${extractedUserId}`,
           { headers: { Authorization: `Bearer ${token}` } }

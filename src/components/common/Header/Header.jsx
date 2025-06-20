@@ -26,7 +26,7 @@ const Header = () => {
     logout(); // Use AuthContext logout to clear token and user state
     setProfileOpen(false);
     closeDrawer();
-    navigate("/login"); // Navigate to login page
+    navigate("/login"); 
     toast.success("Logged out successfully");
   };
 

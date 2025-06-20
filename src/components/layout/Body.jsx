@@ -53,10 +53,9 @@ const Layout = () => {
     <>
       <Header />
       <Suspense fallback={<div>Loading...</div>}>
-        <Outlet />
+      <Outlet />
       </Suspense>
-            <ChatBot/>
-
+      <ChatBot/>
       <WhatsApps />
       <Footer />
     </>

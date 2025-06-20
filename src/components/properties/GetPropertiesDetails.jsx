@@ -472,7 +472,7 @@ const GetPropertyDetails = () => {
             </div>
 
             {/* Owner Info */}
-            <div className="bg-white rounded-xl shadow-md p-6">
+            {/* <div className="bg-white rounded-xl shadow-md p-6">
               <h2 className="text-2xl font-semibold mb-4">Contact Owner</h2>
               <div className="flex items-center gap-4">
                 <img
@@ -505,7 +505,7 @@ const GetPropertyDetails = () => {
               >
                 Contact via WhatsApp
               </Button>
-            </div>
+            </div> */}
 
             {/* Quick Facts */}
             <div className="bg-white rounded-xl shadow-md p-6">

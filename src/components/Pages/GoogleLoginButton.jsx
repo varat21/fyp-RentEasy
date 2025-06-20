@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -13,7 +10,7 @@ const GoogleLoginButton = ({ onSuccess = () => {} }) => {
   const { login } = useContext(AuthContext);
   const API_URL = "http://localhost/rent-easy/auth/google-auth.php";
 
-  console.log("API Endpoint:", API_URL);
+  // console.log("API Endpoint:", API_URL);
 
   const handleLoginSuccess = async (credentialResponse) => {
     try {
@@ -22,9 +19,9 @@ const GoogleLoginButton = ({ onSuccess = () => {} }) => {
         throw new Error("No token received from Google");
       }
 
-      console.log("Google ID Token:", token);
+      // console.log("Google ID Token:", token);
 
-      console.log("Sending request to:", API_URL);
+      // console.log("Sending request to:", API_URL);
 
       const response = await axios.post(
         API_URL,
@@ -36,13 +33,13 @@ const GoogleLoginButton = ({ onSuccess = () => {} }) => {
         }
       );
 
-      console.log("Backend Response:", response.data);
+      // console.log("Backend Response:", response.data);
 
       if (response.data.success) {
         login(response.data.token, response.data.user); // Use context login
-        console.log("User data stored and logged in");
+        // console.log("User data stored and logged in");
         onSuccess(response.data);
-        navigate("/"); // Navigate here after successful login
+        navigate("/"); 
       } else {
         throw new Error(response.data.message || "Login failed");
       }
@@ -57,8 +54,8 @@ const GoogleLoginButton = ({ onSuccess = () => {} }) => {
   };
 
   const handleLoginFailure = () => {
-    console.error("Google Login Failed - User canceled or error occurred");
-    toast.error("Google login failed. Please try again."); 
+    // console.error("Google Login Failed - User canceled or error occurred");
+    toast.error("Google login failed. Please try again.");
   };
 
   return (

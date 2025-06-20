@@ -31,12 +31,15 @@ const DeleteBookingModal = ({ opened, onClose, bookingId, onDeleteSuccess }) => 
                     },
                 }
             );
+            console.log("Delete response:", response.data);
 
             // Handle API response
             if (response.data.success) {
                 toast.success("Booking deleted successfully");
-                onDeleteSuccess(bookingId); // Notify parent to update state
+                onDeleteSuccess(bookingId); 
                 onClose(); // Close modal
+                                window.location.reload();
+
             } else {
                 toast.error(response.data.message || "Failed to delete booking");
             }

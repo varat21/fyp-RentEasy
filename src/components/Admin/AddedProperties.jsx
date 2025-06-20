@@ -54,7 +54,7 @@ const AddedProperties = () => {
         "http://localhost/rent-easy/public/Admin/propertiesDetails.php",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("API Response:", response);
+      // console.log("API Response:", response);
 
       if (response.data && response.data.success) {
         setProperties(response.data.properties || []);

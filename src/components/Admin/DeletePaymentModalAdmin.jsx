@@ -31,7 +31,7 @@ const DeletePaymentModal = ({ opened, onClose, paymentId }) => {
             if (response.data.success) {
                 toast.success("Payment deleted successfully");
                 onClose();
-                // window.location.reload();
+                window.location.reload();
             } else {
                 toast.error(response.data.message || "Failed to delete payment");
             }
