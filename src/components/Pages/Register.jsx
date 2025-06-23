@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { PasswordInput, TextInput, Button, Select } from "@mantine/core";
-import { FcGoogle } from "react-icons/fc";
 import { Controller, useForm } from "react-hook-form";
 import { FiLoader } from "react-icons/fi";
 import { useFormValidation } from "../hooks/formValidate";
@@ -27,19 +26,18 @@ const Register = () => {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
-      formData.append("gender",data.gender);
+      formData.append("gender", data.gender);
       formData.append("name", data.name);
       formData.append("phoneNumber", data.phoneNumber);
       formData.append("userType", data.userType);
-      formData.append("address",data.address);
-      formData.append("image",data.image);
-
+      formData.append("address", data.address);
+      formData.append("image", data.image);
 
       const response = await axios.post(
         "http://localhost/rent-easy/auth/register.php",
         formData
       );
-      console.log("Response from registration:", response.data);
+      // console.log("Response from registration:", response.data);
 
       if (response.data.success) {
         toast.success(
@@ -77,15 +75,15 @@ const Register = () => {
             autoPlay
             loop
             muted
-    className="w-full h-full object-cover rounded-xl filter  contrast-125 hue-rotate-180 "
+            className="w-full h-full object-cover rounded-xl filter  contrast-125 hue-rotate-180 "
           />
         </div>
 
         {/* Form Section */}
         <div className="lg:w-full flex flex-col justify-center lg:p-10 h-full">
-        <h1 className="font-bold text-3xl text-gray-800 text-center lg:text-left">
-              Sign Up
-            </h1>
+          <h1 className="font-bold text-3xl text-gray-800 text-center lg:text-left">
+            Sign Up
+          </h1>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
             {/* Full Name and Phone Number */}
@@ -130,24 +128,22 @@ const Register = () => {
 
             {/* Address and Gender */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Controller
-  name="gender"
-  control={control}
-  rules={{ required: "Gender is required" }} // Validation rule
-  render={({ field }) => (
-    <Select
-      {...field}
-      label="Gender"
-      placeholder="Select gender"
-      data={["Male", "Female", "Others"]}
-      error={errors.gender?.message}
-    />
-  )}
-/>
+              <Controller
+                name="gender"
+                control={control}
+                rules={{ required: "Gender is required" }} // Validation rule
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    label="Gender"
+                    placeholder="Select gender"
+                    data={["Male", "Female", "Others"]}
+                    error={errors.gender?.message}
+                  />
+                )}
+              />
 
-
-               
-                           <TextInput
+              <TextInput
                 {...register("address")}
                 label="Address"
                 placeholder="Enter your address"

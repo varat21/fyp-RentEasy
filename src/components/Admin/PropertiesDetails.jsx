@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Button, Rating } from "@mantine/core";
+import { Button, Rating, Skeleton } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import useBookingStore from "../stores/useBookingStore";
 import { jwtDecode } from "jwt-decode";
@@ -116,8 +116,125 @@ const PropertiesDetails = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-10">Loading...</div>;
-  if (error) return <div className="text-center text-red-500 p-10">{error}</div>;
+  if (loading) {
+    return (
+      <motion.div
+        className="mx-auto p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header Skeleton */}
+        <Skeleton height={40} width="40%" mb="md" />
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <Skeleton height={20} width="20%" />
+          <Skeleton height={20} width="10%" />
+          <Skeleton height={20} width="15%" />
+        </div>
+
+        {/* Main Content Skeleton */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Column */}
+          <div className="lg:w-2/3 space-y-6">
+            {/* Image Gallery Skeleton */}
+            <div>
+              <Skeleton height={384} width="100%" radius="xl" />
+              <div className="flex gap-2 mt-4">
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} height={80} width={80} radius="sm" />
+                ))}
+              </div>
+            </div>
+
+            {/* Description Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="20%" mb="md" />
+              <Skeleton height={100} width="100%" />
+            </div>
+
+            {/* Features Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="20%" mb="md" />
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[...Array(6)].map((_, index) => (
+                  <Skeleton key={index} height={20} width="80%" />
+                ))}
+              </div>
+            </div>
+
+            {/* Location Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="20%" mb="md" />
+              <Skeleton height={256} width="100%" radius="lg" />
+            </div>
+
+            {/* Reviews Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex justify-between mb-4">
+                <Skeleton height={30} width="30%" />
+                <Skeleton height={36} width="20%" />
+              </div>
+              <div className="space-y-4">
+                {[...Array(2)].map((_, index) => (
+                  <div key={index} className="border-b pb-4">
+                    <div className="flex items-center gap-4">
+                      <Skeleton circle height={48} width={48} />
+                      <div className="flex-1">
+                        <Skeleton height={20} width="30%" />
+                        <Skeleton height={16} width="20%" mt={6} />
+                      </div>
+                    </div>
+                    <Skeleton height={20} width="40%" mt={10} />
+                    <Skeleton height={60} width="100%" mt={10} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column Skeleton */}
+          <div className="lg:w-1/3 space-y-6">
+            {/* Pricing Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="20%" mb="md" />
+              <Skeleton height={30} width="40%" mb="md" />
+              <Skeleton height={40} width="100%" />
+            </div>
+
+            {/* Owner Info Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="30%" mb="md" />
+              <div className="flex items-center gap-4">
+                <Skeleton circle height={64} width={64} />
+                <div className="flex-1">
+                  <Skeleton height={20} width="50%" />
+                  <Skeleton height={16} width="30%" mt={6} />
+                </div>
+              </div>
+              <Skeleton height={20} width="60%" mt={10} />
+              <Skeleton height={36} width="100%" mt={10} />
+            </div>
+
+            {/* Quick Facts Skeleton */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <Skeleton height={30} width="30%" mb="md" />
+              <div className="space-y-3">
+                {[...Array(3)].map((_, index) => (
+                  <div key={index} className="flex justify-between">
+                    <Skeleton height={20} width="30%" />
+                    <Skeleton height={20} width="30%" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (error)
+    return <div className="text-center text-red-500 p-10">{error}</div>;
 
   const avgRating =
     property?.ratings?.length > 0
@@ -285,20 +402,10 @@ const PropertiesDetails = () => {
             <div className="bg-white rounded-xl shadow-md p-6">
               <h2 className="text-2xl font-semibold mb-4">Pricing</h2>
               <div className="flex justify-between items-center mb-4">
-                {/* <span className="text-gray-600">Rent:</span> */}
                 <span className="text-2xl font-bold text-blue-600">
                   Rs.{property?.price}
                 </span>
               </div>
-              {/* <Button
-                fullWidth
-                size="lg"
-                onClick={handleBooking}
-                className="bg-blue-600 hover:bg-blue-700"
-                disabled={property?.status === "booked"}
-              >
-                {property?.status === "booked" ? "Already Booked" : "Book Now"}
-              </Button> */}
             </div>
 
             {/* Owner Info */}

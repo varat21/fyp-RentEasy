@@ -3,7 +3,7 @@ import { BiLogoWhatsappSquare } from "react-icons/bi";
 
 const WhatsAppButton = () => {
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-5 left-5 z-50">
       <a
         href="https://wa.me/9847502403?text=Hello! How can I assist you?"
         target="_blank"

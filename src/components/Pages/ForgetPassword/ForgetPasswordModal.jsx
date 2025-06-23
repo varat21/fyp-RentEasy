@@ -11,15 +11,15 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
   const ForgetPasswordModal = ({ opened, onClose }) => {
-  const [email, setEmail] = useState(""); // State for email
-  const [newPassword, setNewPassword] = useState(""); // State for new password
-  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [email, setEmail] = useState(""); 
+  const [newPassword, setNewPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+  const [messageType, setMessageType] = useState(""); 
 
-  const [otpModalOpen, setOtpModalOpen] = useState(false); // State for OTP modal
-  const [resetModalOpen, setResetModalOpen] = useState(false); // State for reset password modal
+  const [otpModalOpen, setOtpModalOpen] = useState(false); 
+  const [resetModalOpen, setResetModalOpen] = useState(false); 
 
   const navigate = useNavigate();
 
@@ -46,7 +46,6 @@ import { useNavigate } from "react-router-dom";
         setMessage("Check your email and click the link!");
         setMessageType("success");
         toast.success("Check your email and click the link!!");
-        // setOtpModalOpen(true); // Open OTP modal
         onClose(); // Close the email modal
       } else {
         setMessage(response.data.message);

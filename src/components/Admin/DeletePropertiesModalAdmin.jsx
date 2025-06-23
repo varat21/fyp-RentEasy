@@ -31,7 +31,7 @@ const DeletePropertiesModal = ({ opened, onClose, propertyId }) => {
           if (response.data.success) {
             toast.success("Property deleted successfully");
             onClose(); 
-            window.location.reload();
+            // window.location.reload();
           } else {
             toast.error(response.data.message || "Failed to delete property");
           }

@@ -35,21 +35,3 @@ export const useLoginValidation = () => {
   };
 };
 
-// export const useAddProductValidation = () => {
-//   const schema = z.object({
-//     name: z.string().min(1, "Full Name is required"),
-//     address: z.string().min(1, "Address is required"),
-//     phoneNumber: z
-//       .string()
-//       .min(10, "Phone Number must be at least 10 characters")
-//       .max(15, "Phone Number is too long"),
-//     userType: z.enum(["Landlord", "Tenant"], { required_error: "User type is required" }),
-//     gender: z.enum(["Male", "Female", "Others"], { required_error: "Gender is required" }),
-//     email: z.string().email("Invalid email"),
-//     password: z.string().min(8, "Password must be at least 8 characters"),
-//   });
-
-//   return {
-//     resolver: zodResolver(schema),
-//   };
-// };

@@ -19,8 +19,8 @@ const PaymentSuccess = () => {
   const cleanSearch = location.search.split("?")[1] || "";
   const params = new URLSearchParams(cleanSearch);
 
-  console.log("Raw URL search:", location.search);
-  console.log("Cleaned search:", cleanSearch);
+  // console.log("Raw URL search:", location.search);
+  // console.log("Cleaned search:", cleanSearch);
 
   const rawAmount = params.get("amount");
   let amount = rawAmount ? Number(rawAmount) : totalAmount || 0;
@@ -49,12 +49,12 @@ const PaymentSuccess = () => {
         payment_date: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
 
-      console.log("Sending payment data:", paymentData);
+      // console.log("Sending payment data:", paymentData);
 
       const backendUrl = "http://localhost/rent-easy/public/esewaPayment/payment.php";
       const response = await axios.post(backendUrl, paymentData);
 
-      console.log("API response:", response.data);
+      // console.log("API response:", response.data);
 
       if (response.data.success) {
         setModalOpened(true);
@@ -102,7 +102,7 @@ const PaymentSuccess = () => {
     // Add a 5-second delay before calling sendPaymentData
     const delay = setTimeout(() => {
       sendPaymentData();
-    }, 5000);
+    }, 4000);
 
     // Cleanup timeout on component unmount
     return () => clearTimeout(delay);

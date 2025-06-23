@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Group, Title, Text } from "@mantine/core";
-import { FaFile, FaCalendarAlt } from "react-icons/fa";
+import { Card, Group, Title, Text, Skeleton } from "@mantine/core";
+import { FaFile, FaCalendarAlt, FaFileDownload } from "react-icons/fa";
 import moment from "moment";
 import { motion } from "framer-motion";
+import { FaRegEye } from "react-icons/fa";
 
 const PropertyDocument = () => {
   const [documents, setDocuments] = useState([]);
@@ -33,9 +34,36 @@ const PropertyDocument = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen flex items-center justify-center bg-gray-100"
+        className="bg-gray-100 p-6 min-h-screen"
       >
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+        <Skeleton height={40} width="30%" mb="lg" mx="auto" />
+        <div className="max-w-6xl mx-auto">
+          <Skeleton height={30} width="20%" mb="md" />
+          <div className="space-y-6">
+            {[...Array(3)].map((_, index) => (
+              <Card
+                key={index}
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                className="bg-white"
+              >
+                <div className="flex flex-col md:flex-row gap-6">
+                  <Skeleton height={176} width={176} radius="lg" />
+                  <div className="flex-1">
+                    <Skeleton height={24} width="40%" mb="md" />
+                    <Skeleton height={20} width="30%" mb="lg" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Skeleton height={80} width="100%" radius="lg" />
+                      <Skeleton height={80} width="100%" radius="lg" />
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
       </motion.div>
     );
   }
@@ -47,7 +75,9 @@ const PropertyDocument = () => {
         animate={{ opacity: 1 }}
         className="min-h-screen flex items-center justify-center bg-gray-100"
       >
-        <p className="text-lg font-semibold text-red-500">No documents found.</p>
+        <p className="text-lg font-semibold text-red-500">
+          No documents found.
+        </p>
       </motion.div>
     );
   }
@@ -93,8 +123,8 @@ const PropertyDocument = () => {
               whileHover={{ scale: 1.01 }}
             >
               <div className="flex flex-col md:flex-row gap-6">
-                <motion.div 
-                  className="w-full md:w-44"
+                <motion.div
+                  className="relative w-full md:w-44 group"
                   whileHover={{ scale: 1.05 }}
                 >
                   <img
@@ -102,6 +132,14 @@ const PropertyDocument = () => {
                     alt={`Document ${doc.documentId}`}
                     className="w-full h-44 rounded-lg object-cover"
                   />
+                  <a
+                    href={doc.document}
+                    download={`Document_${doc.documentId}.jpg`}
+                    className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100"
+                    title="View image"
+                  >
+                    <FaRegEye className="text-gray-800" size={20} />
+                  </a>
                 </motion.div>
 
                 <div className="flex-1">
@@ -120,9 +158,11 @@ const PropertyDocument = () => {
                     >
                       <FaFile className="text-2xl text-blue-500" />
                       <div>
-                        <p className="text-lg font-semibold text-gray-800">Document</p>
+                        <p className="text-lg font-semibold text-gray-800">
+                          Document
+                        </p>
                         <p className="text-gray-700 text-md">
-                          {doc.document.split('/').pop()}
+                          {doc.document.split("/").pop()}
                         </p>
                       </div>
                     </motion.div>
@@ -132,7 +172,9 @@ const PropertyDocument = () => {
                     >
                       <FaCalendarAlt className="text-2xl text-green-500" />
                       <div>
-                        <p className="text-lg font-semibold text-gray-800">Uploaded At</p>
+                        <p className="text-lg font-semibold text-gray-800">
+                          Uploaded At
+                        </p>
                         <p className="text-gray-700 text-md">
                           {moment(doc.uploaded_at).format("MMM Do YYYY")}
                         </p>
